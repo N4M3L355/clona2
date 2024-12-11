@@ -1,0 +1,178 @@
+
+\section{Development Process}
+The development process involved designing the system architecture, implementing the backend and frontend components, and integrating the image processing algorithms. Key challenges included ensuring accurate segmentation of calibration elements and achieving consistent results across different camera bodies.
+
+\section{Implementation Challenges and Solutions}
+Developing this application involves several challenges, including ensuring accuracy across different camera models, managing large image files, and providing a user-friendly interface. Key solutions include:
+
+\begin{itemize}
+    \item \textbf{Ensuring Accuracy}: Implementing robust image processing algorithms and using standardized test charts help maintain accuracy across different setups.
+    \item \textbf{Managing Large Files}: Using efficient file handling techniques and dynamic loading helps manage large RAW files without overloading system memory.
+    \item \textbf{User-Friendly Interface}: Designing an intuitive web interface allows users to easily navigate the application, set up scenarios, and view results.
+\end{itemize}
+
+\section{Used technologies}
+This chapter provides an overview of the technologies used in the lens evaluation application. The core technologies and libraries employed in this project are essential for its functionality, performance, and user experience.
+
+\subsection{Python}
+Python is the primary programming language used for this project. Known for its simplicity and readability, Python facilitates rapid development and supports a large number of libraries and frameworks that are essential for this application, such as libraries for image processing and data analysis.
+
+\subsection{Selected Python Libraries}
+\textbf{OpenCV (Open Source Computer Vision Library)}
+\\
+OpenCV is extensively used for image acquisition, preprocessing, and segmentation tasks. It provides functions for reading images from the camera, correcting geometric distortions, and reducing noise. 
+
+In the \texttt{image\_processing.py} file, OpenCV functions are used to preprocess images and extract calibration elements, especially the \texttt{findContours()} function for edge detection and the \texttt{GaussianBlur()} function for image filtering \cite{opencv}.
+\\
+\\
+\textbf{NumPy}
+\\
+NumPy is used for numerical computations and handling image data as arrays. It supports operations on large arrays and matrices, which are essential for processing image data efficiently. NumPy arrays are used to store image data and perform mathematical operations during lens property evaluations \cite{numpy}.
+\\
+\\
+\textbf{Scikit-Image}
+\\
+This library is used for image processing tasks, complementing OpenCV with additional utilities for more advanced image analysis. Functions from Scikit-Image are used for tasks such as edge detection, which is crucial for evaluating lens properties like sharpness and point spread function (PSF) \cite{scikit}.
+\\
+\\
+\textbf{Matplotlib}
+\\
+Matplotlib is used for visualizing results and displaying them in a comprehensible manner. It helps in creating plots and graphs to represent the evaluation metrics of various lens properties. In the \texttt{ui.py} file, Matplotlib is used to generate visualizations that are displayed on the web interface \cite{matplotlib}.
+\\
+\\
+\textbf{NiceGUI}
+\\
+NiceGUI is a modern web framework designed to create user interfaces for Python applications. It simplifies the process of building interactive web-based interfaces by providing high-level abstractions and integration with popular Python libraries. In this project, NiceGUI is used throughout the code files in odred to develop the user interface. It handles dynamic updates, user notifications, and the presentation of images and analysis results \cite{nicegui}.
+
+\subsection{Additional Tools and Configurations}
+
+\textbf{ConfigParser}
+\\
+Used for managing configuration settings of the application. It helps in reading configuration files that specify camera settings and other parameters. The \texttt{config.py} file contains functions to read and manage configuration settings.
+\\
+\\
+\textbf{Git}
+\\
+Version control system used to manage the project codebase. Git tracks changes, facilitates collaboration, and helps in maintaining a history of modifications. The \texttt{.gitignore} file specifies files and directories to be ignored by Git to keep the repository clean.
+
+\section{Project Structure}
+
+\begin{itemize}
+    \item \texttt{camera.py}: Handles image acquisition from the camera.
+    \item \texttt{config.py}: Manages configuration settings.
+    \item \texttt{image\_processing.py}: Contains functions for image preprocessing and segmentation as well as lens analysis.
+    \item \texttt{main.py}: The entry point of the application, setting up the web server and routes.
+    \item \texttt{ui.py}: Manages the user interface and result display.
+\end{itemize}
+
+\subsection{Dependencies}
+
+The \texttt{requirements.txt} file lists all the Python libraries and their versions required to run the application. This file ensures that all necessary dependencies are installed in the development environment.
+
+\begin{verbatim}
+opencv-python-headless==4.5.1.48
+numpy==1.19.5
+scikit-image==0.18.1
+matplotlib==3.3.4
+\end{verbatim}
+
+\section{Implementation of System Components}
+
+\subsection{Image Acquisition Component}
+\textbf{Connecting the camera}
+\\
+The first step of image acquisition includes connecting the camera. The application features several functions present in the process of camera connection.
+
+The \texttt{initialize\_camera()} function is the entry point for setting up the camera. It attempts to create a camera object and initialize it with the given context. If the camera is successfully initialized, it can be used for further operations such as capturing images and adjusting settings. If the initialization fails, an error is logged, and the camera object is set to \texttt{None}.
+
+The \texttt{exit\_camera()} function ensures that the camera connection is properly closed and resources are released when the application exits or the camera is no longer needed.
+
+The \texttt{list\_connected\_cameras()} function detects all cameras connected to the system and updates the user interface to display the list of detected cameras.
+
+The \texttt{check\_camera\_connection\_periodically()} function runs in a separate thread, continuously checking the camera's connection status. If the camera disconnects, it tries to reconnect automatically. This ensures that the application can recover from temporary connection issues without user intervention.
+
+The \texttt{debug()} function prints the camera's configuration settings for debugging purposes, including the number of configuration children and their labels and names.
+\\
+\\
+\textbf{Setting up the camera}
+\\
+When the camera is connected to the application, additional settings like autofocus and zoom can be set up using the following functions:
+
+\begin{itemize}
+    \item \texttt{enable\_cancel\_auto\_focus()}: Enables the cancel autofocus feature on the camera by setting the corresponding configuration value.
+    \item \texttt{disable\_cancel\_auto\_focus()}: Disables the cancel autofocus feature on the camera by setting the corresponding configuration value.
+    \item \texttt{enable\_auto\_focus\_drive()}: Enables the autofocus drive feature on the camera by setting the corresponding configuration value.
+    \item \texttt{disable\_auto\_focus\_drive()}: Disables the autofocus drive feature on the camera by setting the corresponding configuration value.
+    \item \texttt{disable\_viewfinder()}: Disables the camera's viewfinder by setting the corresponding configuration value and locking the camera connection during the operation.
+    \item \texttt{enable\_viewfinder()}: Enables the camera's viewfinder by setting the corresponding configuration value and locking the camera connection during the operation.
+    \item \texttt{set\_eos\_remote\_release()}: Sets the EOS remote release mode to "Immediate" on the camera, allowing for immediate capture control.
+    \item \texttt{zoom\_out()}: Adjusts the camera's manual focus drive to zoom out by setting the corresponding configuration value.
+    \item \texttt{zoom\_in()}: Adjusts the camera's manual focus drive to zoom in by setting the corresponding configuration value.
+\end{itemize}
+%%%%%
+\textbf{Capturing the image}
+\\
+After setting up the parameters of the camera the images are captured using the function $\texttt{capture\_photo()}$, which saves the image to a temporary directory on the local machine, and returns the file path of the saved image with filename derived from the captured image's name. This function is essential for capturing and storing images for further processing and analysis in the lens evaluation application.
+\\
+\\
+\textbf{Implementation Details}
+\\
+The image acquisition implementation uses the \texttt{gphoto2} library to control digital cameras via bindings for \texttt{libgphoto2}. Key technologies include \texttt{gphoto2} for camera interaction, \texttt{logging} for error and status monitoring, \texttt{time} and \texttt{threading} for periodic connection checks and background operations, \texttt{config.py} for managing camera-specific configuration settings, and \texttt{nicegui.ui} for creating a web-based user interface to display camera status and captured image.
+
+\subsection{Segmentation and Preprocessing Component}
+
+Image segmentation and preprocessing is an important step to prepare images for lens property evaluation and is handled inside the file \texttt{image\_processing.py}. 
+\\
+\\
+\textbf{Image Preprocessing}
+\\
+Image preprocessing is important to ensure accurate and reliable analysis of lens properties by reducing noise and correcting distortions. Some of functions related to image preprocessing include:
+
+\begin{itemize}
+    \item \texttt{process\_raw\_image(file\_path)}: Reads a RAW image file using the \texttt{rawpy} library, processes it to convert to an RGB format, and then converts it to a BGR format for OpenCV compatibility.
+    \item \texttt{capture\_and\_process\_image()}: Captures an image using the camera, processes the RAW image to BGR format, and ensures the camera connection lock is managed correctly during the process.
+    \item \texttt{display\_image(image)}: Resizes the processed image for display, compresses it to JPEG format, encodes it to base64, and updates the user interface to display the image.
+    \item \texttt{capture\_photo\_and\_display()}: Captures and processes an image, then displays it using the \texttt{display\_image()} function.
+    \item \texttt{preprocess\_image(image)}: Applies a Gaussian blur to the image to reduce noise and smooth it.
+\end{itemize}
+%%%
+\textbf{Segmentation}
+\\
+Image segmentation is important to accurately locate and extract relevant features or calibration elements necessary for detailed analysis of lens properties. The main function used for segmentation is \texttt{locate\_elements(image)}, which converts the image to grayscale, uses the SIFT algorithm to detect keypoints and descriptors, and draws these keypoints on the image.
+\\
+\\
+\textbf{Implementation Details}
+\\
+The image segmentation and preprocessing implementation employs several key libraries like \texttt{rawpy} used to read and process RAW image files, providing high-quality image data. \texttt{OpenCV (cv2)} handles color conversion, resizing, keypoint detection, and various image analysis functions. \texttt{NumPy} is utilized for numerical operations to analyze properties like sharpness, vignetting, PSF, and bokeh, while \texttt{base64} encodes images for display in the user interface. The \texttt{SIFT (Scale-Invariant Feature Transform)} algorithm, provided by OpenCV, detects and describes local features, crucial for analyzing sharpness, PSF, and bokeh. \texttt{Gaussian Blur} is applied for noise reduction and image smoothing, essential for accurate keypoint detection.
+
+\subsection{Lens Property Evaluation Component}
+This component evaluates various properties of the lens, such as sharpness, vignetting, point spread function (PSF), and bokeh, to provide comprehensive insights into lens performance. Important functions for lens evaluation are: 
+
+\begin{itemize}
+    \item \texttt{analyze\_sharpness(image, keypoints)}: Analyzes the sharpness of the image by calculating the average response value of the detected keypoints.
+    \item \texttt{analyze\_vignetting(image)}: Analyzes the vignetting effect by comparing the mean intensity of the center and corner regions of the image.
+    \item \texttt{analyze\_psf(image, keypoints)}: Analyzes the point spread function (PSF) by summing the pixel values around each keypoint and calculating the average.
+    \item \texttt{analyze\_bokeh(image, keypoints)}: Analyzes the bokeh effect by calculating the standard deviation of pixel values around each keypoint and averaging them.
+\end{itemize}
+%%
+The \texttt{analyze\_image()} function integrates all functions for evaluating lens properties as well as captures and processes an image and performs segmentation. The results are then displayed through the user interface, providing users with detailed metrics on the lens performance.
+\\
+\\
+\textbf{Implementation Details}
+\\
+The lens property evaluation implementation uses several technologies to analyze images and extract meaningful metrics regarding lens performance. \texttt{Matplotlib} visualizes results through plots and graphs. \texttt{NumPy} is utilized for numerical operations, including calculating mean values, standard deviations, and concatenating arrays to analyze vignetting and other properties.
+
+\subsection{Result Display Component}
+The result display component features code displaying numerical values of the lens evaluation, like the vignetting analysis measure or the sharpness analysis measure.
+
+\section{Testing}
+The application was tested using various lenses and cameras under different lighting conditions. Test cases included evaluating sharpness, bokeh, distortions, chromatic aberration, and vignetting.
+\subsection{Tested Cameras and Lenses}
+Some of the tested cameras include Canon EOS 5D Mark III and Canon EOS 600D.
+Among the tested lenses there are:
+
+\begin{itemize}
+    \item Canon Sigma 50mm F/1.4 DG HSM
+    \item Canon EF-S 18-135MM F/3.5-5.6 IS USM
+    \item Canon EF-S 18-55MM F/3.5-5.6 IS II
+\end{itemize}

@@ -1,0 +1,51 @@
+\section*{Background and motivation}
+In today's rapidly advancing digital age of photography, the quality of a camera lens can significantly influence the outcome of photographic or videographic work. High-quality lenses can enhance sharpness, color accuracy, and overall image fidelity, while low-quality lenses may introduce undesirable artifacts such as distortion, chromatic aberration, and vignetting. Evaluating a lens's quality, therefore, becomes crucial for both amateur and professional photographers.
+
+However, evaluating lens quality involves intricate techniques and specialized equipment, often making it inaccessible for many photographers. Current tools and methods, such as those provided by Imatest and Dxomark, offer comprehensive image quality assessments but can be prohibitively expensive and complex for everyday users. These tools also often require controlled environments and advanced technical knowledge to operate effectively.
+
+This thesis aims to bridge this gap by developing a user-friendly Python application that allows photographers to assess the quality of their lenses using at-home printable test charts and commonly available equipment. The application captures images of calibration elements, processes and analyzes these images to evaluate various lens properties, and provides a score (or a suite of scores) to describe the performance. This evaluation includes analyzing sharpness, vignetting, point spread function (PSF), and bokeh characteristics.
+
+
+Evaluating lens quality accurately and conveniently is important for several reasons. For professionals, it can mean the difference between a good and a great shot, impacting their reputation and business. For amateurs, understanding lens quality can enhance their learning curve and improve their photography skills. This application democratizes lens evaluation, making it accessible to a wider audience and helping photographers make informed decisions about their equipment.
+
+
+
+The source code for this project is available on GitHub: \url{https://github.com/N4M3L355/clona}
+\section*{Problem statement}
+\section*{Objectives}
+The objectives of this thesis are:
+\begin{enumerate}
+    \item Develop an application to interface with a camera via USB and capture images in RAW format.
+    \item Implement image processing algorithms to segment and preprocess calibration elements in the captured images.
+    \item Evaluate lens properties and provide comprehensive scores, focusing on sharpness, vignetting, and other key characteristics.
+    \item Create a web interface for user interaction, allowing both advanced users and beginners to use the application.
+    \item Ensure consistent results across different camera bodies and varying lighting conditions.
+    \item Implement functionality to save and load session data, enabling repeated analyses and comparisons over time.
+\end{enumerate}
+
+\section*{Scope and limitations}
+
+This thesis addresses several challenges:
+\begin{enumerate}
+    \item \textbf{Accessibility}: By providing a cost-effective and user-friendly tool, this application makes lens evaluation accessible to non-professionals.
+    \item \textbf{Accuracy}: Implementing robust image processing algorithms ensures accurate assessment of lens properties.
+    \item \textbf{Versatility}: The application is designed to work with different camera bodies and under varying lighting conditions, providing consistent results.
+    \item \textbf{Usability}: The web interface is designed to be intuitive, catering to both advanced users and beginners.
+\end{enumerate}
+\begin{enumerate}
+    \item How can a user-friendly application for lens quality evaluation be designed to provide accurate and reliable results?
+    \item What image processing techniques are most effective for evaluating different lens properties such as sharpness, vignetting, and bokeh?
+    \item How can the application ensure consistency in results across different camera models and varying lighting conditions?
+    \item What are the benefits and limitations of using at-home printable test charts for lens evaluation?
+\end{enumerate}
+
+\section*{Thesis Structure}
+This thesis is structured as follows:
+\begin{itemize}
+    \item \textbf{Chapter 1: Introduction}: Provides an overview of the study, its objectives, significance, and research questions.
+    \item \textbf{Chapter 2: Literature Review}: Reviews existing tools and techniques for lens evaluation, and explains key concepts and technologies used.
+    \item \textbf{Chapter 3: Methodology}: Describes the system architecture, data flow, and scenarios for analysis.
+    \item \textbf{Chapter 4: Implementation}: Details the development process, core functionalities, and integration of the application.
+    \item \textbf{Chapter 5: Results and Discussion}: Presents the results of testing and validation, compares with existing tools, and discusses user feedback.
+    \item \textbf{Chapter 6: Conclusion and Further Work}: Summarizes key findings, discusses limitations, and outlines future research directions.
+\end{itemize}

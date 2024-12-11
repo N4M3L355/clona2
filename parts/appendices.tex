@@ -1,0 +1,60 @@
+
+\chapter{Technical Appendices}
+\section{Source code}
+The complete source code for this project is available on GitHub: \url{https://github.com/N4M3L355/clona} and in the attachment of this thesis in IS.
+
+\section{Code Snippets}
+\begin{spverbatim}
+# Function to capture a photo and save it as a RAW file
+def capture_photo_and_save(camera):
+    file_path = camera.capture(gp.GP_CAPTURE_IMAGE)
+    target = os.path.join(tempfile.gettempdir(), 
+                          file_path.name)
+    camera_file = camera.file_get(file_path.folder, 
+                                  file_path.name, 
+                                  gp.GP_FILE_TYPE_NORMAL)
+    camera_file.save(target)
+    return target
+
+# Function to process a RAW image using rawpy
+def process_raw_image(file_path):
+    with rawpy.imread(file_path) as raw:
+        rgb = raw.postprocess()
+    return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+
+# Function to analyze sharpness using a Siemens star
+def analyze_sharpness(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 50, 150)
+    return edges
+
+# Function to analyze vignetting using a white wall
+def analyze_vignetting(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    mean_intensity = np.mean(gray)
+    return mean_intensity
+
+
+
+
+
+# Function to capture a series of photos with different 
+# aperture settings
+def capture_series(camera, settings):
+    file_paths = []
+    config = camera.get_config(camera.context)
+    aperture_cfg = config.get_child_by_name('aperture')
+
+    for setting in settings:
+        aperture_cfg.set_value(setting)
+        camera.set_config(config, camera.context)
+        file_path = camera.capture(gp.GP_CAPTURE_IMAGE)
+        target = os.path.join(tempfile.gettempdir(), 
+                              file_path.name)
+        camera_file = camera.file_get(file_path.folder,
+                                      file_path.name, 
+                                      gp.GP_FILE_TYPE_NORMAL)
+        camera_file.save(target)
+        file_paths.append(target)
+    return file_paths
+\end{spverbatim}

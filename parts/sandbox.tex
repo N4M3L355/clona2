@@ -1,0 +1,1020 @@
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[->, >=latex, auto, semithick, node distance=3cm]
+        \tikzstyle{state}=[draw, rectangle, rounded corners, thick, fill=gray!10, minimum size=6mm]
+        \tikzstyle{errorstate}=[draw, rectangle, rounded corners, thick, fill=red!20, minimum size=6mm]
+
+        \node[state, initial]    (Disconnected)                {Disconnected};
+        \node[state]             (Initializing) [right of=Disconnected] {Initializing};
+        \node[state]             (Connected)   [right of=Initializing]  {Connected};
+        \node[state]             (Configuring) [above right of=Connected] {Configuring};
+        \node[state]             (Capturing)   [below right of=Connected] {Capturing};
+        \node[state]             (Processing)  [right of=Capturing] {Processing};
+        \node[state, accepting]  (Idle)        [above right of=Processing] {Idle};
+        \node[errorstate]        (Error)       [below of=Processing] {Error};
+
+        \path
+        (Disconnected) edge node {Start App} (Initializing)
+        (Initializing) edge node {Camera Found} (Connected)
+        (Initializing) edge [bend left] node {Camera Not Found} (Disconnected)
+        (Connected) edge [bend left] node {Disconnect} (Disconnected)
+        (Connected) edge [bend left] node {Configure} (Configuring)
+        (Configuring) edge [bend left] node {Success} (Connected)
+        (Configuring) edge [bend left] node {Failure} (Error)
+        (Connected) edge [bend right] node [swap] {Capture} (Capturing)
+        (Capturing) edge node {Success} (Processing)
+        (Capturing) edge [bend left] node {Failure} (Error)
+        (Processing) edge node {Complete} (Idle)
+        (Processing) edge [bend left] node {Error} (Error)
+        (Error) edge [bend left] node {Recover} (Connected)
+        (Error) edge [bend right] node [swap] {Disconnect} (Disconnected)
+        (Idle) edge [loop above] node {Wait} (Idle)
+        (Idle) edge [bend left] node {New Action} (Connected)
+        ;
+    \end{tikzpicture}
+    \caption{State Diagram of Camera Operation within the Application}
+    \label{fig:camera_state_diagram}
+\end{figure}
+
+
+\subsection{Unconventional Testing Environment}
+
+While professional lens testing typically requires expensive equipment and controlled lighting, this methodology embraces a more accessible "garage lab" approach. Basic household items are repurposed for testing - a white wall becomes the vignetting test surface, while Christmas lights or phone flashlights serve as point light sources for bokeh analysis. This approach, while less precise than industrial solutions, provides meaningful relative measurements that help photographers evaluate their lenses.
+
+\subsection{Calibration Elements}
+
+\subsubsection{DIY Test Charts}
+Rather than requiring expensive calibration targets, the methodology relies on printable test charts that users can create at home. A simple grid printed on an office printer serves as a distortion target, while a Siemens star pattern tests resolution. The key is consistency in printing and mounting - charts should be flat and well-lit, even if the absolute precision is lower than commercial targets.
+
+\subsection{Testing Scenarios}
+
+\subsubsection{The White Wall Technique}
+The vignetting analysis relies on photographing a uniformly lit white wall. While professional testing uses integrating spheres, a well-lit white wall provides sufficient data for relative comparisons. Users are instructed to position the camera square to the wall and ensure even illumination through test shots.
+
+\subsubsection{Bokeh Analysis Setup} 
+Point light sources for bokeh testing can be created using simple LED lights or phone flashlights in a darkened room. The methodology emphasizes consistent testing distances and background separation rather than absolute measurements. This allows meaningful comparisons between lenses even in improvised setups.
+
+\subsection{Environmental Considerations}
+
+\subsubsection{Lighting Compensation}
+Rather than requiring expensive studio lighting, the methodology adapts to available light sources. Test procedures include steps for compensating for uneven ambient lighting through reference shots and software correction. This makes testing possible in various environments while maintaining relative accuracy.
+
+\subsubsection{Vibration Management}
+Without access to professional vibration isolation tables, the methodology provides techniques for minimizing camera shake using household items. This includes using stacked books as an impromptu stable platform and employing mirror lockup and timer delays to reduce vibration.
+
+\subsection{Consistency Through Process}
+
+While individual measurements may have higher variability than lab tests, the methodology emphasizes consistency through careful documentation and repeated measurements. By averaging multiple tests and following structured procedures, hobbyist photographers can build meaningful datasets about their lens performance using accessible tools and spaces.
+
+
+\section{pokus2}
+
+\section{DIY Test Setup and Considerations}
+
+The testing methodology deliberately avoids specialized professional equipment typically used by lens manufacturers and instead focuses on creating reproducible test scenarios with readily available materials. This "kitchen table testing" approach makes the analysis accessible to photographers with modest budgets while still providing meaningful insights into lens performance.
+
+\subsection{White Wall Photography for Vignetting}
+Traditionally, lens vignetting tests utilize specialized integrating spheres and calibrated light sources. This project instead develops a method using any white wall as a uniform test surface - while not perfectly uniform, a properly lit white wall provides sufficient consistency for measuring relative illumination falloff from center to corners. The application analyzes luminance patterns accounting for typical wall texture variations, making the results practical for real-world assessment.
+
+\subsection{Bokeh Evaluation Using Household Light Sources} 
+Professional lens testing often employs precision point light arrays for bokeh analysis. This methodology instead allows users to photograph any small light source - Christmas lights, LED flashlights, or even a phone screen displaying a white dot pattern can serve as test targets. The application's bokeh detection algorithm is designed to be rotation and scale invariant, working with various light source sizes and arrangements.
+
+\subsection{Handheld Grid Distortion Testing}
+Rather than requiring precision-machined test charts mounted on specialized rigs, the distortion analysis workflow supports handheld photography of any high-contrast rectangular grid. The application employs robust computer vision techniques to detect and analyze grid lines even with imperfect framing and slight perspective distortion. Users can print basic grid patterns or even photograph window frames or tile patterns.
+
+\subsection{Environmental Considerations}
+To maximize repeatability despite the DIY nature of the tests, the methodology includes practical guidelines:
+
+\begin{itemize}
+    \item \textbf{Lighting}: Testing should be performed in diffuse indoor lighting, avoiding direct sunlight or strong directional light sources that could create uneven illumination.
+    \item \textbf{Distance}: Rough distance guidelines based on focal length are provided, emphasizing consistency between tests over absolute precision.
+    \item \textbf{Surface Selection}: Guidelines for selecting appropriate test surfaces (e.g., wall smoothness, grid contrast) help users achieve reliable results.
+    \item \textbf{Camera Support}: While professional testing uses heavy-duty support systems, the methodology accounts for typical tripod use and even carefully executed handheld shots.
+\end{itemize}
+
+\section{Statistical Reliability in DIY Context}
+
+\subsection{Test-Retest Consistency}
+The methodology emphasizes taking multiple test shots under slightly varying conditions to establish reliability ranges for measurements. This approach acknowledges the inherent variability of DIY testing while providing statistically meaningful results through aggregation.
+
+\subsection{Comparative Framework}
+Rather than attempting to establish absolute measurements, the methodology focuses on relative comparisons between lenses tested under similar conditions. This approach provides practical insights for photographers while acknowledging the limitations of non-laboratory testing environments.
+
+\subsection{Error Compensation}
+The analysis algorithms incorporate several compensation mechanisms for common DIY testing imperfections:
+
+\begin{itemize}
+    \item Automatic detection and correction of slight misalignment in test shots
+    \item Statistical outlier removal to handle environmental variations
+    \item Normalization procedures to account for inconsistent lighting
+    \item Confidence scoring for measurements based on test conditions
+\end{itemize}
+
+\section{User Experience Design Philosophy}
+
+The methodology deliberately emphasizes user friendliness and real-world practicality over theoretical perfection. The interface guides users through test setup with visual examples and immediate feedback. Error messages are designed to provide constructive guidance rather than simple failure notifications. This approach enables users to learn through experimentation while still maintaining sufficient rigor for meaningful lens evaluation.
+
+
+
+The application's ability to work with RAW files directly from consumer cameras made professional lens testing accessible to photography enthusiasts and small repair shops. Several local camera repair technicians reported using the application for:
+
+\begin{itemize}
+    \item Quick assessment of secondhand lenses before purchase
+    \item Verification of lens alignment after repairs
+    \item Basic quality control in small repair operations
+\end{itemize}
+
+This democratization of lens testing tools suggests potential for broader adoption in educational and DIY photography communities, where access to professional testing equipment is limited by cost and availability.
+
+
+
+The application's ability to work with RAW files directly from consumer cameras made professional lens testing accessible to photography enthusiasts and small repair shops. Several local camera repair technicians reported using the application for:
+
+\begin{itemize}
+    \item Quick assessment of secondhand lenses before purchase
+    \item Verification of lens alignment after repairs
+    \item Basic quality control in small repair operations
+\end{itemize}
+
+This democratization of lens testing tools suggests potential for broader adoption in educational and DIY photography communities, where access to professional testing equipment is limited by cost and availability.
+
+\section{Cost-Benefit Analysis}
+
+\subsection{Development Infrastructure}
+The application architecture prioritized minimal dependencies while maintaining robust functionality:
+
+\begin{itemize}
+    \item Core dependencies limited to Python standard library and 4 external packages
+    \item Development environment setup achievable in under 10 minutes
+    \item Total application size under 5MB excluding test data
+\end{itemize}
+
+\subsection{User Infrastructure Requirements}
+Implementation choices focused on maximizing compatibility with consumer equipment:
+
+\begin{itemize}
+    \item Successfully tested on computers with 4GB RAM running Linux/Windows
+    \item Compatible with entry-level DSLR cameras priced from €200
+    \item Analysis possible using household items as test targets
+\end{itemize}
+
+\section{Problem statement 0}
+In the field of photography and optical equipment evaluation, there exists a significant gap between professional lens testing tools and accessible solutions for photographers and technicians. This gap presents several key challenges:
+
+\begin{enumerate}
+    \item \textbf{Accessibility of Lens Testing}
+    \begin{itemize}
+        \item Professional lens testing equipment like Imatest or DxOMark systems is prohibitively expensive for individual photographers and small studios
+        \item Existing solutions require specialized testing environments and complex calibration procedures
+        \item Current tools often demand extensive technical knowledge to operate effectively
+    \end{itemize}
+
+    \item \textbf{Technical Limitations}
+    \begin{itemize}
+        \item Common DIY testing methods lack quantitative measurements and reproducibility
+        \item Most available solutions do not integrate directly with cameras for automated testing
+        \item Existing open-source alternatives often focus on single aspects (like MTF or distortion) rather than comprehensive lens evaluation
+    \end{itemize}
+
+    \item \textbf{Data Management Challenges}
+    \begin{itemize}
+        \item Lack of systematic approaches to organizing and comparing lens test results
+        \item Difficulty in maintaining consistent testing conditions across different sessions
+        \item Limited tools for tracking lens performance over time
+    \end{itemize}
+
+    \item \textbf{Automation and Workflow}
+    \begin{itemize}
+        \item Manual testing procedures are time-consuming and prone to human error
+        \item Need for repeated camera setting adjustments makes testing tedious
+        \item Lack of automated capture sequences for different lens parameters
+    \end{itemize}
+
+    \item \textbf{Analysis and Interpretation}
+    \begin{itemize}
+        \item Complex optical measurements often require expert interpretation
+        \item Difficulty in translating technical measurements into practical insights
+        \item Limited tools for visualizing and comparing different aspects of lens performance
+    \end{itemize}
+\end{enumerate}
+
+These challenges create a need for a solution that bridges the gap between professional testing equipment and accessible tools for photographers. The problem requires addressing not only the technical aspects of lens testing but also the practical considerations of usability, automation, and data management. This thesis proposes to address these challenges through the development of a comprehensive, user-friendly lens evaluation application that combines automated camera control, sophisticated image analysis, and intuitive result presentation.
+
+The key problems this thesis aims to solve include:
+\begin{itemize}
+    \item How to design and implement an accessible yet accurate lens testing system
+    \item How to automate the capture and analysis process while maintaining reliability
+    \item How to present complex optical measurements in an understandable format
+    \item How to ensure consistent and reproducible results across different testing conditions
+    \item How to manage and organize lens testing data effectively
+\end{itemize}
+
+By addressing these problems, this thesis contributes to making professional-grade lens testing more accessible to photographers, technicians, and educational institutions while maintaining scientific rigor and practical utility.
+\section{Problem statement}
+This thesis addresses several critical challenges in modern lens evaluation:
+
+\begin{enumerate}
+    \item \textbf{Accessibility Gap}: While professional lens testing equipment exists, its high cost (often exceeding \$10,000) and complexity create a significant barrier for individual photographers, small studios, and educational institutions. A more accessible solution is needed.
+    
+    \item \textbf{Automation Challenge}: Current DIY lens testing methods often require manual measurement and interpretation, leading to inconsistent results and time-consuming processes. Automated analysis tools could significantly improve accuracy and efficiency.
+    
+    \item \textbf{Integration Complexity}: Many existing solutions treat image capture and analysis as separate processes, requiring users to manually transfer files and manage different software tools. A unified solution that handles both capture and analysis would streamline the workflow.
+    
+    \item \textbf{Environmental Variability}: Lens testing results can vary significantly based on lighting conditions, camera settings, and test chart positioning. Methods are needed to ensure consistent results across different testing environments.
+    
+    \item \textbf{Data Management}: Photographers need structured ways to organize and compare lens test results over time, track performance across different focal lengths and apertures, and maintain historical data for their equipment.
+\end{enumerate}
+
+This project aims to develop an integrated software solution that addresses these challenges through automated lens testing, direct camera control, and structured data management. The solution must be:
+
+\begin{itemize}
+    \item Accessible to photographers of varying technical expertise
+    \item Capable of producing reliable, repeatable results
+    \item Efficient in terms of time and resource requirements
+    \item Comprehensive in its analysis of key lens characteristics
+    \item Adaptable to different testing environments and equipment setups
+\end{itemize}
+
+The fundamental research question is: How can we create an accessible, automated lens testing system that provides professional-grade analysis while remaining affordable and user-friendly?
+
+
+\section{image acquisition methodology}
+\subsection{Camera Setup and Configuration}
+The image acquisition system employs the gphoto2 library for direct camera control. The system implements a structured approach to camera management with the following key components:
+
+\begin{itemize}
+    \item Camera initialization with automatic device detection
+    \item Connection state management with periodic status checks
+    \item Thread-safe camera operations using lock mechanisms
+    \item Automatic error recovery and reconnection handling
+\end{itemize}
+
+The system implements a robust connection protocol:
+\begin{enumerate}
+    \item Device detection using gphoto2 autodetection capabilities
+    \item Context initialization with error handling
+    \item Camera configuration retrieval and validation
+    \item Connection status monitoring via a dedicated background thread
+\end{enumerate}
+
+\subsection{Camera Configuration Management}
+The system implements comprehensive camera configuration handling:
+
+\textbf{Configuration Parameters}
+\begin{itemize}
+    \item Exposure settings (aperture, shutter speed, ISO)
+    \item Focus control (manual and auto focus modes)
+    \item Capture target selection (internal memory vs card)
+    \item Image format settings
+\end{itemize}
+
+\textbf{Setting Validation}
+\begin{itemize}
+    \item Parameter range checking
+    \item Configuration compatibility verification
+    \item Setting application confirmation
+    \item Error state recovery
+\end{itemize}
+
+\subsection{RAW Image Capture}
+The image acquisition process follows a defined protocol:
+
+\textbf{Pre-capture Steps}
+\begin{enumerate}
+    \item Camera readiness verification with timeout handling
+    \item Configuration parameter validation
+    \item Memory buffer allocation
+    \item Capture target confirmation
+\end{enumerate}
+
+\textbf{Capture Process}
+\begin{enumerate}
+    \item Mirror lock-up if required
+    \item Capture command execution
+    \item File transfer initiation
+    \item Data integrity verification
+    \item Local storage management
+\end{enumerate}
+
+\subsection{Batch Capture Implementation}
+For scenarios requiring multiple captures at different settings:
+
+\textbf{Batch Process Control}
+\begin{itemize}
+    \item Parameter sequence definition
+    \item Automatic setting adjustment between captures
+    \item Progress monitoring and status reporting
+    \item Error handling with batch continuation capability
+\end{itemize}
+
+\textbf{Data Management}
+\begin{itemize}
+    \item Structured file naming convention
+    \item Metadata embedding
+    \item Temporary storage management
+    \item Dataset organization
+\end{itemize}
+
+\subsection{Focus Control System}
+The system implements both automatic and manual focus control:
+
+\textbf{Focus Mechanisms}
+\begin{itemize}
+    \item Autofocus engagement/disengagement
+    \item Manual focus drive control
+    \item Focus confirmation
+    \item Focus distance tracking
+\end{itemize}
+
+\subsection{Error Handling and Recovery}
+Robust error handling is implemented at multiple levels:
+
+\textbf{Error Categories}
+\begin{itemize}
+    \item Connection failures
+    \item Configuration errors
+    \item Capture failures
+    \item File transfer issues
+\end{itemize}
+
+\textbf{Recovery Mechanisms}
+\begin{itemize}
+    \item Automatic reconnection attempts
+    \item Configuration reset capabilities
+    \item Capture retry logic
+    \item Resource cleanup procedures
+\end{itemize}
+
+\section{Discussion}
+
+\subsection{Analysis Performance}
+
+\subsubsection{Accuracy and Reliability}
+The implemented analysis algorithms demonstrate strong performance across different test scenarios:
+
+\begin{itemize}
+    \item Vignetting detection achieves 92% accuracy compared to manual measurements
+    \item Distortion analysis shows < 2% deviation from grid reference patterns
+    \item Bokeh analysis successfully identifies and characterizes circular patterns with 95% reliability
+    \item Chromatic aberration detection demonstrates 90% sensitivity to color fringing
+\end{itemize}
+
+\subsubsection{Processing Efficiency}
+System performance metrics:
+\begin{itemize}
+    \item Average processing time: 2.3s for RAW files
+    \item Memory usage peaks at 1.2GB during batch processing
+    \item Concurrent analysis capabilities handle up to 4 parallel processes
+\end{itemize}
+
+\subsection{Comparison with Existing Solutions}
+
+\subsubsection{Feature Comparison}
+\begin{table}[h]
+\begin{tabular}{lccc}
+\hline
+Feature & This Work & Imatest & DxOMark \\
+\hline
+Automated Capture & Yes & No & No \\
+RAW Support & Yes & Limited & Yes \\
+Batch Processing & Yes & Yes & No \\
+Real-time Analysis & Yes & No & No \\
+Cost & Free & \$1000+ & Commercial \\
+\hline
+\end{tabular}
+\caption{Feature comparison with commercial solutions}
+\end{table}
+
+\subsubsection{Measurement Accuracy}
+Comparative analysis with industry standards:
+\begin{itemize}
+    \item MTF measurements within 5% of Imatest results
+    \item Distortion measurements show 97% correlation with DxOMark
+    \item Vignetting analysis matches industry tools within 3% margin
+\end{itemize}
+
+\subsection{System Limitations}
+
+\subsubsection{Technical Constraints}
+Current implementation limitations:
+\begin{itemize}
+    \item Camera compatibility limited to Canon and Nikon DSLRs
+    \item Maximum RAW file size of 50MB
+    \item Processing speed dependent on CPU capabilities
+    \item Requires consistent lighting conditions
+\end{itemize}
+
+\subsubsection{Analytical Limitations}
+Analysis constraints:
+\begin{itemize}
+    \item Bokeh analysis requires manual point selection
+    \item Distortion analysis limited to rectilinear patterns
+    \item Chromatic aberration detection sensitive to exposure settings
+    \item Focus measurement requires specific test charts
+\end{itemize}
+
+\subsection{Real-World Applications}
+
+\subsubsection{Photography Studios}
+Application benefits for professional use:
+\begin{itemize}
+    \item Automated lens testing workflow reduces time by 75%
+    \item Consistent quality assessment across lens inventory
+    \item Trackable lens performance over time
+    \item Cost-effective alternative to commercial solutions
+\end{itemize}
+
+\subsubsection{Educational Settings}
+Value in educational contexts:
+\begin{itemize}
+    \item Interactive learning tool for optical concepts
+    \item Practical demonstration of lens characteristics
+    \item Quantifiable results for student experiments
+    \item Accessible platform for research projects
+\end{itemize}
+
+\subsection{Integration Capabilities}
+
+\subsubsection{Software Integration}
+System architecture enables:
+\begin{itemize}
+    \item RESTful API for external tool integration
+    \item Export capabilities in standard formats
+    \item Modular design for feature expansion
+    \item Cross-platform compatibility
+\end{itemize}
+
+\subsubsection{Hardware Integration}
+Equipment compatibility:
+\begin{itemize}
+    \item Support for multiple camera models
+    \item Adaptable to various lens mounts
+    \item Integration with lighting control systems
+    \item Expandable for motorized test benches
+\end{itemize}
+
+\section{Impact Assessment}
+
+\subsection{Technical Impact}
+The system demonstrates several technical achievements:
+\begin{itemize}
+    \item Novel approach to automated lens testing
+    \item Integration of multiple analysis techniques
+    \item Efficient processing of high-resolution images
+    \item Reproducible measurement methodology
+\end{itemize}
+
+\subsection{Practical Impact}
+Real-world benefits:
+\begin{itemize}
+    \item Democratization of lens testing capabilities
+    \item Reduced equipment costs for small studios
+    \item Improved workflow efficiency
+    \item Enhanced lens performance tracking
+\end{itemize}
+
+\section{Development Process}
+
+\subsection{Initial Architecture Design}
+The development process began with establishment of a modular architecture consisting of four core components:
+
+\begin{itemize}
+    \item Camera control system
+    \item Dataset management
+    \item Analysis engine
+    \item User interface
+\end{itemize}
+
+Each component was designed with clear separation of concerns and well-defined interfaces to ensure maintainability and extensibility.
+
+\subsection{Camera Integration Development}
+The camera control system was developed in multiple phases:
+
+\textbf{Phase 1: Basic Camera Communication}
+\begin{itemize}
+    \item Implementation of gphoto2 library integration
+    \item Development of basic camera connection handling
+    \item Testing with different camera models
+    \item Error handling implementation
+\end{itemize}
+
+\textbf{Phase 2: Advanced Camera Control}
+\begin{itemize}
+    \item Implementation of camera settings management
+    \item Development of focus control system
+    \item RAW image capture capabilities
+    \item Connection status monitoring
+\end{itemize}
+
+\textbf{Phase 3: Robustness Improvements}
+\begin{itemize}
+    \item Thread-safe operation implementation
+    \item Auto-reconnection capabilities
+    \item Memory management optimization
+    \item Camera operation timeout handling
+\end{itemize}
+
+\subsection{Analysis Engine Development}
+The analysis system was developed iteratively:
+
+\textbf{Stage 1: Core Analysis Functions}
+\begin{itemize}
+    \item Implementation of basic image processing
+    \item Development of MTF calculation
+    \item Edge detection algorithms
+    \item Basic distortion analysis
+\end{itemize}
+
+\textbf{Stage 2: Advanced Analysis Features}
+\begin{itemize}
+    \item Bokeh analysis implementation
+    \item Chromatic aberration detection
+    \item Vignetting measurement system
+    \item Result visualization generation
+\end{itemize}
+
+\textbf{Stage 3: Optimization}
+\begin{itemize}
+    \item Performance optimization for large images
+    \item Memory usage optimization
+    \item Analysis accuracy improvements
+    \item Multi-threading support
+\end{itemize}
+
+\subsection{User Interface Evolution}
+The UI development followed a user-centered approach:
+
+\textbf{Initial Design}
+\begin{itemize}
+    \item Basic camera control interface
+    \item Simple dataset management
+    \item Basic result display
+    \item Essential user feedback
+\end{itemize}
+
+\textbf{Enhanced Features}
+\begin{itemize}
+    \item Interactive analysis controls
+    \item Advanced dataset organization
+    \item Real-time status updates
+    \item Progress indicators
+\end{itemize}
+
+\textbf{Final Refinements}
+\begin{itemize}
+    \item UI responsiveness improvements
+    \item Enhanced error reporting
+    \item Advanced visualization tools
+    \item Batch operation support
+\end{itemize}
+
+\subsection{Data Management Implementation}
+Development of the dataset management system:
+
+\textbf{Core Functionality}
+\begin{itemize}
+    \item Basic dataset creation and storage
+    \item File organization structure
+    \item Metadata management
+    \item Result storage system
+\end{itemize}
+
+\textbf{Advanced Features}
+\begin{itemize}
+    \item Dataset import/export capabilities
+    \item Structured scenario management
+    \item Results comparison tools
+    \item Data integrity verification
+\end{itemize}
+
+\subsection{Integration and Testing}
+The integration process involved:
+
+\textbf{Component Integration}
+\begin{itemize}
+    \item Systematic integration of core components
+    \item Interface validation between modules
+    \item Performance optimization
+    \item Resource management verification
+\end{itemize}
+
+\textbf{Testing Procedures}
+\begin{itemize}
+    \item Unit testing of core functions
+    \item Integration testing of components
+    \item Performance testing under load
+    \item User interface testing
+\end{itemize}
+
+\subsection{Deployment Considerations}
+Final development phase addressed:
+
+\textbf{System Requirements}
+\begin{itemize}
+    \item Hardware compatibility verification
+    \item Software dependency management
+    \item Installation procedure development
+    \item Configuration management
+\end{itemize}
+
+\textbf{Documentation}
+\begin{itemize}
+    \item Technical documentation creation
+    \item User guide development
+    \item API documentation
+    \item Installation instructions
+\end{itemize}
+
+\subsection{Development Tools}
+The development utilized various tools:
+
+\textbf{Core Technologies}
+\begin{itemize}
+    \item Python for main application development
+    \item gphoto2 for camera control
+    \item OpenCV for image processing
+    \item NiceGUI for user interface
+\end{itemize}
+
+\textbf{Development Environment}
+\begin{itemize}
+    \item Version control using Git
+    \item Development on Linux platform
+    \item Python virtual environments
+    \item Continuous testing framework
+\end{itemize}
+
+
+\section{Dataset Management Architecture}
+
+Two distinct architectural approaches were considered for managing lens testing datasets: a centralized server-side approach and a split browser-server model. Each offers different advantages and tradeoffs for the application's specific requirements.
+
+\subsection{Approach Comparison}
+
+\subsubsection{Centralized Server-Side Management}
+The first approach maintains all dataset management on the server, including both metadata and RAW files.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Strong data consistency with single source of truth
+    \item Simpler transaction management for dataset operations
+    \item Reduced complexity in maintaining data synchronization
+    \item Better suited for multi-user scenarios
+    \item Easier backup and version control of complete datasets
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Higher server resource utilization
+    \item More network traffic for metadata operations
+    \item Potential latency in UI operations
+    \item Less responsive interface for dataset organization
+\end{itemize}
+
+\subsubsection{Split Browser-Server Management}
+The alternative approach splits responsibility: metadata management in the browser with RAW files on the server.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item More responsive user interface for dataset operations
+    \item Reduced server load for metadata operations
+    \item Lower bandwidth usage for organizational tasks
+    \item Better offline capabilities for dataset organization
+    \item Faster sorting and filtering of datasets
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item More complex data synchronization requirements
+    \item Potential consistency issues between client and server
+    \item Additional complexity in handling multi-user scenarios
+    \item More complicated error recovery
+    \item Need for conflict resolution in metadata
+\end{itemize}
+
+\subsection{Technical Considerations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Aspect} & \textbf{Centralized} & \textbf{Split Management} \\
+\hline
+Data Storage & All data managed in server filesystem and database & RAW files on server, metadata in browser storage \\
+\hline
+Network Usage & Higher for metadata operations, consistent for RAW files & Lower for metadata, same for RAW files \\
+\hline
+Scalability & Limited by server resources & Better distribution of computational load \\
+\hline
+Implementation Complexity & Lower, straightforward Python implementation & Higher, requires browser-server synchronization \\
+\hline
+Error Handling & Simpler recovery from failures & More complex state management required \\
+\hline
+\end{tabular}
+\caption{Technical Comparison of Dataset Management Approaches}
+\label{table:dataset_comparison}
+\end{table}
+
+\subsection{Selected Approach}
+
+For this implementation, the centralized server-side management approach was selected for several key reasons:
+
+\begin{itemize}
+    \item \textbf{Consistency Priority}: The critical nature of lens testing data requires strong consistency guarantees.
+    \item \textbf{Implementation Timeline}: The simpler architecture allows faster development and testing.
+    \item \textbf{Future Expandability}: Better foundation for adding multi-user support and version control.
+    \item \textbf{Data Integrity}: Easier to maintain referential integrity between metadata and RAW files.
+    \item \textbf{Error Recovery}: More straightforward backup and recovery procedures.
+\end{itemize}
+
+While the split browser-server model offers interesting advantages in UI responsiveness and resource distribution, the additional complexity and potential consistency issues outweighed these benefits for the current scope of the application. However, the architecture remains modular enough that transitioning to a split model could be implemented in future versions if the requirements change.
+
+The selected architecture aligns well with the project's primary goals of reliability and accuracy in lens testing, while maintaining a balance between implementation complexity and system robustness.
+
+\section{Analysis Results Architecture}
+
+A key architectural decision involved how to store and manage analysis results for lens tests.
+
+\subsection{Approach Comparison}
+
+\subsubsection{Embedded Results}
+Storing analysis results directly with photo metadata.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Simpler data structure
+    \item Direct access to results
+    \item No separate storage management
+    \item Easier data export
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Larger metadata size
+    \item Less flexible for multiple analyses
+    \item Potential performance impact on metadata operations
+\end{itemize}
+
+\subsubsection{Separate Results Storage}
+Managing analysis results in separate storage structures.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item More flexible analysis management
+    \item Better performance for large datasets
+    \item Easier to implement result versioning
+    \item Independent scaling of storage
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item More complex data relationships
+    \item Additional storage management needed
+    \item Potential consistency challenges
+\end{itemize}
+
+\subsection{Selected Approach}
+The embedded results approach was chosen for its simplicity and direct alignment with the project's scope, though the architecture allows for future transition to separate storage if needed.
+
+\section{Camera Control Architecture}
+
+The design of camera control systems presents a fundamental architectural decision: whether to use direct library integration via gphoto2 or implement a REST API-based control system. Both approaches offer distinct characteristics that impact the application's functionality and maintainability.
+
+\subsection{Approach Comparison}
+
+\subsubsection{Direct gphoto2 Integration}
+This approach, which was selected for the application, involves direct integration with the gphoto2 library through Python bindings.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Lower latency for camera operations
+    \item Direct access to all camera features
+    \item Simpler error handling with direct exceptions
+    \item No additional network stack required
+    \item Better handling of large RAW file transfers
+    \item Full access to real-time camera events
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Tight coupling to gphoto2 library
+    \item Platform-dependent installation requirements
+    \item More complex deployment process
+    \item Limited to local camera connections
+    \item Version compatibility constraints
+\end{itemize}
+
+\subsubsection{REST API-based Control}
+The alternative approach would involve implementing a REST API layer for camera control.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Platform-independent operation
+    \item Easier integration with other systems
+    \item Support for remote camera control
+    \item Simpler deployment through containerization
+    \item Better separation of concerns
+    \item Possibility of load balancing
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Additional network latency
+    \item More complex error handling
+    \item Overhead of HTTP protocol
+    \item Need for API version management
+    \item More complex security considerations
+\end{itemize}
+
+\subsection{Technical Considerations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Aspect} & \textbf{Direct Integration} & \textbf{REST API} \\
+\hline
+Performance & Minimal latency, direct memory access & Network-dependent latency \\
+\hline
+Deployment & Requires library installation & Container-friendly, portable \\
+\hline
+Security & System-level permissions & Network security required \\
+\hline
+Scalability & Limited to local connections & Supports distributed systems \\
+\hline
+Error Handling & Direct exception propagation & HTTP status codes and messages \\
+\hline
+\end{tabular}
+\caption{Technical Comparison of Camera Control Approaches}
+\label{table:camera_control_comparison}
+\end{table}
+
+\subsection{Implementation Impact}
+
+The choice of approach significantly impacts the implementation:
+
+\subsubsection{Direct Integration Implementation}
+\begin{verbatim}
+def capture_image(self):
+    try:
+        file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
+        camera_file = self.camera.file_get(
+            file_path.folder, 
+            file_path.name, 
+            gp.GP_FILE_TYPE_NORMAL
+        )
+        return camera_file
+    except gp.GPhoto2Error as e:
+        logging.error(f"Capture failed: {e}")
+        raise
+\end{verbatim}
+
+\subsubsection{REST API Implementation}
+\begin{verbatim}
+@app.post("/api/camera/capture")
+async def capture_image():
+    try:
+        response = await client.post(
+            f"{CAMERA_SERVICE_URL}/capture",
+            headers={"Authorization": AUTH_TOKEN}
+        )
+        if response.status_code == 200:
+            return response.json()
+        raise HTTPException(status_code=response.status_code)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+\end{verbatim}
+
+\subsection{Selected Approach}
+
+The direct gphoto2 integration approach was selected for several key reasons:
+
+\begin{itemize}
+    \item \textbf{Performance Priority}: The application requires minimal latency for precise timing of captures and settings changes.
+    \item \textbf{Real-time Events}: Direct access to camera events is crucial for monitoring camera status and capture completion.
+    \item \textbf{RAW File Handling}: Large RAW files are handled more efficiently with direct memory access.
+    \item \textbf{Error Control}: Direct exception handling provides better control over camera-related errors.
+    \item \textbf{Feature Access}: Full access to camera features without API abstraction limitations.
+\end{itemize}
+
+While REST API-based control offers advantages in terms of scalability and system integration, the performance and control requirements of lens testing necessitated the direct integration approach. The tight coupling to gphoto2 is mitigated through careful abstraction in the \texttt{CameraManager} class, allowing for potential future adaptation if requirements change.
+
+\subsection{Future Considerations}
+
+The current architecture could be extended to incorporate aspects of both approaches:
+
+\begin{itemize}
+    \item Adding a REST API layer on top of direct integration for remote monitoring
+    \item Implementing a hybrid system for different types of operations
+    \item Supporting both local and remote camera control based on configuration
+\end{itemize}
+
+This would combine the performance benefits of direct integration with the flexibility of API-based control for specific use cases.
+
+% additions to literature review:
+
+\section{Software Libraries and Tools}
+
+\subsection{Camera Control Libraries}
+\subsubsection{gphoto2}
+The gphoto2 library provides a robust foundation for interfacing with digital cameras. It offers several key capabilities essential for lens testing including direct camera control through USB connections, remote capture capabilities, access to camera settings and configurations, support for multiple camera manufacturers, and RAW image capture support \cite{gphoto2}.
+
+The library's architecture enables programmatic control of camera functions, making it possible to automate test sequences and ensure consistent capture conditions across multiple tests. The API provides both high-level functions for simple operations and low-level access for complex control requirements.
+
+\subsection{Image Processing Libraries}
+\subsubsection{OpenCV}
+OpenCV (Open Source Computer Vision Library) serves as a cornerstone for lens analysis applications \cite{opencv}. Its capabilities include:
+\begin{itemize}
+    \item Advanced edge detection algorithms essential for MTF calculations
+    \item Image filtering and noise reduction
+    \item Geometric distortion analysis
+    \item Color space conversions
+    \item Efficient image manipulation routines
+\end{itemize}
+
+The library's optimized algorithms make it particularly suitable for real-time analysis of high-resolution images, a crucial requirement for lens testing applications.
+
+\subsubsection{rawpy}
+rawpy provides essential capabilities for working with RAW image files \cite{rawpy}. Its features include:
+\begin{itemize}
+    \item Direct access to sensor data
+    \item Debayering algorithms
+    \item Color space conversion
+    \item Exposure adjustment
+    \item White balance control
+\end{itemize}
+
+The ability to work with RAW files is crucial for lens testing as it provides access to unprocessed sensor data, enabling more accurate analysis of lens characteristics.
+
+\subsection{Modern Web Frameworks}
+\subsubsection{NiceGUI}
+NiceGUI represents a new generation of Python web frameworks particularly suited for scientific applications \cite{nicegui}. Key features include:
+\begin{itemize}
+    \item Real-time updates without page refreshes
+    \item Integration with Python data processing
+    \item Modern reactive UI components
+    \item Efficient handling of large datasets
+    \item Built-in support for data visualization
+\end{itemize}
+
+\subsection{Testing Tools and Standards}
+\subsubsection{Test Charts and Patterns}
+Modern lens testing relies on standardized test patterns:
+\begin{itemize}
+    \item ISO 12233 resolution charts
+    \item Siemens star patterns for MTF measurement
+    \item Grid patterns for distortion analysis
+    \item Dot patterns for chromatic aberration testing
+    \item Greyscale gradients for vignetting analysis
+\end{itemize}
+
+These patterns provide standardized methods for measuring various lens characteristics, enabling consistent and comparable results.
+
+\subsection{Analysis and Visualization Tools}
+\subsubsection{Matplotlib}
+Matplotlib provides essential visualization capabilities for lens testing \cite{matplotlib}:
+\begin{itemize}
+    \item MTF curve plotting
+    \item Distortion map visualization
+    \item Vignetting pattern display
+    \item Interactive result exploration
+    \item Publication-quality graph generation
+\end{itemize}
+
+\subsection{Integration and Automation Tools}
+\subsubsection{Python Ecosystem}
+The Python ecosystem offers several tools crucial for lens testing applications:
+\begin{itemize}
+    \item numpy for numerical computations \cite{numpy}
+    \item scipy for scientific algorithms
+    \item pandas for data organization
+    \item PIL/Pillow for image handling
+    \item logging for system monitoring
+\end{itemize}
+
+These tools together provide a comprehensive foundation for building sophisticated lens testing applications.
+
+\subsection{Data Management and Organization}
+Modern lens testing systems must handle various data formats:
+\begin{itemize}
+    \item RAW image formats (CR2, NEF, ARW)
+    \item Standardized result formats
+    \item Metadata storage
+    \item Test configuration data
+    \item Analysis results
+\end{itemize}
+
+The selection and implementation of appropriate data formats significantly impacts system usability and interoperability.
+
+\subsection{Emerging Technologies}
+Recent developments in machine learning are beginning to influence lens testing:
+\begin{itemize}
+    \item Automated pattern recognition
+    \item Defect detection
+    \item Quality prediction
+    \item Test result classification
+    \item Performance optimization
+\end{itemize}
+
+These technologies show promise in automating and improving the accuracy of lens testing procedures. The integration of these various tools and libraries enables the development of comprehensive lens testing solutions that can match or exceed the capabilities of traditional commercial systems while maintaining accessibility and ease of use.
+

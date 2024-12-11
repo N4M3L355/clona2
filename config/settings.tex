@@ -1,0 +1,51 @@
+\documentclass[
+  digital,     %% The `digital` option enables the default options for the
+               %% digital version of a document. Replace with `printed`
+               %% to enable the default options for the printed version
+               %% of a document.
+%%  color,       %% Uncomment these lines (by removing the %% at the
+%%               %% beginning) to use color in the printed version of your
+%%               %% document
+  oneside,     %% The `oneside` option enables one-sided typesetting,
+               %% which is preferred if you are only going to submit a
+               %% digital version of your thesis. Replace with `twoside`
+               %% for double-sided typesetting if you are planning to
+               %% also print your thesis. For double-sided typesetting,
+               %% use at least 120 g/m² paper to prevent show-through.
+  nosansbold,  %% The `nosansbold` option prevents the use of the
+               %% sans-serif type face for bold text. Replace with
+               %% `sansbold` to use sans-serif type face for bold text.
+  nocolorbold, %% The `nocolorbold` option disables the usage of the
+               %% blue color for bold text, instead using black. Replace
+               %% with `colorbold` to use blue for bold text.
+  lof,         %% The `lof` option prints the List of Figures. Replace
+               %% with `nolof` to hide the List of Figures.
+  lot,         %% The `lot` option prints the List of Tables. Replace
+               %% with `nolot` to hide the List of Tables.
+]{fithesis4}
+
+\thesissetup{
+    date        = \the\year/\the\month/\the\day,
+    university  = mu,
+    faculty     = fi,
+    type        = mgr,
+    department  = Katedra vizuální informatiky,
+    author      = Adam Král,
+    gender      = f,
+    advisor     = {prof. RNDr. Michal Kozubek, Ph.D.},
+    title       = {Lens Evaluation and Analysis App: A Python-Based Tool for Automated Assessment of Lens Properties},
+    TeXtitle    = {Lens Evaluation and Analysis App: A Python-Based Tool for Automated Assessment of Lens Properties},
+    keywords    = {photography, lens quality, image analysis, Python application,
+test chart, image artifact, user interface, gphoto2},
+    TeXkeywords = {photography, lens quality, image analysis, Python application,
+test chart, image artifact, user interface, gphoto2},
+    abstract    = {%
+      In today’s digital age, the quality of a camera lens significantly impacts photographic and videographic outcomes. This thesis develops an open-source, user-friendly Python application for assessing lens quality using printable test charts and commonly available equipment. The application captures and processes images to evaluate lens properties such as sharpness, vignetting, point spread function (PSF), and bokeh. It provides performance scores, ensuring consistent results across different camera models and lighting conditions, offering an accessible, cost-effective tool for photographers.
+    },
+    thanks      = {%
+      Thank you to everyone who has read or is reading this thesis.
+    },
+    bib         = bibliography.bib,
+    %% Remove the following line to use the JVS 2018 faculty logo.
+    facultyLogo = fithesis-fi,
+}
