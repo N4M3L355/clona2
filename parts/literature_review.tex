@@ -1,3 +1,4 @@
+\chapter{Literature Review}
 \section{Existing Tools and Techniques}
 
 \subsection{Imatest}
@@ -33,7 +34,7 @@ The Point Spread Function (PSF) describes how a point source of light is imaged 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=2.7cm]{Images/psf.png}
+\includegraphics[width=3.7cm]{Images/psf.png}
 \caption{Example of Point Spread Function \cite{PSF}}
 \label{fig:psf}
 \end{figure}
@@ -153,97 +154,68 @@ The library's architecture enables programmatic control of camera functions, mak
 
 \subsection{Image Processing Libraries}
 \subsubsection{OpenCV}
-OpenCV (Open Source Computer Vision Library) serves as a cornerstone for lens analysis applications \cite{opencv}. Its capabilities include:
-\begin{itemize}
-    \item Advanced edge detection algorithms essential for MTF calculations
-    \item Image filtering and noise reduction
-    \item Geometric distortion analysis
-    \item Color space conversions
-    \item Efficient image manipulation routines
-\end{itemize}
+OpenCV (Open Source Computer Vision Library) serves as a cornerstone for lens analysis applications \cite{opencv}. Its capabilities include advanced edge detection algorithms crucial for MTF calculations, along with image filtering and noise reduction techniques. It also includes geometric distortion analysis, color space conversions, and efficient image manipulation routines to enhance the accuracy and efficiency of lens evaluation processes.
 
 The library's optimized algorithms make it particularly suitable for real-time analysis of high-resolution images, a crucial requirement for lens testing applications.
 
 \subsubsection{rawpy}
-rawpy provides essential capabilities for working with RAW image files \cite{rawpy}. Its features include:
-\begin{itemize}
-    \item Direct access to sensor data
-    \item Debayering algorithms
-    \item Color space conversion
-    \item Exposure adjustment
-    \item White balance control
-\end{itemize}
+rawpy is a powerful library that offers essential capabilities for working with RAW image files. Its features include direct access to sensor data, debayering algorithms, color space conversion, exposure adjustment, and white balance control \cite{rawpy}.
 
-The ability to work with RAW files is crucial for lens testing as it provides access to unprocessed sensor data, enabling more accurate analysis of lens characteristics.
+These functionalities are critical for lens testing, as they allow access to unprocessed sensor data. This raw data provides a more accurate foundation for analyzing lens characteristics, ensuring precise and reliable results. By leveraging rawpy, the application enhances the overall quality of lens evaluation.
 
 \subsection{Modern Web Frameworks}
 \subsubsection{NiceGUI}
-NiceGUI represents a new generation of Python web frameworks particularly suited for scientific applications \cite{nicegui}. Key features include:
-\begin{itemize}
-    \item Real-time updates without page refreshes
-    \item Integration with Python data processing
-    \item Modern reactive UI components
-    \item Efficient handling of large datasets
-    \item Built-in support for data visualization
-\end{itemize}
+NiceGUI is a modern Python web framework designed to meet the needs of scientific applications, offering a range of features that enhance usability and performance \cite{nicegui}. It enables real-time updates without requiring page refreshes. The framework integrates seamlessly with Python-based data processing, allowing for efficient workflows in data-driven applications. Its modern reactive UI components provide an intuitive and interactive interface, while its ability to handle large datasets makes it suitable for complex scientific tasks. Additionally, NiceGUI includes built-in support for data visualization.
 
 \subsection{Testing Tools and Standards}
-\subsubsection{Test Charts and Patterns}
-Modern lens testing relies on standardized test patterns:
-\begin{itemize}
-    \item ISO 12233 resolution charts
-    \item Siemens star patterns for MTF measurement
-    \item Grid patterns for distortion analysis
-    \item Dot patterns for chromatic aberration testing
-    \item Greyscale gradients for vignetting analysis
-\end{itemize}
 
-These patterns provide standardized methods for measuring various lens characteristics, enabling consistent and comparable results.
+\subsubsection{Test Charts}  
+Modern lens testing utilizes standardized test charts that serve as comprehensive tools for evaluating multiple imaging properties. Examples include the ISO 12233 resolution chart \cite{ISO12233}, which is widely used to assess spatial resolution, and grid charts, which are essential for analyzing geometric distortions such as barrel and pincushion effects. These charts provide a structured and consistent framework for measuring various characteristics, ensuring reproducibility and comparability across different testing scenarios.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[height=5cm]{Images/siemens_star.png}
+\caption{Siemens star \cite{siemens_star}}
+\label{fig:siemens_star}
+\end{figure}
+
+\subsubsection{Test Patterns}  
+In addition to complete test charts, specific patterns are often employed to focus on particular lens attributes. For instance, Siemens star patterns are commonly used for measuring Modulation Transfer Function (MTF) \cite{siemens_star}, while dot patterns are effective for detecting chromatic aberrations. Greyscale gradients, on the other hand, are crucial for evaluating vignetting by analyzing brightness variations across the image. These patterns, whether used standalone or as part of a larger test chart, provide standardized methods for measuring various lens characteristics, enabling consistent and comparable results.
 
 \subsection{Analysis and Visualization Tools}
-\subsubsection{Matplotlib}
-Matplotlib provides essential visualization capabilities for lens testing \cite{matplotlib}:
-\begin{itemize}
-    \item MTF curve plotting
-    \item Distortion map visualization
-    \item Vignetting pattern display
-    \item Interactive result exploration
-    \item Publication-quality graph generation
-\end{itemize}
+
+\subsubsection{Matplotlib}  
+Matplotlib offers essential visualization capabilities for lens testing, enabling clear and effective representation of analytical results. It supports plotting Modulation Transfer Function (MTF) curves, visualizing distortion maps, and displaying vignetting patterns. Additionally, it facilitates interactive exploration of results, allowing users to examine data dynamically, and is able to produce publication-quality graphs.
 
 \subsection{Integration and Automation Tools}
-\subsubsection{Python Ecosystem}
-The Python ecosystem offers several tools crucial for lens testing applications:
-\begin{itemize}
-    \item numpy for numerical computations \cite{numpy}
-    \item scipy for scientific algorithms
-    \item pandas for data organization
-    \item PIL/Pillow for image handling
-    \item logging for system monitoring
-\end{itemize}
 
-These tools together provide a comprehensive foundation for building sophisticated lens testing applications.
+\subsubsection{NumPy}  
+NumPy is a powerful library that supports efficient numerical computations, making it an essential tool for lens testing applications. Its capabilities allow for handling large arrays and performing complex mathematical operations, which are critical for processing and analyzing image data.
+
+\subsubsection{SciPy}  
+SciPy complements NumPy by offering a wide range of scientific algorithms. These include optimization, interpolation, and signal processing techniques, which are crucial for tasks such as lens quality evaluation and advanced data analysis.
+
+\subsubsection{Pandas}  
+Pandas streamlines data organization and manipulation, providing robust tools for managing structured data. In lens testing applications, pandas is indispensable for handling test results, metadata, and performance metrics in a clear and organized manner.
+
+\subsubsection{PIL/Pillow}  
+PIL/Pillow facilitates efficient image handling, including tasks such as reading, writing, and processing image files. These capabilities are vital for managing RAW images and performing preprocessing steps in lens evaluation workflows.
+
+\subsubsection{Logging}  
+The logging module plays a key role in system monitoring by recording runtime information and errors. This ensures smooth operation and effective debugging, making it an essential component of any sophisticated lens testing application.
 
 \subsection{Data Management and Organization}
-Modern lens testing systems must handle various data formats:
-\begin{itemize}
-    \item RAW image formats (CR2, NEF, ARW)
-    \item Standardized result formats
-    \item Metadata storage
-    \item Test configuration data
-    \item Analysis results
-\end{itemize}
 
-The selection and implementation of appropriate data formats significantly impacts system usability and interoperability.
+Modern lens testing systems need to manage a variety of data formats including RAW image formats such as CR2, NEF, and ARW, which preserve unprocessed sensor data for accurate analysis \cite{formats}. Standardized result formats are also essential, as they facilitate consistent comparisons and reporting across different lenses and tests.
+
+In addition to image and result formats, the storage of metadata plays a crucial role. Metadata contains important contextual information, such as camera settings and environmental conditions, which can significantly influence test outcomes. Test configuration data, outlining the parameters and settings for each test, ensures reproducibility and clarity in the testing process. Finally, systems must handle analysis results, which provide insights into lens performance and serve as a basis for further evaluations.
+
+The selection and implementation of these data formats have a profound impact on the system's usability and interoperability, enabling seamless integration and effective communication between various components and tools.
 
 \subsection{Emerging Technologies}
-Recent developments in machine learning are beginning to influence lens testing:
-\begin{itemize}
-    \item Automated pattern recognition
-    \item Defect detection
-    \item Quality prediction
-    \item Test result classification
-    \item Performance optimization
-\end{itemize}
 
-These technologies show promise in automating and improving the accuracy of lens testing procedures. The integration of these various tools and libraries enables the development of comprehensive lens testing solutions that can match or exceed the capabilities of traditional commercial systems while maintaining accessibility and ease of use.
+Recent advancements in machine learning are beginning to transform the field of lens testing. Automated pattern recognition now allows for more efficient and precise identification of key features in test images, significantly reducing manual effort. Defect detection algorithms can identify imperfections in lenses with higher accuracy and consistency than traditional methods. Quality prediction models leverage machine learning to estimate lens performance metrics based on test data, enabling proactive decision-making.
+
+Machine learning also facilitates the classification of test results, streamlining the analysis process and ensuring reproducibility. Furthermore, performance optimization techniques help refine the testing workflow, reducing time and resource requirements while enhancing overall accuracy.
+
+These technologies hold great potential for automating and improving lens testing procedures. By integrating these advanced tools and techniques, comprehensive lens testing solutions can be developed that rival or even surpass the capabilities of traditional commercial systems, all while maintaining accessibility and ease of use for a wider range of users.

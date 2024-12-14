@@ -1,104 +1,55 @@
 \section*{Background and motivation}
-In today's rapidly advancing digital age of photography, the quality of a camera lens can significantly influence the outcome of photographic or videographic work. High-quality lenses can enhance sharpness, color accuracy, and overall image fidelity, while low-quality lenses may introduce undesirable artifacts such as distortion, chromatic aberration, and vignetting. Evaluating a lens's quality, therefore, becomes crucial for both amateur and professional photographers.
+In today's rapidly advancing digital age of photography, the quality of a camera lens can significantly influence the outcome of photographic or videographic work. High-quality lenses can enhance sharpness, color accuracy, and overall image fidelity, while low-quality lenses can introduce undesirable artifacts such as distortion, chromatic aberration, and vignetting. Evaluating a lens's quality, therefore, becomes crucial for both amateur and professional photographers.
 
-However, evaluating lens quality involves intricate techniques and specialized equipment, often making it inaccessible for many photographers. Current tools and methods, such as those provided by Imatest and Dxomark, offer comprehensive image quality assessments but can be prohibitively expensive and complex for everyday users. These tools also often require controlled environments and advanced technical knowledge to operate effectively.
+However, evaluating lens quality involves intricate techniques and specialized equipment, often making it inaccessible to many photographers. Current tools and methods, such as those provided by Imatest and Dxomark, offer comprehensive image quality assessments, but can be prohibitively expensive and complex for everyday users. These tools also often require controlled environments and advanced technical knowledge to operate effectively.
 
 This thesis aims to bridge this gap by developing a user-friendly Python application that allows photographers to assess the quality of their lenses using at-home printable test charts and commonly available equipment. The application captures images of calibration elements, processes and analyzes these images to evaluate various lens properties, and provides a score (or a suite of scores) to describe the performance. This evaluation includes analyzing sharpness, vignetting, point spread function (PSF), and bokeh characteristics.
 
 
-Evaluating lens quality accurately and conveniently is important for several reasons. For professionals, it can mean the difference between a good and a great shot, impacting their reputation and business. For amateurs, understanding lens quality can enhance their learning curve and improve their photography skills. This application democratizes lens evaluation, making it accessible to a wider audience and helping photographers make informed decisions about their equipment.
+Evaluating lens quality accurately and conveniently is important for several reasons. For professionals, it can mean the difference between a good and a great shot, which can impact their reputation and business. For amateurs, understanding lens quality can enhance their learning curve and improve their photography skills. This application democratizes lens evaluation, making it accessible to a wider audience and helping photographers make informed decisions about their equipment.
 
 
 
-The source code for this project is available on GitHub: \url{https://github.com/N4M3L355/clona}
+The source code for this project is available on GitHub: \url{https://github.com/N4M3L355/clona}.
 \section*{Problem statement}
-In the field of photography and optical equipment evaluation, there exists a significant gap between professional lens testing tools and accessible solutions for photographers and technicians. This gap presents several key challenges:
+In the field of photography and optical equipment evaluation, there is a significant gap between professional lens testing tools and accessible solutions for photographers and technicians. This gap presents several key challenges:
 
 \begin{enumerate}
-    \item \textbf{Accessibility of Lens Testing}
-    \begin{itemize}
-        \item Professional lens testing equipment like Imatest or DxOMark systems is prohibitively expensive for individual photographers and small studios
-        \item Existing solutions require specialized testing environments and complex calibration procedures
-        \item Current tools often demand extensive technical knowledge to operate effectively
-    \end{itemize}
+    \item \textbf{Accessibility of Lens Testing} \\
+        Professional lens testing tools are costly, require specialized environments, and demand technical expertise, limiting their accessibility for nonexperts.
+        
+    \item \textbf{Technical Limitations} \\
+        DIY methods lack quantitative accuracy and reproducibility. Most open-source tools focus on isolated metrics like MTF or distortion, rather than comprehensive lens evaluation.
+        
+    \item \textbf{Data Management Challenges} \\
+        Existing tools lack systematic methods for organizing and comparing test results, maintaining consistent conditions, and tracking performance trends over time.
 
-    \item \textbf{Technical Limitations}
-    \begin{itemize}
-        \item Common DIY testing methods lack quantitative measurements and reproducibility
-        \item Most available solutions do not integrate directly with cameras for automated testing
-        \item Existing open-source alternatives often focus on single aspects (like MTF or distortion) rather than comprehensive lens evaluation
-    \end{itemize}
+    \item \textbf{Automation and Workflow} \\
+        Manual testing is time-consuming, error-prone, and requires repeated adjustments. The absence of automated capture workflows limits efficiency.
 
-    \item \textbf{Data Management Challenges}
-    \begin{itemize}
-        \item Lack of systematic approaches to organizing and comparing lens test results
-        \item Difficulty in maintaining consistent testing conditions across different sessions
-        \item Limited tools for tracking lens performance over time
-    \end{itemize}
-
-    \item \textbf{Automation and Workflow}
-    \begin{itemize}
-        \item Manual testing procedures are time-consuming and prone to human error
-        \item Need for repeated camera setting adjustments makes testing tedious
-        \item Lack of automated capture sequences for different lens parameters
-    \end{itemize}
-
-    \item \textbf{Analysis and Interpretation}
-    \begin{itemize}
-        \item Complex optical measurements often require expert interpretation
-        \item Difficulty in translating technical measurements into practical insights
-        \item Limited tools for visualizing and comparing different aspects of lens performance
-    \end{itemize}
+    \item \textbf{Analysis and Interpretation} \\
+        Complex optical data requires expert interpretation. Tools for translating measurements into actionable insights and visual comparisons are insufficient.
 \end{enumerate}
 
-These challenges create a need for a solution that bridges the gap between professional testing equipment and accessible tools for photographers. The problem requires addressing not only the technical aspects of lens testing but also the practical considerations of usability, automation, and data management. This thesis proposes to address these challenges through the development of a comprehensive, user-friendly lens evaluation application that combines automated camera control, sophisticated image analysis, and intuitive result presentation.
+These challenges create a need for a solution that bridges the gap between professional testing equipment and accessible tools for photographers. This thesis proposes to address these challenges through the development of a comprehensive, user-friendly lens evaluation application that combines automated camera control, sophisticated image analysis, and intuitive result presentation.
 
-The key problems this thesis aims to solve include:
-\begin{itemize}
-    \item How to design and implement an accessible yet accurate lens testing system
-    \item How to automate the capture and analysis process while maintaining reliability
-    \item How to present complex optical measurements in an understandable format
-    \item How to ensure consistent and reproducible results across different testing conditions
-    \item How to manage and organize lens testing data effectively
-\end{itemize}
+% The key problems this thesis aims to solve include:
+% \begin{itemize}
+%     \item Designing and implementing an accessible yet accurate lens testing system
+%     \item Automating the capture and analysis process while maintaining reliability
+%     \item Presenting complex optical measurements in an understandable format
+%     \item Ensuring consistent and reproducible results across different testing conditions
+%     \item Managing and organizing lens testing data effectively
+% \end{itemize}
 
 By addressing these problems, this thesis contributes to making professional-grade lens testing more accessible to photographers, technicians, and educational institutions while maintaining scientific rigor and practical utility.
 
-\section*{Problem statement}
 \section*{Objectives}
-The objectives of this thesis are:
-\begin{enumerate}
-    \item Develop an application to interface with a camera via USB and capture images in RAW format.
-    \item Implement image processing algorithms to segment and preprocess calibration elements in the captured images.
-    \item Evaluate lens properties and provide comprehensive scores, focusing on sharpness, vignetting, and other key characteristics.
-    \item Create a web interface for user interaction, allowing both advanced users and beginners to use the application.
-    \item Ensure consistent results across different camera bodies and varying lighting conditions.
-    \item Implement functionality to save and load session data, enabling repeated analyses and comparisons over time.
-\end{enumerate}
+This thesis aims to develop an application that interfaces with cameras to capture RAW images and implements image processing algorithms for segmenting and preprocessing calibration elements within these images. The application then evaluates lens properties such as sharpness and vignetting with comprehensive scoring. A user-friendly web interface ensures accessibility for both experts and beginners, while features like session saving and consistent performance across various cameras and lighting conditions enhance usability and reliability.
 
 \section*{Scope and limitations}
 
-This thesis addresses several challenges:
-\begin{enumerate}
-    \item \textbf{Accessibility}: By providing a cost-effective and user-friendly tool, this application makes lens evaluation accessible to non-professionals.
-    \item \textbf{Accuracy}: Implementing robust image processing algorithms ensures accurate assessment of lens properties.
-    \item \textbf{Versatility}: The application is designed to work with different camera bodies and under varying lighting conditions, providing consistent results.
-    \item \textbf{Usability}: The web interface is designed to be intuitive, catering to both advanced users and beginners.
-\end{enumerate}
-\begin{enumerate}
-    \item How can a user-friendly application for lens quality evaluation be designed to provide accurate and reliable results?
-    \item What image processing techniques are most effective for evaluating different lens properties such as sharpness, vignetting, and bokeh?
-    \item How can the application ensure consistency in results across different camera models and varying lighting conditions?
-    \item What are the benefits and limitations of using at-home printable test charts for lens evaluation?
-\end{enumerate}
+The scope of this thesis focuses on addressing key challenges in lens evaluation by developing a cost-effective and user-friendly tool that makes this process accessible to non-professionals. Robust image processing algorithms are employed to ensure accurate assessments of lens properties, while the application is designed to deliver consistent results across various camera models and lighting conditions, showcasing its versatility. An intuitive web interface further enhances usability, catering to both advanced users and beginners. Additionally, the research explores designing a reliable and user-friendly application, determining effective image processing techniques for evaluating properties such as sharpness and bokeh, ensuring consistency across diverse setups, and assessing the practicality of using at-home printable test charts.
 
 \section*{Thesis Structure}
-This thesis is structured as follows:
-\begin{itemize}
-    \item \textbf{Chapter 1: Introduction}: Provides an overview of the study, its objectives, significance, and research questions.
-    \item \textbf{Chapter 2: Literature Review}: Reviews existing tools and techniques for lens evaluation, and explains key concepts and technologies used.
-    \item \textbf{Chapter 3: Methodology}: Describes the system architecture, data flow, and scenarios for analysis.
-    \item \textbf{Chapter 4: Implementation}: Details the development process, core functionalities, and integration of the application.
-    \item \textbf{Chapter 5: Results and Discussion}: Presents the results of testing and validation, compares with existing tools, and discusses user feedback.
-    \item \textbf{Chapter 6: Conclusion and Further Work}: Summarizes key findings, discusses limitations, and outlines future research directions.
-\end{itemize}
+This thesis is organized into six chapters. First chapter reviews existing tools and techniques for lens evaluation while explaining key concepts and technologies. Second chapter details the methodology, including the system architecture, data flow, and analysis scenarios. Third chapter describes the implementation process, covering core functionalities and application integration. Fourth chapter presents the testing results, validation and comparisons with existing tools. The last chapter concludes with a summary of findings, limitations, and directions for future research.
