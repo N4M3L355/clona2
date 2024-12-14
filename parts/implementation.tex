@@ -214,22 +214,141 @@ The web interface provides:
 
 \section{Testing}
 
-\subsection{Testing Methodology}
-Testing was conducted across multiple areas:
+To ensure the reliability and correctness of the application, particularly in the context of the "garage lab" approach described in the methodology, a comprehensive test suite was implemented using the pytest framework. The tests were designed to validate both the technical functionality and the practical usability of the application.
 
+\subsection{Test Architecture}
+The test suite is organized into four main components, reflecting the modular architecture of the application:
 \begin{itemize}
-    \item Unit testing of core functions
-    \item Integration testing of system components
-    \item Performance testing under various conditions
-    \item User interface testing and validation
+    \item \texttt{test\_camera\_manager.py} - Validates camera control and image acquisition
+    \item \texttt{test\_dataset\_manager.py} - Ensures proper data organization and persistence
+    \item \texttt{test\_analysis.py} - Verifies image processing and lens measurement algorithms
+    \item \texttt{test\_ui.py} - Tests user interface components and interactions
 \end{itemize}
 
-\subsection{Test Results}
-Testing revealed:
-
+\subsection{Camera Manager Tests}
+The camera manager tests focus on ensuring reliable camera operation in various scenarios:
 \begin{itemize}
-    \item Successful camera integration across supported models
-    \item Accurate analysis results compared to reference data
-    \item Acceptable performance under typical usage conditions
-    \item Positive user feedback on interface usability
+    \item Camera initialization and connection management
+    \item Image capture and metadata extraction
+    \item Camera configuration for different testing scenarios
+    \item EXIF data processing for lens information
+    \item Error handling and recovery mechanisms
 \end{itemize}
+
+Example of camera initialization test:
+\begin{lstlisting}[language=Python]
+def test_initialize_camera(mock_camera):
+    """Test camera initialization"""
+    with patch('gphoto2.Camera') as mock_camera_class:
+        mock_camera_class.return_value = mock_camera
+        mock_camera_class.autodetect = MagicMock(
+            return_value=[(0, "Test Camera")])
+        
+        # Mock camera status check
+        config = MagicMock()
+        widget = MagicMock()
+        widget.get_value.return_value = 0
+        config.get_child_by_name.return_value = widget
+        mock_camera.get_config.return_value = config
+        
+        manager = CameraManager()
+        success = manager.initialize_camera()
+        
+        assert success
+        assert manager.connected
+        assert manager.camera is not None
+\end{lstlisting}
+
+\subsection{Analysis Tests}
+The analysis tests verify the accuracy of lens measurement algorithms:
+\begin{itemize}
+    \item MTF calculation and sharpness analysis
+    \item Bokeh quality assessment
+    \item Distortion measurement
+    \item Vignetting analysis
+    \item Chromatic aberration detection
+\end{itemize}
+
+\subsection{UI Tests}
+The UI tests ensure proper user interaction and workflow:
+\begin{itemize}
+    \item Camera connection and status display
+    \item Test scenario execution
+    \item Dataset and measurement management
+    \item Result visualization and export
+\end{itemize}
+
+Example of photo capture test:
+\begin{lstlisting}[language=Python]
+def test_handle_capture_photo(ui_instance, temp_dir):
+    """Test photo capture handling"""
+    capture_result = {
+        'path': os.path.join(temp_dir, "test.jpg"),
+        'metadata': {
+            'camera_settings': {
+                'aperture': '1.8',
+                'shutterspeed': '1/100',
+                'iso': '400'
+            }
+        }
+    }
+    
+    ui_instance.camera_manager.capture_image = MagicMock(
+        return_value=capture_result)
+    ui_instance.camera_manager.connected = True
+    
+    with patch('nicegui.ui.notify') as mock_notify:
+        ui_instance.handle_capture_photo()
+        ui_instance.camera_manager.capture_image\
+            .assert_called_once()
+        mock_notify.assert_called_once()
+\end{lstlisting}
+
+\subsection{Test Fixtures and Mocking}
+To support the "garage lab" testing approach while ensuring reliable software testing:
+
+\textbf{Test Fixtures}
+\begin{itemize}
+    \item \texttt{mock\_camera} - Simulates camera behavior
+    \item \texttt{mock\_camera\_manager} - Provides camera control testing
+    \item \texttt{temp\_dir} - Manages test file storage
+    \item \texttt{dataset\_manager} - Handles test data organization
+    \item \texttt{sample\_image} - Provides standardized test images
+\end{itemize}
+
+\textbf{External Dependencies}
+\begin{itemize}
+    \item Camera operations are mocked to ensure consistent testing
+    \item File system operations are isolated for reproducibility
+    \item UI components are simulated for interaction testing
+    \item Image processing operations use controlled test data
+\end{itemize}
+
+\subsection{Quality Assurance}
+The test suite ensures quality across several dimensions:
+
+\textbf{Functional Testing}
+\begin{itemize}
+    \item Camera control reliability
+    \item Data management accuracy
+    \item Analysis algorithm precision
+    \item UI responsiveness and usability
+\end{itemize}
+
+\textbf{Error Handling}
+\begin{itemize}
+    \item Camera connection issues
+    \item Invalid user input
+    \item Resource availability
+    \item Data corruption scenarios
+\end{itemize}
+
+\textbf{Performance Testing}
+\begin{itemize}
+    \item Image processing efficiency
+    \item Memory usage optimization
+    \item Response time measurement
+    \item Resource cleanup verification
+\end{itemize}
+
+Test coverage reports are generated using pytest-cov to ensure comprehensive testing of all components, with particular attention to critical paths in the lens measurement workflows.
