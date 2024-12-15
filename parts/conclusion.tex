@@ -1,13 +1,20 @@
 \chapter{Conclusion and Further Work}
 \section{Summary of Findings}
-This thesis presented the development of a Python application for evaluating lens properties. The application successfully captured and analyzed images to assess various lens properties, providing a comprehensive score for each lens. Comparison with existing tools demonstrated the application's accuracy and usability.
+This thesis presented the development of a Python application for evaluating lens properties. The application successfully captured and analyzed images to assess various lens properties, providing a comprehensive score for each property. % todo: toto si asi nerobila: Comparison with existing tools demonstrated the application's accuracy and usability.
+
+The methodology includes support for RAW image capture, parameterized batch processing, and integration of standardized test charts. A web-based user interface, developed with NiceGUI, enhances usability and supports diverse use cases for beginners and professionals alike.
+
+The research explores fundamental aspects of lens performance, including sharpness, chromatic aberrations, geometric distortions, vignetting, bokeh, and dynamic range. It also examines the challenges posed by metadata reliability and camera control standardization. Robust error handling and recovery mechanisms are implemented to ensure system stability.
 
 \section{Limitations}
-Limitations of the current implementation include the need for consistent lighting conditions and the dependency on specific camera models. Future work could address these limitations by developing more robust algorithms and expanding compatibility.
+The application is currently limited to cameras that are compatible with the Python libraries utilized in its implementation, particularly gphoto2 used to access the camera \cite{gphoto2_compatible}. This dependency on library support restricts the system’s compatibility to a subset of cameras, potentially excluding certain models or brands.
+
+Lighting conditions significantly impact lens evaluation by affecting the accuracy and consistency of results. Variations in intensity, color temperature, and uniformity can influence the measurements of various lens properties. Furthermore, achieving even illumination, especially for test charts, often requires specialized setups that may not always be accessible for at-home lens testing.
+
+The reliance on EXIF metadata for extracting camera and lens information presents challenges due to inconsistent implementation across manufacturers and the lack of a formal standard. This makes metadata an unreliable sole source of information.
+
+High-resolution RAW image analysis and advanced processing algorithms might place significant computational demands on lower-end hardware, potentially affecting performance.
 
 \section{Future Work}
-Future research could focus on:
-\begin{itemize}
-    \item \textbf{Motorisation}: Automating the testing setup for more precise measurements.
-    \item \textbf{Exhaustive Catalogue}: Developing an exhaustive catalogue of lens evaluations to serve as a reference for photographers and technicians.
-\end{itemize}
+
+Future research could explore the integration of motorized testing setups to achieve greater precision in measurements. Currently tested lens properties could be expanded to create an extensive catalog of lens evaluations, providing a valuable reference for photographers and technicians.

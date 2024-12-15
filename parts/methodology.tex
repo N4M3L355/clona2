@@ -1,3 +1,5 @@
+
+
 \chapter{Methodology}
 
 \section{Overview}
@@ -12,7 +14,7 @@ Rather than requiring expensive calibration targets, the methodology relies on p
 
 \subsection{Testing Scenarios}
 
-\subsubsection{The White Wall Technique}
+\subsubsection{The White Wall Technique} %todo prepisat
 The vignetting analysis relies on photographing a uniformly lit white wall. While professional testing uses integrating spheres, a well-lit white wall provides sufficient data for relative comparisons. Users are instructed to position the camera square to the wall and ensure even illumination through test shots.
 
 \subsubsection{Bokeh Analysis Setup} 
@@ -23,47 +25,30 @@ Point light sources for bokeh testing can be created using simple LED lights or 
 \subsubsection{Lighting Compensation}
 Rather than requiring expensive studio lighting, the methodology adapts to available light sources. Test procedures include steps for compensating for uneven ambient lighting through reference shots and software correction. This makes testing possible in various environments while maintaining relative accuracy.
 
-\subsubsection{Vibration Management}
-Without access to professional vibration isolation tables, the methodology provides techniques for minimizing camera shake using household items. This includes using stacked books as an impromptu stable platform and employing mirror lockup and timer delays to reduce vibration.
-
-\subsection{Consistency Through Process}
+\subsection{Consistency Through Process} %todo prepisat
 While individual measurements may have higher variability than lab tests, the methodology emphasizes consistency through careful documentation and repeated measurements. By averaging multiple tests and following structured procedures, hobbyist photographers can build meaningful datasets about their lens performance using accessible tools and spaces.
 
 \section{Image Acquisition}
+
 \subsection{Camera Control System}
-The image acquisition system uses gphoto2 for camera control with:
-\begin{itemize}
-    \item Automated camera detection and configuration
-    \item Exposure and focus parameter management
-    \item Error handling and recovery procedures
-    \item RAW format capture optimization
-\end{itemize}
+The image acquisition system uses gphoto2 to manage camera control effectively. It provides automated detection and configuration of cameras, simplifying the setup process. The system also facilitates the management of exposure and focus parameters. Robust error handling and recovery procedures are implemented to ensure uninterrupted operation. Additionally, the system is optimized for capturing images in RAW format, preserving maximum image quality for detailed analysis.
 
 \subsection{Camera Setup and Configuration}
-The image acquisition system employs the gphoto2 library for direct camera control. The system implements a structured approach to camera management with the following key components:
-
-\textbf{Setting Validation}
-\begin{itemize}
-    \item Parameter range checking
-    \item Configuration compatibility verification
-    \item Setting application confirmation
-    \item Error state recovery
-\end{itemize}
+The system implements a structured approach to camera management by incorporating key components that ensure reliability and accuracy. Setting validation is a critical aspect, including parameter range checking to confirm that values fall within acceptable limits, configuration compatibility verification to prevent conflicts, and setting application confirmation to ensure that changes are successfully applied. Additionally, error state recovery mechanisms are in place to handle unexpected issues and maintain smooth operation.
 
 \subsection{RAW Image Capture}
-The image acquisition process follows a defined protocol:
+The image acquisition process follows to a defined protocol that ensures reliability and efficiency.
 
-\textbf{Pre-capture Steps}
-\begin{enumerate}
-    \item Camera readiness verification with timeout handling
-    \item Configuration parameter validation
-    \item Memory buffer allocation
-    \item Capture target confirmation
-\end{enumerate}
+\subsubsection{Pre-capture Steps}
+Pre-capture steps include verifying camera readiness with timeout handling to avoid delays, validating configuration parameters to ensure compatibility, allocating memory buffers for seamless data handling, and confirming the capture target to direct where the image will be stored. These measures collectively provide a robust foundation for the image capture process.
 
-\textbf{Capture Process}
+\subsubsection{Capture Process}
+
+The capture process involves a sequence of well-defined steps. If required, the process begins with mirror lock-up to minimize vibrations during the capture. This is followed by the execution of the capture command and the initiation of file transfer from the camera. Data integrity is then verified to ensure the accuracy of the captured image, and finally, local storage management is performed to organize and store the data efficiently.
+
+% TODO: neviem ci pouzit
 \begin{enumerate}
-    \item Mirror lock-up if required
+    \item Mirror lock-up
     \item Capture command execution
     \item File transfer initiation
     \item Data integrity verification
@@ -71,39 +56,23 @@ The image acquisition process follows a defined protocol:
 \end{enumerate}
 
 \subsection{Batch Capture Implementation}
-For scenarios requiring multiple captures at different settings:
+The batch capture implementation is designed to facilitate scenarios that require multiple captures with different settings.
 
-\textbf{Batch Process Control}
-\begin{itemize}
-    \item Parameter sequence definition
-    \item Automatic setting adjustment between captures
-    \item Progress monitoring and status reporting
-    \item Error handling with batch continuation capability
-\end{itemize}
+\subsubsection{Batch Process Control}
+ Batch process control ensures a seamless workflow by defining the sequence of parameters for each capture and automatically adjusting settings between captures. Additionally, progress monitoring and status reporting provide real-time updates on the batch process, while robust error-handling mechanisms allow the process to continue uninterrupted, even in the presence of individual capture failures.
 
-\textbf{Data Management}
-\begin{itemize}
-    \item Structured file naming convention
-    \item Metadata embedding
-    \item Temporary storage management
-    \item Dataset organization
-\end{itemize}
+\subsubsection{Data Management}
+Data management plays a critical role in the batch capture process. A structured file naming convention is employed to maintain consistency and ease of identification, while metadata is embedded directly into the captured files for enhanced traceability. Temporary storage is managed efficiently to optimize space usage during the batch process, and the final dataset is organized systematically to ensure accessibility and compatibility with subsequent analysis workflows.
 
 \subsection{Focus Control System}
-The system implements both automatic and manual focus control:
 
-\textbf{Focus Mechanisms}
-\begin{itemize}
-    \item Autofocus engagement/disengagement
-    \item Manual focus drive control
-    \item Focus confirmation
-    \item Focus distance tracking
-\end{itemize}
+The system implements both automatic and manual focus control. Autofocus can be engaged or disengaged as needed. Manual focus drive control offers fine-tuned adjustments for scenarios requiring greater precision. Focus confirmation ensures that the desired focus point has been achieved. The system tracks focus distance in real-time, providing valuable data for maintaining accuracy and consistency across captures.
 
 \subsection{Error Handling and Recovery}
-Robust error handling is implemented at multiple levels:
 
-\textbf{Error Categories}
+\subsubsection{Error Categories}
+The system implements robust error handling mechanisms at multiple levels:
+
 \begin{itemize}
     \item Connection failures
     \item Configuration errors
@@ -111,17 +80,14 @@ Robust error handling is implemented at multiple levels:
     \item File transfer issues
 \end{itemize}
 
-\textbf{Recovery Mechanisms}
-\begin{itemize}
-    \item Automatic reconnection attempts
-    \item Configuration reset capabilities
-    \item Capture retry logic
-    \item Resource cleanup procedures
-\end{itemize}
+Each error category is addressed with targeted strategies to minimize disruption and maintain smooth operation.
+
+\subsubsection{Recovery Mechanisms}
+Recovery mechanisms are an integral part of the system’s error management framework. Automatic reconnection attempts are employed to restore communication in the event of connection failures. Configuration reset capabilities allow the system to recover from misconfigurations efficiently. Capture retry logic ensures that transient issues during image capture do not halt the overall process. Resource cleanup procedures are implemented to prevent system clutter and ensure that resources are appropriately managed following errors.
 
 \section{Software Architecture Decisions}
 
-\subsubsection{Dataset Management Architecture}
+\subsection{Dataset Management Architecture}
 The dataset management architecture implements a hierarchical file-based organization system designed to maintain relationships between captured images, their analysis results, and associated metadata. Each dataset represents a complete lens evaluation session, structured as a self-contained directory with standardized subdirectories for scenarios, images, and analysis outputs.
 
 At the root of each dataset, a JSON-based manifest file maintains dataset metadata and provides an index of all contained scenarios and images. This manifest approach enables quick dataset listing and scenario selection without requiring full directory traversal or image loading. The architecture separates the storage of large image files from their metadata, allowing efficient loading of analysis results without immediately incurring the memory overhead of image data.
@@ -132,7 +98,7 @@ The architecture implements an import/export system that packages datasets into 
 
 Storage efficiency is considered through selective JPEG preview generation, with computationally intensive RAW processing performed only when required for analysis. The architecture maintains relative paths within datasets, enabling relocation of dataset directories without breaking internal references.
 
-\subsubsection{Camera Control Architecture}
+\subsection{Camera Control Architecture}
 The camera control architecture implements a state machine pattern to manage camera interactions and maintain connection stability. At its core, a camera manager class encapsulates all camera operations behind a thread-safe interface, utilizing a locking mechanism to prevent concurrent access conflicts during critical operations.
 
 The architecture employs a background monitoring system that periodically verifies camera connectivity and readiness. This monitoring runs in a separate daemon thread, checking camera status every two seconds and attempting automatic recovery when connection issues are detected. The system manages three primary states: disconnected, connected-but-busy, and ready-for-capture.
@@ -144,16 +110,16 @@ Error handling is implemented through a layered approach, with low-level camera 
 Memory management considerations are addressed through careful handling of image data buffers, particularly during RAW capture operations where memory requirements are substantial. The architecture implements immediate cleanup of temporary buffers and provides mechanisms for streaming large images directly to storage rather than holding them in memory.
 
 While primarily tested with Canon EOS models, the architecture attempts to maintain vendor neutrality by accessing camera features through generic gphoto2 interfaces rather than relying on vendor-specific commands where possible. This design decision trades some advanced feature access for broader compatibility.
-\subsubsection{State Management}
+\subsection{State Management}
 The system employs a thread-safe state machine to maintain camera states throughout operation cycles. The connection state continuously monitors camera connectivity and implements automatic recovery mechanisms when needed. An operation state handler manages active camera operations including capture and configuration processes. To prevent race conditions and ensure data integrity, a lock state mechanism provides thread-safe access to all camera resources.
 
-\subsubsection{Error Recovery System}
+\subsection{Error Recovery System}
 The error handling system provides comprehensive recovery mechanisms for various failure scenarios. When connection failures occur, the system automatically initiates reconnection attempts with exponential backoff. Temporary errors are handled through operation retry logic, while hardware issues trigger graceful degradation procedures to maintain basic functionality. Critical failures activate resource cleanup protocols to prevent system resource leaks.
 
-\subsubsection{Event System}
+\subsection{Event System}
 Asynchronous camera operations are managed through a sophisticated event system. This system broadcasts status changes to all relevant components, handles operation completion notifications, and provides detailed context for error events. The event system maintains a consistent view of camera state across all system components through connection state broadcasts.
 
-\subsubsection{Analysis Results Architecture}
+\subsection{Analysis Results Architecture}
 The architecture for storing and managing analysis results follows a hierarchical structure designed to maintain organization across different types of lens evaluations. Each analysis result is stored as a dictionary containing both numerical measurements and visualization data, with standardized fields for consistent access and comparison.
 
 The core results structure includes metadata about the capture conditions, raw measurements, processed metrics, and paths to generated visualizations. For vignetting analysis, the results store center-to-corner intensity ratios along with a heat map visualization. Sharpness analysis results maintain edge intensity measurements, MTF values, and comparative visualizations showing detected edges against the original image.
@@ -166,16 +132,16 @@ An important consideration in the design was error handling - results objects in
 
 While not attempting to match the sophistication of commercial solutions, this architecture provides sufficient structure to support meaningful lens evaluation within the scope of an educational tool.
 
-\subsubsection{Storage Format}
+\subsection{Storage Format}
 The system utilizes a hierarchical JSON-based structure for data organization, ensuring both flexibility and accessibility. Each measurement is associated with detailed metadata that captures test conditions and parameters. The system preserves raw data alongside processed results, enabling future reanalysis as algorithms improve. Version control of stored results maintains data integrity and enables tracking of analysis improvements over time.
 
-\subsubsection{Comparison Framework}
+\subsection{Comparison Framework}
 A sophisticated comparison framework enables detailed analysis across different lenses and testing conditions. The system supports both direct cross-lens comparisons and historical trend analysis, incorporating statistical significance testing to validate results. A normalized scoring system accounts for variations in test conditions, ensuring meaningful comparisons across different testing scenarios.
 
-\subsubsection{Export Capabilities}
+\subsection{Export Capabilities}
 The system provides flexible data export options to support various analysis needs. Detailed CSV reports capture numerical data for statistical analysis, while visual comparison charts offer intuitive result interpretation. Raw measurement data export enables external analysis and verification, and comprehensive metadata export ensures full reproducibility of all test results.
 
-\subsection{Integration Points} 
+\section{Integration Points} %todo subsection or section
 The integration points between system components follow a modular design that emphasizes loose coupling and high cohesion. The camera control system communicates with the analysis engine through a message queue system, allowing asynchronous processing of captured images. This design choice reduces system blocking during long-running operations and improves overall responsiveness.
 
 The analysis engine interfaces with the data management system through a unified API that handles both RAW image storage and analysis results. This integration point implements retry logic and transaction management to ensure data consistency, particularly important when handling large RAW files during batch operations.
@@ -192,10 +158,8 @@ Storage requirements vary based on usage patterns, with a typical analysis sessi
 \subsection{Validation Procedures} 
 The validation process implements both automated and manual verification steps to ensure measurement accuracy. Each lens analysis includes control measurements using calibration patterns to validate the core metrics. These controls provide baseline measurements that help identify any systematic errors in the analysis pipeline.
 
-The testing methodology incorporates reference measurements from two Canon EOS cameras with known characteristics. Test results show measurement repeatability within 5% for key metrics including MTF50 and vignetting analysis. This variation accounts for environmental factors such as lighting changes and mechanical tolerances in lens positioning.
-
 Cross-validation with existing analysis tools provided reference points for accuracy assessment. While the system cannot match the precision of industrial testing equipment, it achieves sufficient accuracy for practical lens evaluation. The validation process identified areas where measurement accuracy could be improved, particularly in chromatic aberration detection under varying lighting conditions.
-
+%todo dopisat
 \section{Image Processing Pipeline}
 
 \subsection{Preprocessing}
@@ -327,21 +291,6 @@ The application creates separate directories for each dataset, with subdirectori
 
 \subsubsection{Metadata Storage}
 The system stores dataset and scenario metadata in JSON format, enabling easy parsing and modification. Analysis results use efficient binary storage for quick access. The application preserves original image files in their native format (RAW or JPEG) and maintains separate preview images for rapid display.
-
-\subsection{Testing Workflow}
-The data organization supports a systematic testing process:
-
-\subsubsection{Dataset Creation}
-Users begin by creating a new dataset, entering lens specifications and testing conditions. This establishes the foundation for all subsequent tests.
-
-\subsubsection{Scenario Execution}
-Within each dataset, users select and execute specific test scenarios. The application guides users through proper setup and capture procedures for each scenario type.
-
-\subsubsection{Results Management}
-After capture and analysis, the system organizes results hierarchically. Users can examine individual frame results or aggregate data across scenarios. The organization enables easy comparison of results across different lens settings or between different lenses.
-
-\subsection{Integration with Analysis System}
-The data organization structure directly supports the image processing and analysis pipeline described in Section 3.5. Each scenario type corresponds to specific analysis algorithms, with results stored in standardized formats for consistency and comparability.
 
 \subsection{User Interface Considerations}
 The data organization influences the user interface design, providing intuitive navigation through tests and results. The interface reflects the hierarchical nature of the data, allowing users to drill down from datasets to specific frame results while maintaining context.

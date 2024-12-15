@@ -1,7 +1,7 @@
 \chapter{Implementation}
 \section{Development Process}
 
-\subsection{Initial Architecture Design}
+ \subsection{Initial Architecture Design}
 The development process began with a modular architecture designed around four primary components, each with distinct responsibilities and well-defined interfaces:
 
 \begin{itemize}
@@ -46,7 +46,7 @@ The analysis engine evolved through three main stages:
     \item Raw image processing pipeline implementation
     \item MTF calculation algorithms
     \item Edge detection and analysis systems
-    \item Basic lens distortion measurement
+    \item Basic lens distortion measurement %todo: prepisat
 \end{itemize}
 
 \textbf{Stage 2: Advanced Analysis Features}
@@ -168,7 +168,7 @@ The project utilized modern development tools:
     \item Automated testing framework
 \end{itemize}
 
-\section{Used Technologies}
+\section{Used Technologies} %todo rozpisat
 
 \subsection{Dependencies}
 The project relies on several key Python libraries and tools:
@@ -204,14 +204,115 @@ The image processing pipeline consists of:
 \end{itemize}
 
 \subsection{User Interface Components}
-The web interface provides:
+The application’s user interface provides tools for camera control, dataset management, and lens analysis. Users can connect cameras, adjust settings, capture images, and manage batch processes with real-time progress updates. Analysis tools display metrics and visualizations for sharpness, vignetting, distortion, chromatic aberrations, and bokeh. The UI also includes logging, notifications, and metadata visualization.
 
-\begin{itemize}
-    \item Camera control panel
-    \item Analysis configuration options
-    \item Results visualization
-    \item Data management tools
-\end{itemize}
+\subsubsection{Camera Control Panel}
+The camera control panel offers a centralized interface for managing camera operations. Users can connect and disconnect the camera and monitor its status in real-time. Advanced camera controls include access to settings like aperture, shutter speed, and ISO. The application supports both automatic and manual focus adjustments, ensuring flexibility for various testing scenarios. Additional features include capturing images directly through the interface, importing RAW files, and listing all camera properties.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{Images/camera_control.png}
+\caption{Camera control panel.}
+\label{fig:ui_camera_control}
+\end{figure}
+
+\subsubsection{Datasets Panel}
+The dataset panel enables handling captured images and related metadata. Users can import, create, select, and manage datasets, enabling systematic storage and categorization of images. Each image is linked to a specific scenario, allowing users to structure their tests based on various lens properties. Metadata embedding ensures that all relevant information, including camera settings and capture details, is preserved for future reference. The system also supports structured file naming conventions and temporary storage management, ensuring consistency and ease of navigation.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{Images/datasets_panel.png}
+\caption{Datasets panel.}
+\label{fig:ui_datasets}
+\end{figure}
+
+\subsubsection{Scenarios Panel} % todo
+The scenarios panel allows users to target lens evaluations to specific properties, such as sharpness, vignetting, distortion, chromatic aberrations, and bokeh. Each scenario is linked to a dataset and includes predefined settings and workflows for capturing and analyzing images.
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=1\textwidth]{Images/scenarios_panel.png}
+\caption{Scenarios panel.}
+\label{fig:ui_scenarios}
+\end{figure}
+
+The user can view detailed analysis results presented in a structured format. At the top, the Capture Settings section summarizes the camera configuration during the image capture. This includes details such as the camera model, lens information, aperture setting, shutter speed, ISO sensitivity, and focal length. These settings provide context for understanding the conditions under which the analysis was performed.
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[height=0.8\textwidth]{Images/scenario_result.png}
+\caption{Result of vignette scenario.}
+\label{fig:ui_scenario_result}
+\end{figure}
+
+The Numerical Scores section delivers a quantitative assessment tailored to the specific scenario. For example, in sharpness analysis, this may include metrics like Modulation Transfer Function (MTF) scores. These scores are often normalized to a scale (e.g., 0-100) to simplify interpretation and enable comparisons across different lenses and settings.
+
+The Visual Outputs section includes graphical representations to enhance the understanding of the analysis results. This may involve the display of the original captured image alongside processed visualizations, such as heatmaps, intensity maps and edge overlays.
+
+The Measurement Details section provides more granular insights. This could include corner measurements for luminance ratios in vignetting analysis or edge intensity values for sharpness.
+
+Finally, the Analysis Interpretation section summarizes the findings in plain language, offering a qualitative assessment of the results. For example, it may indicate whether vignetting is minimal, sharpness is excellent, or distortions are significant. This summary helps users quickly grasp the outcome of the analysis without needing to interpret the raw data or metrics.
+
+
+
+\textbf{Vignetting} analysis results include center-to-corner luminance ratios, average corner intensity and a normalized vignetting score. Heatmaps visually represent brightness variations across the image and offer further insights into the vignetting effect.
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.4\textwidth]{Images/vignette_image_result.png}
+\caption{Intensity map for vignette scenario.}
+\label{fig:ui_vignette_intensity_map}
+\end{figure}
+
+For \textbf{sharpness} analysis, the UI displays numerical metrics such as Modulation Transfer Function (MTF) scores, edge intensity, and an overall sharpness rating. These are accompanied by graphs illustrating MTF curves across spatial frequencies and edge detection overlays that highlight areas of detail within the image. Original and processed images are shown side by side, providing clear visual comparisons.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{Images/sharpness_image_result.jpg}
+\caption{Sharpness analysis details.}
+\label{fig:ui_sharpness_image}
+\end{figure}
+
+For \textbf{distortion} analysis, the system outputs metrics such as deviations in line straightness, average line deviation, and an overall distortion score. Grid overlays on the original image demonstrate detected distortion patterns, while corrected and uncorrected versions are displayed for comparison. The type of distortion—barrel, pincushion, or waveform—is identified based on the analysis.
+
+\textbf{Chromatic aberration} analysis highlights color fringing in images, providing metrics on pixel offsets and scores for lateral and longitudinal aberrations. The UI displays zoomed-in sections of the image where chromatic aberrations occur, with overlaid color error vectors for visualization. Original and corrected images are presented side by side to showcase the impact of corrections.
+
+In \textbf{bokeh} analysis, the system evaluates characteristics such as roundness, smoothness, and consistency of out-of-focus highlights. Overlays highlight bokeh regions, accompanied by metrics for size, shape, and edge definition. Users can compare bokeh characteristics across different aperture settings or light sources using dynamic visualization tools.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.3\textwidth]{Images/bokeh_image_result.jpg}
+\caption{Bokeh analysis details.}
+\label{fig:ui_bokeh_image}
+\end{figure}
+
+\subsubsection{System Logs}
+The system logs provide a real-time record of application activities, ensuring transparency and aiding in troubleshooting. Logs capture key events such as camera connections, configuration changes, capture processes, and errors. Displayed within the user interface, the logs update dynamically, allowing users to monitor the status of ongoing tasks.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{Images/system_logs.png}
+\caption{System logs.}
+\label{fig:ui_system_logs}
+\end{figure}
+
+\subsubsection{Notifications}
+The notification system provides real-time feedback to users. Notifications appear dynamically within the user interface to report critical events, such as successful camera connections and image captures. They also alert users to errors, including connection failures, invalid configurations, or file transfer issues.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{Images/notification.png}
+\caption{Notification example.}
+\label{fig:ui_notification}
+\end{figure}
+
+%% BIG IMAGES
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.8\textwidth]{Images/scenario_photos.png}
+\caption{Overview of scenario's images.}
+\label{fig:ui_scenario_images}
+\end{figure}
 
 \section{Testing}
 

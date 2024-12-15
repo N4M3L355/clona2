@@ -61,13 +61,26 @@ The Optical Transfer Function (OTF) combines the MTF and phase information to pr
 
 \section{Additional Concepts and Techniques}
 
-\subsection{Accutance}
+\subsection{Image Quality Metrics}
+
+\subsubsection{Accutance}
 Accutance is a measure of perceived sharpness, taking into account both the contrast at edges and the human visual system's sensitivity to different spatial frequencies. It combines sharpness and contrast to provide a more comprehensive assessment of image quality \cite{accutance} .
 
-\subsection{Sharpness and Optical Resolution}
+\subsubsection{Sharpness and Optical Resolution}
 Sharpness refers to the clarity and detail of an image, while resolution measures the amount of detail an imaging system can capture, typically in pixels. Higher resolution allows for larger prints and more detailed images.
 
-\subsection{Geometric Distortions}
+\subsubsection{Dynamic Range}
+Dynamic range is the range of light intensities a camera can capture, from the darkest shadows to the brightest highlights. High dynamic range (HDR) imaging techniques are used to enhance detail in both dark and bright areas.
+
+\subsubsection{Noise}
+Noise refers to random variations in pixel values, often visible as graininess or speckles in an image. It is more pronounced in low-light conditions and high ISO settings.
+
+\subsubsection{Color Accuracy}
+Color accuracy measures how faithfully a camera reproduces colors compared to the original scene. It is critical for applications requiring precise color reproduction, such as product photography and medical imaging.
+
+\subsection{Lens-Induced Imperfections}
+
+\subsubsection{Geometric Distortions}
 Image distortions occur when straight lines in an image get unnaturally curved or deformed. Distortions are caused by aberrations near the edges of the image and can result from the use of certain lenses. Common types of distortion include barrel distortion, where lines bulge outward, typically seen when a lens is at full zoom; pincushion distortion, where lines curve inward, frequently associated with telephoto lenses; and waveform distortion, a combination of both barrel and pincushion distortions, often occurring with wide-angle cameras in zoom mode \cite{distortions}.
 
 \begin{figure}[htbp]
@@ -89,7 +102,7 @@ Image distortions occur when straight lines in an image get unnaturally curved o
   \label{fig:distortions}
 \end{figure}
 
-\subsection{Chromatic Aberrations}
+\subsubsection{Chromatic Aberrations}
 Chromatic aberration is an optical phenomenon caused by a lens failing to focus different wavelengths of light at the same point. There are two types of chromatic aberrations: longitudinal (axial), where different wavelengths of color do not converge at the same point after passing through a lens, and lateral, where different wavelengths of color coming at an angle focus at different positions along the same focal plane. Chromatic aberrations can degrade image quality and are typically corrected through lens design or software post-processing \cite{ChromaticAberation}.
 
 \begin{figure}[h]
@@ -106,10 +119,12 @@ Chromatic aberration is an optical phenomenon caused by a lens failing to focus 
 \label{fig:chrom_ab}
 \end{figure}
 
-\subsection{Bokeh}
+\subsection{Aesthetic and Physical Lens Characteristics}
+
+\subsubsection{Bokeh}
 Bokeh describes the aesthetic quality of the out-of-focus areas in an image, often characterized by the shape and smoothness of background blur produced by the lens. Bokeh depends on lens aperture shape and size as well as other lens characteristics.
 
-\subsection{Airy Disk}
+\subsubsection{Airy Disk}
 An Airy disk is the diffraction pattern produced by a circular aperture, representing the fundamental limit of resolution for optical systems. It appears as a central bright spot surrounded by concentric rings of decreasing intensity. The diameter of the Airy disk depends on the wavelength of the light and the size of the aperture. \cite{AiryDisk}.
 
 \begin{figure}[htbp]
@@ -119,7 +134,9 @@ An Airy disk is the diffraction pattern produced by a circular aperture, represe
 \label{fig:airy_disk}
 \end{figure}
 
-\subsection{Aliasing}
+\subsection{Digital Artifacts}
+
+\subsubsection{Aliasing}
 Aliasing occurs when a signal is undersampled, causing different signals to become indistinguishable. Aliasing is related to maximum spatial frequency, called the Nyquist frequency. Any information above the Nyquist frequency that reaches the sensor will be aliased to a lower spatial frequency and create visual artifacts. In imaging, it manifests as jagged edges or moiré patterns, especially when capturing fine details \cite{Aliasing}.
 
 \begin{figure}[htbp]
@@ -129,20 +146,13 @@ Aliasing occurs when a signal is undersampled, causing different signals to beco
 \label{fig:moire}
 \end{figure}
 
-\subsection{Focus Breathing}
+\subsubsection{Focus Breathing}
 Focus breathing refers to the change in a lens's field of view when adjusting focus, noticeable as a slight zooming effect during focusing \cite{FocusBreathing}.
 
-\subsection{Test Charts}
+\subsection{Testing and Calibration Tools}
+
+\subsubsection{Test Charts}
 Test charts are printed or digital patterns with known properties used to evaluate and calibrate the performance of imaging systems, assessing parameters like resolution, color accuracy, and distortion.
-
-\subsection{Dynamic Range}
-Dynamic range is the range of light intensities a camera can capture, from the darkest shadows to the brightest highlights. High dynamic range (HDR) imaging techniques are used to enhance detail in both dark and bright areas.
-
-\subsection{Noise}
-Noise refers to random variations in pixel values, often visible as graininess or speckles in an image. It is more pronounced in low-light conditions and high ISO settings.
-
-\subsection{Color Accuracy}
-Color accuracy measures how faithfully a camera reproduces colors compared to the original scene. It is critical for applications requiring precise color reproduction, such as product photography and medical imaging.
 
 \section{Software Libraries and Tools}
 
@@ -223,19 +233,9 @@ These technologies hold great potential for automating and improving lens testin
 \section{Technical Implementation Challenges}
 
 \subsection{Camera Control Standardization}
-Despite the promise of unified camera control interfaces, significant challenges were encountered:
-\begin{itemize}
-    \item Manufacturer-specific implementations of standard protocols
-    \item Inconsistent feature support across camera models
-    \item Varying command sets between brands
-\end{itemize}
+
+Although unified camera control interfaces promise consistency, significant challenges emerged during implementation. Many manufacturers provide their own specific implementations of standard protocols, leading to inconsistencies. Feature support often varies across different camera models, further complicating integration. Additionally, the command sets used to interact with cameras differ between brands.
 
 \subsection{Metadata Reliability}
-EXIF data presented several challenges:
-\begin{itemize}
-    \item Lack of formal standardization
-    \item Inconsistent implementation across manufacturers
-    \item Unreliable as sole source of camera and lens information
-\end{itemize}
 
-These challenges necessitated the development of robust fallback mechanisms and comprehensive error handling strategies.
+The use of EXIF metadata for extracting camera and lens information revealed several challegnes. The lack of formal standardization in metadata structure and content creates inconsistencies in implementation across manufacturers. Furthermore, relying solely on EXIF data as the source of camera and lens information proved to be unreliable, necessitating the development of robust fallback mechanisms and comprehensive error-handling strategies.
