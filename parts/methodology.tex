@@ -275,3 +275,73 @@ Users can navigate through different scenarios for lens testing, including vigne
 
 \subsection{Performance Metrics}
 [To be completed - what metrics are tracked]
+
+
+\section{methodology 2 - to be merged}
+\section{Data Organization and Structure}
+
+The application organizes lens analysis data in a hierarchical structure that enables systematic testing and comparison of different lenses. This section describes the core data structures and their relationships within the system.
+
+\subsection{Dataset Organization}
+A dataset in the application represents a complete testing session for a specific lens. Each dataset contains comprehensive lens information, testing conditions, and multiple testing scenarios.
+
+\subsubsection{Dataset Properties}
+The dataset maintains essential information about the lens being tested including name, unique identifier, creation date, and detailed lens specifications. The dataset metadata records the manufacturer, model, serial number, focal length range, and maximum aperture of the lens. Additional fields store the camera model used for testing and user notes about testing conditions.
+
+For systematic organization, datasets follow a naming convention: \texttt{lens\_name\_date}. This ensures easy identification and chronological tracking of tests.
+
+\subsection{Testing Scenarios}
+Each dataset contains multiple testing scenarios, where each scenario focuses on evaluating a specific lens characteristic. The scenarios provide structured approaches to measure different aspects of lens performance.
+
+\subsubsection{Vignette Analysis Scenario}
+This scenario evaluates light falloff from center to corners. Testing requires a uniform white or gray surface and captures images at different aperture settings. The analysis produces corner-to-center intensity ratios that quantify the vignetting effect.
+
+\subsubsection{Bokeh Analysis Scenario}
+For evaluating out-of-focus rendering characteristics, this scenario uses point light sources against a dark background. Variables include focus distance and aperture settings. The analysis examines bokeh shape, smoothness, and symmetry.
+
+\subsubsection{Distortion Analysis Scenario}
+This scenario measures geometric distortion using a grid pattern test chart. For zoom lenses, measurements are taken at different focal lengths. Results quantify barrel and pincushion distortion.
+
+\subsubsection{Sharpness Test Scenario}
+Resolution and detail evaluation uses specialized resolution test charts. Testing occurs across different apertures and focal lengths, producing MTF scores and edge acutance measurements.
+
+\subsubsection{Chromatic Aberration Scenario}
+Color fringing measurement uses high-contrast edges in the test scene. The scenario examines color misalignment across different apertures and focal lengths.
+
+\subsection{Frame Management}
+Each scenario contains multiple frames, representing individual captured images with their associated metadata and analysis results.
+
+\subsubsection{Frame Properties}
+Frames store comprehensive metadata including:
+
+Camera settings encompass aperture, shutter speed, ISO, focus distance, and focal length for zoom lenses. The system preserves complete EXIF data and maintains preview paths for RAW files. Each frame includes specific analysis results relevant to its parent scenario type.
+
+\subsubsection{Frame Organization}
+Frames follow a consistent naming pattern: \texttt{scenario\_type\_timestamp\_settings}. This enables easy identification of specific test conditions and chronological ordering.
+
+\subsection{Data Storage Architecture}
+The system implements a structured storage approach for organizing test data:
+
+\subsubsection{File System Organization}
+The application creates separate directories for each dataset, with subdirectories for individual scenarios. Frame data, including original images and analysis results, resides within scenario directories. This hierarchical structure facilitates easy backup and transfer of test data.
+
+\subsubsection{Metadata Storage}
+The system stores dataset and scenario metadata in JSON format, enabling easy parsing and modification. Analysis results use efficient binary storage for quick access. The application preserves original image files in their native format (RAW or JPEG) and maintains separate preview images for rapid display.
+
+\subsection{Testing Workflow}
+The data organization supports a systematic testing process:
+
+\subsubsection{Dataset Creation}
+Users begin by creating a new dataset, entering lens specifications and testing conditions. This establishes the foundation for all subsequent tests.
+
+\subsubsection{Scenario Execution}
+Within each dataset, users select and execute specific test scenarios. The application guides users through proper setup and capture procedures for each scenario type.
+
+\subsubsection{Results Management}
+After capture and analysis, the system organizes results hierarchically. Users can examine individual frame results or aggregate data across scenarios. The organization enables easy comparison of results across different lens settings or between different lenses.
+
+\subsection{Integration with Analysis System}
+The data organization structure directly supports the image processing and analysis pipeline described in Section 3.5. Each scenario type corresponds to specific analysis algorithms, with results stored in standardized formats for consistency and comparability.
+
+\subsection{User Interface Considerations}
+The data organization influences the user interface design, providing intuitive navigation through tests and results. The interface reflects the hierarchical nature of the data, allowing users to drill down from datasets to specific frame results while maintaining context.
