@@ -1115,3 +1115,40 @@ The implementation emphasizes code reusability and maintainability through:
 \end{itemize}
 
 This architecture allows for future enhancements and additions of new analysis types while maintaining code quality and user experience.
+
+\subsection{Offline Capabilities}
+The application is designed to operate fully offline after initial installation, implementing several key architectural decisions:
+
+\begin{itemize}
+    \item \textbf{Local Web Server}: The NiceGUI framework runs a local web server, eliminating the need for external internet connectivity for the user interface.
+    
+    \item \textbf{Self-contained Dependencies}: All required libraries and dependencies are installed locally during setup, including:
+    \begin{itemize}
+        \item gphoto2 for camera control
+        \item OpenCV for image processing
+        \item rawpy for RAW file handling
+        \item NumPy for numerical computations
+    \end{itemize}
+    
+    \item \textbf{Local Storage Architecture}: All data, including:
+    \begin{itemize}
+        \item RAW image files
+        \item Analysis results
+        \item Configuration settings
+        \item Test scenarios
+    \end{itemize}
+    is stored in the local filesystem, ensuring accessibility without network connectivity.
+\end{itemize}
+
+
+\subsection{Offline Capabilities}
+
+The application is designed to operate fully offline after the initial installation. This capability is achieved through several key architectural decisions:
+
+- **Local Web Server**: The NiceGUI framework runs a local web server, eliminating the need for external internet connectivity for the user interface. This ensures that users can interact with the application without relying on an internet connection.
+
+- **Self-contained Dependencies**: All required libraries and dependencies are installed locally during setup. This includes essential components such as gphoto2 for camera control, OpenCV for image processing, rawpy for RAW file handling, and NumPy for numerical computations. By bundling these dependencies, the application can function independently of external resources.
+
+- **Local Storage Architecture**: All data, including RAW image files, analysis results, configuration settings, and test scenarios, is stored in the local filesystem. This design choice ensures that all necessary data is accessible without network connectivity, allowing users to perform lens evaluations in any environment.
+
+These features collectively enable the application to provide a seamless user experience, even in offline scenarios, making it a versatile tool for photographers and technicians.
