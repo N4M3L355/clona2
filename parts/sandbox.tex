@@ -1018,3 +1018,100 @@ Recent developments in machine learning are beginning to influence lens testing:
 
 These technologies show promise in automating and improving the accuracy of lens testing procedures. The integration of these various tools and libraries enables the development of comprehensive lens testing solutions that can match or exceed the capabilities of traditional commercial systems while maintaining accessibility and ease of use.
 
+\chapter{Organization and Implementation}
+
+This chapter presents the organizational structure and implementation details of the lens analysis application. The system is designed with modularity and extensibility in mind, utilizing a clear separation of concerns between different components.
+
+\section{System Architecture}
+
+The application follows a layered architecture pattern, with distinct components handling different aspects of the system. At its core, the application consists of three main layers: the camera interface layer, the analysis engine, and the user interface layer.
+
+\subsection{Camera Interface Layer}
+
+The camera interface layer provides abstraction over the physical camera hardware, utilizing the gphoto2 library for USB communication. This layer encapsulates all camera-specific operations, including:
+
+\begin{itemize}
+    \item Establishing and maintaining camera connections
+    \item Capturing images in RAW format
+    \item Retrieving camera settings and metadata
+    \item Managing camera parameters such as aperture and shutter speed
+\end{itemize}
+
+\subsection{Analysis Engine}
+
+The analysis engine forms the heart of the application, implementing various algorithms for lens characteristic evaluation. It processes captured images and performs specialized analyses for:
+
+\begin{itemize}
+    \item Distortion measurement and correction
+    \item Vignetting analysis across the image frame
+    \item Chromatic aberration detection and quantification
+    \item Bokeh shape and quality assessment
+    \item Sharpness evaluation at different focal points
+\end{itemize}
+
+Each analysis type is implemented as a separate module, allowing for easy maintenance and future extensions.
+
+\subsection{User Interface Layer}
+
+The user interface layer provides an intuitive web-based interface built using the Nicegui framework. It implements:
+
+\begin{itemize}
+    \item Real-time camera control and preview
+    \item Test scenario management
+    \item Analysis result visualization
+    \item Dataset organization and storage
+\end{itemize}
+
+The interface is designed to be responsive and user-friendly, providing immediate feedback during the testing process.
+
+\section{Data Management}
+
+The application implements a structured approach to data management, organizing captured images and analysis results into datasets and scenarios. Each dataset represents a complete lens evaluation session, while scenarios within a dataset focus on specific lens characteristics.
+
+\subsection{Dataset Structure}
+
+Datasets maintain metadata about the lens under test, including:
+
+\begin{itemize}
+    \item Lens model and specifications
+    \item Camera body information
+    \item Testing conditions and parameters
+    \item Collection of test scenarios
+\end{itemize}
+
+\subsection{Scenario Organization}
+
+Scenarios are organized by test type, with each type focusing on a specific lens characteristic. The application supports:
+
+\begin{itemize}
+    \item Distortion scenarios for evaluating geometric distortion
+    \item Vignetting scenarios for light fall-off analysis
+    \item Chromatic aberration scenarios for color fringing tests
+    \item Bokeh scenarios for out-of-focus rendering quality
+    \item Sharpness scenarios for focus accuracy assessment
+\end{itemize}
+
+Each scenario maintains its own set of captured images, analysis results, and test-specific parameters.
+
+\section{Implementation Details}
+
+The application is implemented in Python, leveraging several key libraries and frameworks:
+
+\begin{itemize}
+    \item OpenCV for image processing and analysis
+    \item Nicegui for the web-based user interface
+    \item Gphoto2 for camera control and image acquisition
+    \item NumPy for numerical computations
+    \item Matplotlib for data visualization
+\end{itemize}
+
+The implementation emphasizes code reusability and maintainability through:
+
+\begin{itemize}
+    \item Clear separation of concerns between components
+    \item Comprehensive error handling and logging
+    \item Modular design allowing for easy extensions
+    \item Type hints and documentation for better code understanding
+\end{itemize}
+
+This architecture allows for future enhancements and additions of new analysis types while maintaining code quality and user experience.

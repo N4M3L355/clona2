@@ -56,7 +56,13 @@
   Hereby I declare that this paper is my original authorial work,
   which I have worked out on my own. All sources, references, and
   literature used or excerpted during elaboration of this work are
-  properly cited and listed in complete reference to the due source.}
+  properly cited and listed in complete reference to the due source.
+
+  Tools designed to assist with textual refinement and consistency
+  (grammar checkers, code assistance tools, large language models) were
+  employed during the preparation of this thesis. All such contributions
+  were critically reviewed and adapted to ensure compliance with
+  academic standards and originality.}
 
 \gdef\thesis@english@assignment{%
   \ifthesis@digital@
