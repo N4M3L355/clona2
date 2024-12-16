@@ -1,6 +1,8 @@
 \chapter{Implementation}
 \section{Development Process}
 
+
+ 
  \subsection{Initial Architecture Design}
 The development process began with a modular architecture designed around four primary components, each with distinct responsibilities and well-defined interfaces:
 
@@ -191,7 +193,8 @@ The dataset panel enables handling captured images and related metadata. Users c
 \label{fig:ui_datasets}
 \end{figure}
 
-\subsubsection{Scenarios Panel} % todo
+
+\subsubsection{Scenarios Panel}
 The scenarios panel allows users to target lens evaluations to specific properties, such as sharpness, vignetting, distortion, chromatic aberrations, and bokeh. Each scenario is linked to a dataset and includes predefined settings and workflows for capturing and analyzing images.
 
 \begin{figure}[hbt]
@@ -200,6 +203,16 @@ The scenarios panel allows users to target lens evaluations to specific properti
 \caption{Scenarios panel.}
 \label{fig:ui_scenarios}
 \end{figure}
+
+%% BIG IMAGES
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.8\textwidth]{Images/scenario_photos.png}
+\caption{Overview of scenario's images.}
+\label{fig:ui_scenario_images}
+\end{figure}
+
+\subsubsection{Analysis Results}
 
 The user can view detailed analysis results presented in a structured format. At the top, the Capture Settings section summarizes the camera configuration during the image capture. This includes details such as the camera model, lens information, aperture setting, shutter speed, ISO sensitivity, and focal length. These settings provide context for understanding the conditions under which the analysis was performed.
 
@@ -218,13 +231,15 @@ The Measurement Details section provides more granular insights. This could incl
 
 Finally, the Analysis Interpretation section summarizes the findings in plain language, offering a qualitative assessment of the results. For example, it may indicate whether vignetting is minimal, sharpness is excellent, or distortions are significant. This summary helps users quickly grasp the outcome of the analysis without needing to interpret the raw data or metrics.
 
+\subsubsection{Analysis Details}
 
+The section with visual outputs and measurement details varies based on the selected analysis type:
 
 \textbf{Vignetting} analysis results include center-to-corner luminance ratios, average corner intensity and a normalized vignetting score. Heatmaps visually represent brightness variations across the image and offer further insights into the vignetting effect.
 
 \begin{figure}[hbt]
 \centering
-\includegraphics[width=0.4\textwidth]{Images/vignette_image_result.png}
+\includegraphics[width=0.6\textwidth]{Images/vignette_image_result.jpg}
 \caption{Intensity map for vignette scenario.}
 \label{fig:ui_vignette_intensity_map}
 \end{figure}
@@ -246,7 +261,7 @@ In \textbf{bokeh} analysis, the system evaluates characteristics such as roundne
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.3\textwidth]{Images/bokeh_image_result.jpg}
+\includegraphics[width=0.35\textwidth]{Images/bokeh_image_result.jpg}
 \caption{Bokeh analysis details.}
 \label{fig:ui_bokeh_image}
 \end{figure}
@@ -271,13 +286,6 @@ The notification system provides real-time feedback to users. Notifications appe
 \label{fig:ui_notification}
 \end{figure}
 
-%% BIG IMAGES
-\begin{figure}[hbt]
-\centering
-\includegraphics[width=0.8\textwidth]{Images/scenario_photos.png}
-\caption{Overview of scenario's images.}
-\label{fig:ui_scenario_images}
-\end{figure}
 
 \subsection{Additional Features}
 The application includes several key features that enhance user experience and functionality:
