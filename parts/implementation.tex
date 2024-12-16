@@ -65,33 +65,6 @@ The analysis engine evolved through three main stages:
     \item Multi-threaded analysis support
 \end{itemize}
 
-\subsection{User Interface Evolution}
-The user interface development followed an iterative approach:
-
-\textbf{Initial Design}
-\begin{itemize}
-    \item Basic camera control interface
-    \item Simple dataset management
-    \item Fundamental result visualization
-    \item Basic user feedback mechanisms
-\end{itemize}
-
-\textbf{Enhanced Features}
-\begin{itemize}
-    \item Interactive analysis controls
-    \item Advanced dataset organization
-    \item Real-time status updates
-    \item Analysis progress indicators
-\end{itemize}
-
-\textbf{Final Refinements}
-\begin{itemize}
-    \item UI responsiveness optimization
-    \item Comprehensive error reporting
-    \item Advanced visualization tools
-    \item Batch processing capabilities
-\end{itemize}
-
 \subsection{Data Management Implementation}
 The data management system was developed in two phases:
 
@@ -149,25 +122,6 @@ The final phase addressed deployment requirements:
     \item Installation guides
 \end{itemize}
 
-\subsection{Development Tools}
-The project utilized modern development tools:
-
-\textbf{Core Technologies}
-\begin{itemize}
-    \item Python as primary development language
-    \item gphoto2 for camera interfacing
-    \item OpenCV for image processing
-    \item NiceGUI for web interface
-\end{itemize}
-
-\textbf{Development Environment}
-\begin{itemize}
-    \item Git for version control
-    \item Linux development platform
-    \item Python virtual environments
-    \item Automated testing framework
-\end{itemize}
-
 \section{Used Technologies} %todo rozpisat
 
 \subsection{Dependencies}
@@ -179,6 +133,16 @@ The project relies on several key Python libraries and tools:
     \item \textbf{NumPy}: Numerical computations and array operations
     \item \textbf{rawpy}: RAW image file processing
     \item \textbf{NiceGUI}: Web-based user interface framework
+\end{itemize}
+
+
+
+\textbf{Development Environment}
+\begin{itemize}
+    \item Git for version control
+    \item Linux development platform
+    \item Python virtual environments
+    \item Automated testing framework
 \end{itemize}
 
 \section{Implementation of System Components}
@@ -314,6 +278,14 @@ The notification system provides real-time feedback to users. Notifications appe
 \label{fig:ui_scenario_images}
 \end{figure}
 
+\subsection{Additional Features}
+The application includes several key features that enhance user experience and functionality:
+\begin{itemize}
+    \item \textbf{Offline Operation}: The application can operate fully offline after the initial installation, allowing users to utilize its features without internet connectivity.
+    \item \textbf{Dark Mode}: The application includes a dark mode feature, enhancing usability in low-light environments and providing a more comfortable viewing experience.
+    \item \textbf{UI State Storage}: The application stores user interface state, including user preferences and the currently opened elements, between visits, ensuring a seamless user experience.
+\end{itemize}
+
 \section{Testing}
 
 To ensure the reliability and correctness of the application, particularly in the context of the "garage lab" approach described in the methodology, a comprehensive test suite was implemented using the pytest framework. The tests were designed to validate both the technical functionality and the practical usability of the application.
@@ -328,38 +300,11 @@ The test suite is organized into four main components, reflecting the modular ar
 \end{itemize}
 
 \subsection{Camera Manager Tests}
-The camera manager tests focus on ensuring reliable camera operation in various scenarios:
-\begin{itemize}
-    \item Camera initialization and connection management
-    \item Image capture and metadata extraction
-    \item Camera configuration for different testing scenarios
-    \item EXIF data processing for lens information
-    \item Error handling and recovery mechanisms
-\end{itemize}
+The camera manager tests focus on ensuring reliable camera operation in various scenarios. They evaluate the initialization process and connection management, verify the accuracy and consistency of image capture and metadata extraction, and test the configuration of the camera for different testing scenarios. Additionally, these tests validate the processing of EXIF data to extract detailed lens information and assess the effectiveness of error handling and recovery mechanisms.
 
-Example of camera initialization test:
-\begin{lstlisting}[language=Python]
-def test_initialize_camera(mock_camera):
-    """Test camera initialization"""
-    with patch('gphoto2.Camera') as mock_camera_class:
-        mock_camera_class.return_value = mock_camera
-        mock_camera_class.autodetect = MagicMock(
-            return_value=[(0, "Test Camera")])
-        
-        # Mock camera status check
-        config = MagicMock()
-        widget = MagicMock()
-        widget.get_value.return_value = 0
-        config.get_child_by_name.return_value = widget
-        mock_camera.get_config.return_value = config
-        
-        manager = CameraManager()
-        success = manager.initialize_camera()
-        
-        assert success
-        assert manager.connected
-        assert manager.camera is not None
-\end{lstlisting}
+\subsection{Dataset Manager Tests}
+
+The dataset tests evaluate the core functionalities of the DatasetManager class, ensuring proper management of datasets and their associated scenarios. They verify the creation, listing, updating, and deletion of datasets, as well as the addition and modification of scenarios within datasets. Additionally, they test the export and import capabilities to confirm that datasets are correctly archived and restored with all metadata and content.
 
 \subsection{Analysis Tests}
 The analysis tests verify the accuracy of lens measurement algorithms:
@@ -379,32 +324,6 @@ The UI tests ensure proper user interaction and workflow:
     \item Dataset and measurement management
     \item Result visualization and export
 \end{itemize}
-
-Example of photo capture test:
-\begin{lstlisting}[language=Python]
-def test_handle_capture_photo(ui_instance, temp_dir):
-    """Test photo capture handling"""
-    capture_result = {
-        'path': os.path.join(temp_dir, "test.jpg"),
-        'metadata': {
-            'camera_settings': {
-                'aperture': '1.8',
-                'shutterspeed': '1/100',
-                'iso': '400'
-            }
-        }
-    }
-    
-    ui_instance.camera_manager.capture_image = MagicMock(
-        return_value=capture_result)
-    ui_instance.camera_manager.connected = True
-    
-    with patch('nicegui.ui.notify') as mock_notify:
-        ui_instance.handle_capture_photo()
-        ui_instance.camera_manager.capture_image\
-            .assert_called_once()
-        mock_notify.assert_called_once()
-\end{lstlisting}
 
 \subsection{Test Fixtures and Mocking}
 To support the "garage lab" testing approach while ensuring reliable software testing:
@@ -455,10 +374,4 @@ The test suite ensures quality across several dimensions:
 
 Test coverage reports are generated using pytest-cov to ensure comprehensive testing of all components, with particular attention to critical paths in the lens measurement workflows.
 
-\subsection{Application Features}
-The application includes several key features that enhance user experience and functionality:
-\begin{itemize}
-    \item \textbf{Offline Operation}: The application can operate fully offline after the initial installation, allowing users to utilize its features without internet connectivity.
-    \item \textbf{Dark Mode}: The application includes a dark mode feature, enhancing usability in low-light environments and providing a more comfortable viewing experience.
-    \item \textbf{UI State Storage}: The application stores user interface state, including user preferences and the currently opened elements, between visits, ensuring a seamless user experience.
-\end{itemize}
+

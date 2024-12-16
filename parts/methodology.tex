@@ -182,16 +182,7 @@ Chromatic aberration detection focuses on color fringing artifacts in images. Th
 \subsubsection{MTF Calculation}
 The Modulation Transfer Function calculation employs a sophisticated slanted-edge analysis approach. This process begins with precise edge detection and proceeds through several stages: calculating the edge spread function (ESF), deriving the line spread function (LSF), and finally computing the MTF through Fourier transform. This provides accurate measurements of lens resolution and contrast performance.
 
-\section{Testing Methodology}
-
-\subsection{Validation Methods}
-[To be completed - how results are validated]
-
-\subsection{Comparison Methodology}
-[To be completed - comparison with professional tools]
-
-\subsection{Error Analysis}
-[To be completed - understanding and quantifying errors]
+%todo
 
 \section{System Architecture}
 
@@ -200,49 +191,6 @@ The system architecture of the lens evaluation application is composed of four m
 
 \subsection{Data Flow}
 The data flow in the application follows a structured process from image acquisition to result display. Each step is designed to ensure that the captured images are accurately processed and analyzed, and the results are presented in a user-friendly manner.
-
-\subsection{Integration Points}
-[To be completed - how components interact]
-
-\section{User Interface Design}
-
-\subsection{Design Philosophy}
-[To be completed - UI/UX principles followed]
-
-\subsection{Interface Components}
-The user interface is structured around a main screen for overall navigation and specific screens for various tasks. The main screen serves as the central hub for the application, providing options to load and save datasets, inspect the camera status, and run analyses.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=1\textwidth]{Images/ui1.png}
-\caption{Main screen with camera connection and photo capture features.}
-\label{fig:ui_main_screen}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{Images/ui2.png}
-\caption{Sketch of the screen with Analyze button and result of vignette analysis.}
-\label{fig:ui_analysis_screen}
-\end{figure}
-
-\subsection{User Workflow}
-Users can navigate through different scenarios for lens testing, including vignetting analysis using a white wall, PSF and bokeh analysis using point light sources, and sharpness analysis using test charts. The interface guides users through each scenario with clear instructions and feedback.
-
-\section{Quality Assurance}
-
-\subsection{Verification Methods}
-[To be completed - how functionality is verified]
-
-\subsection{Validation Procedures}
-[To be completed - how results are validated]
-
-\subsection{Performance Metrics}
-[To be completed - what metrics are tracked]
-
-
-\section{methodology 2 - to be merged}
-\section{Data Organization and Structure}
 
 \subsection{Dataset Concept}
 A dataset represents a comprehensive testing session for a specific lens and camera combination. It encapsulates all relevant information about the lens, testing conditions, and captured images. Each dataset receives a unique identifier following the format \texttt{lens\_model\_date}, enabling straightforward tracking and organization.
