@@ -37,51 +37,6 @@
 \end{figure}
 
 
-\subsection{Unconventional Testing Environment}
-
-While professional lens testing typically requires expensive equipment and controlled lighting, this methodology embraces a more accessible "garage lab" approach. Basic household items are repurposed for testing - a white wall becomes the vignetting test surface, while Christmas lights or phone flashlights serve as point light sources for bokeh analysis. This approach, while less precise than industrial solutions, provides meaningful relative measurements that help photographers evaluate their lenses.
-
-\subsection{Calibration Elements}
-
-\subsubsection{DIY Test Charts}
-Rather than requiring expensive calibration targets, the methodology relies on printable test charts that users can create at home. A simple grid printed on an office printer serves as a distortion target, while a Siemens star pattern tests resolution. The key is consistency in printing and mounting - charts should be flat and well-lit, even if the absolute precision is lower than commercial targets.
-
-\subsection{Testing Scenarios}
-
-\subsubsection{The White Wall Technique}
-The vignetting analysis relies on photographing a uniformly lit white wall. While professional testing uses integrating spheres, a well-lit white wall provides sufficient data for relative comparisons. Users are instructed to position the camera square to the wall and ensure even illumination through test shots.
-
-\subsubsection{Bokeh Analysis Setup} 
-Point light sources for bokeh testing can be created using simple LED lights or phone flashlights in a darkened room. The methodology emphasizes consistent testing distances and background separation rather than absolute measurements. This allows meaningful comparisons between lenses even in improvised setups.
-
-\subsection{Environmental Considerations}
-
-\subsubsection{Lighting Compensation}
-Rather than requiring expensive studio lighting, the methodology adapts to available light sources. Test procedures include steps for compensating for uneven ambient lighting through reference shots and software correction. This makes testing possible in various environments while maintaining relative accuracy.
-
-\subsubsection{Vibration Management}
-Without access to professional vibration isolation tables, the methodology provides techniques for minimizing camera shake using household items. This includes using stacked books as an impromptu stable platform and employing mirror lockup and timer delays to reduce vibration.
-
-\subsection{Consistency Through Process}
-
-While individual measurements may have higher variability than lab tests, the methodology emphasizes consistency through careful documentation and repeated measurements. By averaging multiple tests and following structured procedures, hobbyist photographers can build meaningful datasets about their lens performance using accessible tools and spaces.
-
-
-\section{pokus2}
-
-\section{DIY Test Setup and Considerations}
-
-The testing methodology deliberately avoids specialized professional equipment typically used by lens manufacturers and instead focuses on creating reproducible test scenarios with readily available materials. This "kitchen table testing" approach makes the analysis accessible to photographers with modest budgets while still providing meaningful insights into lens performance.
-
-\subsection{White Wall Photography for Vignetting}
-Traditionally, lens vignetting tests utilize specialized integrating spheres and calibrated light sources. This project instead develops a method using any white wall as a uniform test surface - while not perfectly uniform, a properly lit white wall provides sufficient consistency for measuring relative illumination falloff from center to corners. The application analyzes luminance patterns accounting for typical wall texture variations, making the results practical for real-world assessment.
-
-\subsection{Bokeh Evaluation Using Household Light Sources} 
-Professional lens testing often employs precision point light arrays for bokeh analysis. This methodology instead allows users to photograph any small light source - Christmas lights, LED flashlights, or even a phone screen displaying a white dot pattern can serve as test targets. The application's bokeh detection algorithm is designed to be rotation and scale invariant, working with various light source sizes and arrangements.
-
-\subsection{Handheld Grid Distortion Testing}
-Rather than requiring precision-machined test charts mounted on specialized rigs, the distortion analysis workflow supports handheld photography of any high-contrast rectangular grid. The application employs robust computer vision techniques to detect and analyze grid lines even with imperfect framing and slight perspective distortion. Users can print basic grid patterns or even photograph window frames or tile patterns.
-
 \subsection{Environmental Considerations}
 To maximize repeatability despite the DIY nature of the tests, the methodology includes practical guidelines:
 
@@ -110,13 +65,6 @@ The analysis algorithms incorporate several compensation mechanisms for common D
     \item Confidence scoring for measurements based on test conditions
 \end{itemize}
 
-\section{User Experience Design Philosophy}
-
-The methodology deliberately emphasizes user friendliness and real-world practicality over theoretical perfection. The interface guides users through test setup with visual examples and immediate feedback. Error messages are designed to provide constructive guidance rather than simple failure notifications. This approach enables users to learn through experimentation while still maintaining sufficient rigor for meaningful lens evaluation.
-
-
-
-The application's ability to work with RAW files directly from consumer cameras made professional lens testing accessible to photography enthusiasts and small repair shops. Several local camera repair technicians reported using the application for:
 
 \begin{itemize}
     \item Quick assessment of secondhand lenses before purchase
@@ -127,7 +75,6 @@ The application's ability to work with RAW files directly from consumer cameras 
 This democratization of lens testing tools suggests potential for broader adoption in educational and DIY photography communities, where access to professional testing equipment is limited by cost and availability.
 
 
-
 The application's ability to work with RAW files directly from consumer cameras made professional lens testing accessible to photography enthusiasts and small repair shops. Several local camera repair technicians reported using the application for:
 
 \begin{itemize}
@@ -136,30 +83,6 @@ The application's ability to work with RAW files directly from consumer cameras 
     \item Basic quality control in small repair operations
 \end{itemize}
 
-This democratization of lens testing tools suggests potential for broader adoption in educational and DIY photography communities, where access to professional testing equipment is limited by cost and availability.
-
-\section{Cost-Benefit Analysis}
-
-\subsection{Development Infrastructure}
-The application architecture prioritized minimal dependencies while maintaining robust functionality:
-
-\begin{itemize}
-    \item Core dependencies limited to Python standard library and 4 external packages
-    \item Development environment setup achievable in under 10 minutes
-    \item Total application size under 5MB excluding test data
-\end{itemize}
-
-\subsection{User Infrastructure Requirements}
-Implementation choices focused on maximizing compatibility with consumer equipment:
-
-\begin{itemize}
-    \item Successfully tested on computers with 4GB RAM running Linux/Windows
-    \item Compatible with entry-level DSLR cameras priced from €200
-    \item Analysis possible using household items as test targets
-\end{itemize}
-
-\section{Problem statement 0}
-In the field of photography and optical equipment evaluation, there exists a significant gap between professional lens testing tools and accessible solutions for photographers and technicians. This gap presents several key challenges:
 
 \begin{enumerate}
     \item \textbf{Accessibility of Lens Testing}
@@ -235,12 +158,7 @@ This project aims to develop an integrated software solution that addresses thes
     \item Adaptable to different testing environments and equipment setups
 \end{itemize}
 
-The fundamental research question is: How can we create an accessible, automated lens testing system that provides professional-grade analysis while remaining affordable and user-friendly?
 
-
-\section{image acquisition methodology}
-\subsection{Camera Setup and Configuration}
-The image acquisition system employs the gphoto2 library for direct camera control. The system implements a structured approach to camera management with the following key components:
 
 \begin{itemize}
     \item Camera initialization with automatic device detection

@@ -1,5 +1,3 @@
-
-
 \chapter{Methodology}
 
 \section{Overview}
@@ -7,6 +5,128 @@ This chapter outlines the methodology employed for image processing and evaluati
 
 \section{Unconventional Testing Environment}
 While professional lens testing typically requires expensive equipment and controlled lighting, this methodology embraces a more accessible "garage lab" approach. Basic household items are repurposed for testing - a white wall becomes the vignetting test surface, while Christmas lights or phone flashlights serve as point light sources for bokeh analysis. This approach, while less precise than industrial solutions, provides meaningful relative measurements that help photographers evaluate their lenses.
+
+
+\section{Lens Properties Analysis}
+
+\subsection{Observable Characteristics}
+While professional lens testing employs sophisticated equipment, many lens characteristics are observable in everyday photography:
+
+\begin{itemize}
+    \item Soft corners in landscape photos indicating vignetting
+    \item Color fringing around high-contrast edges showing chromatic aberration
+    \item Curved lines in architectural photos revealing geometric distortion
+    \item Out-of-focus light sources demonstrating bokeh characteristics
+    \item Loss of detail in fine textures suggesting sharpness limitations
+\end{itemize}
+
+These real-world observations form the foundation for developing quantitative measurements.
+
+\subsection{Quantifiable Properties}
+
+\subsubsection{Sharpness Assessment}
+The perceived sharpness of a lens manifests in how well it preserves fine details and edge clarity. While traditionally measured with expensive test charts, edge detection algorithms can quantify sharpness by analyzing high-contrast transitions in images. Key metrics include:
+
+\begin{itemize}
+    \item Edge response strength using SIFT keypoint responses
+    \item Local contrast ratio at detected edges
+    \item Frequency response analysis through MTF calculation
+\end{itemize}
+
+The mathematical foundation lies in the Edge Response Function (ERF):
+
+ERF(x) = I(x) * PSF(x)
+
+Where:
+\begin{itemize}
+    \item I(x) is the ideal edge intensity profile
+    \item PSF(x) is the Point Spread Function of the lens
+\end{itemize}
+
+\subsubsection{Vignetting Measurement}
+Corner darkening appears most prominently in evenly lit scenes. By photographing a uniformly illuminated surface, we can measure the relative light falloff from center to corners. The mathematical model follows the cos⁴ law:
+
+I(r) = I₀ cos⁴(arctan(r/f))
+
+Where:
+\begin{itemize}
+    \item I(r) is the illumination at radius r from center
+    \item I₀ is the center illumination
+    \item f is the focal length
+\end{itemize}
+
+\subsubsection{Bokeh Characterization}
+The aesthetic quality of out-of-focus areas can be quantified through analysis of point light sources. Key metrics include:
+
+\begin{itemize}
+    \item Circularity ratio = 4πA/P², where A is area and P is perimeter
+    \item Intensity distribution uniformity within bokeh discs
+    \item Edge gradient measurement for transition smoothness
+\end{itemize}
+
+\subsubsection{Chromatic Aberration Detection}
+Color fringing along high-contrast edges reveals chromatic aberrations. Quantitative analysis involves:
+
+\begin{itemize}
+    \item RGB channel alignment measurement
+    \item Color difference matrices across edges
+    \item Wavelength-dependent focus shift calculation
+\end{itemize}
+
+The color difference can be quantified using:
+
+ΔE = √[(ΔL*)² + (Δa*)² + (Δb*)²]
+
+Where L*a*b* represents the color space coordinates.
+
+\subsubsection{Geometric Distortion Analysis}
+Distortion manifests as curved lines that should be straight. Analysis involves:
+
+\begin{itemize}
+    \item Line deviation from ideal straight paths
+    \item Radial distortion coefficient calculation
+    \item Grid point displacement measurement
+\end{itemize}
+
+The radial distortion model follows:
+
+r_distorted = r(1 + k₁r² + k₂r⁴)
+
+Where:
+\begin{itemize}
+    \item r is the radial distance from center
+    \item k₁, k₂ are distortion coefficients
+\end{itemize}
+
+\subsection{Mathematical Framework}
+The transition from qualitative observations to quantitative metrics requires robust mathematical models. Each lens property corresponds to specific mathematical tools:
+
+\subsubsection{Edge Response Function}
+Sharpness analysis begins with the Edge Response Function (ERF), measuring how the lens reproduces sharp transitions. The derivative of the ERF yields the Line Spread Function (LSF), which through Fourier transformation produces the MTF curve - a comprehensive measure of lens resolution performance.
+
+\subsubsection{Illumination Model}
+Vignetting analysis employs a radial illumination model:
+
+I(r) = I₀ cos⁴(arctan(r/f))
+
+Where:
+\begin{itemize}
+    \item I(r) is the illumination at radius r
+    \item I₀ is the center illumination
+    \item f is the focal length
+\end{itemize}
+
+\subsubsection{Point Spread Function}
+Bokeh analysis relies on the Point Spread Function (PSF), which describes how a point source of light is rendered by the lens. The PSF shape, symmetry, and intensity distribution provide quantitative measures of bokeh quality.
+
+\subsection{Measurement Protocols}
+These mathematical frameworks translate into specific measurement protocols that balance precision with practicality in a DIY testing environment. Each protocol defines:
+\begin{itemize}
+    \item Required test conditions
+    \item Capture parameters
+    \item Analysis algorithms
+    \item Quality metrics
+\end{itemize}
 
 \subsection{Calibration Elements}
 \subsubsection{DIY Test Charts}
