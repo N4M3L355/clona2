@@ -125,7 +125,7 @@ The final phase addressed deployment requirements:
 \section{Used Technologies} %todo rozpisat
 
 \subsection{Dependencies}
-The project relies on several key Python libraries and tools:
+This project relies on Python programming language and on several Python libraries and tools:
 
 \begin{itemize}
     \item \textbf{gphoto2}: Core library for camera communication and control
@@ -135,37 +135,38 @@ The project relies on several key Python libraries and tools:
     \item \textbf{NiceGUI}: Web-based user interface framework
 \end{itemize}
 
-
-
-\textbf{Development Environment}
-\begin{itemize}
-    \item Git for version control
-    \item Linux development platform
-    \item Python virtual environments
-    \item Automated testing framework
-\end{itemize}
+\subsection{Development Environment}
+The development environment integrates tools and configurations to support efficient and organized software development. Git is utilized for version control, enabling tracking of code changes. The primary platform for development is Linux, providing a robust and versatile foundation. Python virtual environments are employed to isolate dependencies. Additionally, an automated testing framework is incorporated to streamline testing, validate functionality, and maintain code quality.
 
 \section{Implementation of System Components}
 
 \subsection{Camera Control System}
-The camera control system implements:
+The implementation of the camera control system is encapsulated within the CameraManager class, developed using the gphoto2 Python library. The CameraManager begins by initializing the camera context and establishing a connection using thread-safe locks. It ensures robust operation by continuously monitoring the camera's connection status and managing reinitialization when required.
 
-\begin{itemize}
-    \item Camera connection and initialization
-    \item Settings management and configuration
-    \item Image capture and transfer
-    \item Error handling and recovery
-\end{itemize}
+Key features of the CameraManager include the ability to list all available camera properties through a recursive exploration of the camera's configuration widgets. It allows dynamic adjustments to parameters like aperture, ISO, shutter speed, and exposure modes.
+
+The class also provides a mechanism for extracting metadata from images, leveraging EXIF data to gather information such as focal length, lens type, and exposure settings.
+
+The image capture functionality includes autofocus handling and respect for existing camera settings. The captured images, along with their associated metadata, are stored systematically, facilitating subsequent analysis.
+
+Error handling is a critical aspect of the camera control system. It manages hardware exceptions and unexpected states, such as camera unavailability, by logging detailed error messages and retrying operations where appropriate.
 
 \subsection{Image Processing Pipeline}
-The image processing pipeline consists of:
+The image processing pipeline processes calibration images to extract relevant optical properties of camera lenses, including sharpness, vignetting, distortion, chromatic aberrations, and bokeh.
 
-\begin{itemize}
-    \item RAW file processing
-    \item Image preprocessing and normalization
-    \item Feature detection and analysis
-    \item Results calculation and storage
-\end{itemize}
+\subsubsection{Image Preprocessing and Segmentation}
+
+The implementation begins with an initial segmentation phase, which identifies calibration elements within the image. Using algorithms such as SIFT, the pipeline detects and localizes key graphical features of the test charts. This step establishes a foundation for subsequent stages by eliminating irrelevant areas of the image.
+
+The next step is preprocessing, where a series of transformations is applied to normalize the data. Preprocessing tasks include noise reduction, image resizing, and contrast adjustment to account for variations in lighting and camera settings. The use of median or Gaussian filters ensures that these transformations preserve critical details. The pipeline also converts raw image data to an analyzable format.
+
+\subsubsection{Feature Detection and Analysis}
+
+The next stage evaluates specific lens properties. For sharpness, edge detection techniques are applied, enabling the analysis of transitions between high-contrast regions. The modulation transfer function (MTF) is calculated to quantify spatial resolution, providing a robust measure of lens clarity. Vignetting is assessed by analyzing the intensity distribution across the image, while geometric distortion is evaluated by comparing expected grid patterns to their actual appearance. Chromatic aberrations are quantified by measuring color fringing at the boundaries of high-contrast features, and bokeh quality is examined through the characterization of out-of-focus light regions.
+
+A key characteristic of the pipeline is its adaptability to various calibration test charts and environmental conditions. This is achieved through parameterized algorithms and automated calibration routines. The pipeline also integrates mechanisms to validate the reliability of the extracted data, detecting and discarding outliers that might result from erroneous inputs.
+
+The processed data is formatted for visualization and reporting. Analytical results are structured into metrics and graphs. The results are also stored for future reference.
 
 \subsection{User Interface Components}
 The application’s user interface provides tools for camera control, dataset management, and lens analysis. Users can connect cameras, adjust settings, capture images, and manage batch processes with real-time progress updates. Analysis tools display metrics and visualizations for sharpness, vignetting, distortion, chromatic aberrations, and bokeh. The UI also includes logging, notifications, and metadata visualization.
@@ -307,28 +308,14 @@ The camera manager tests focus on ensuring reliable camera operation in various 
 The dataset tests evaluate the core functionalities of the DatasetManager class, ensuring proper management of datasets and their associated scenarios. They verify the creation, listing, updating, and deletion of datasets, as well as the addition and modification of scenarios within datasets. Additionally, they test the export and import capabilities to confirm that datasets are correctly archived and restored with all metadata and content.
 
 \subsection{Analysis Tests}
-The analysis tests verify the accuracy of lens measurement algorithms:
-\begin{itemize}
-    \item MTF calculation and sharpness analysis
-    \item Bokeh quality assessment
-    \item Distortion measurement
-    \item Vignetting analysis
-    \item Chromatic aberration detection
-\end{itemize}
+The analysis tests validate various functionalities of the lens measurement algorithms, ensuring accurate evaluation of lens properties. The tests cover sharpness analysis, distortion measurement, vignetting detection, chromatic aberration evaluation, and bokeh analysis. They validate methods for detecting edges, calculating modulation transfer functions (MTF), analyzing visual artifacts, and generating visualizations. Additionally, preprocessing of RAW images, feature extraction, and score calculation for lens performance are tested..
 
 \subsection{UI Tests}
-The UI tests ensure proper user interaction and workflow:
-\begin{itemize}
-    \item Camera connection and status display
-    \item Test scenario execution
-    \item Dataset and measurement management
-    \item Result visualization and export
-\end{itemize}
+The UI tests focus on ensuring the functionality, responsiveness, and reliability of the user interface in managing camera operations, datasets, and scenarios. These tests validate the integration of UI components with backend functionality, covering critical workflows such as camera connection, configuration, photo capture, and metadata visualization. They evaluate the behavior of UI elements like buttons, dialogs, and status indicators under different conditions, including error states. Additionally, the tests verify that key user actions (such as dataset and scenario creation, RAW file import, and analysis result display) operate seamlessly. Mocked components are used to simulate interactions, ensuring the interface handles real-world scenarios and unexpected events effectively.
 
 \subsection{Test Fixtures and Mocking}
-To support the "garage lab" testing approach while ensuring reliable software testing:
+To facilitate reliable software testing within the "garage lab" approach, the test suite employs a range of fixtures and mocking techniques. Key test fixtures include:
 
-\textbf{Test Fixtures}
 \begin{itemize}
     \item \texttt{mock\_camera} - Simulates camera behavior
     \item \texttt{mock\_camera\_manager} - Provides camera control testing
@@ -337,41 +324,17 @@ To support the "garage lab" testing approach while ensuring reliable software te
     \item \texttt{sample\_image} - Provides standardized test images
 \end{itemize}
 
-\textbf{External Dependencies}
-\begin{itemize}
-    \item Camera operations are mocked to ensure consistent testing
-    \item File system operations are isolated for reproducibility
-    \item UI components are simulated for interaction testing
-    \item Image processing operations use controlled test data
-\end{itemize}
+External dependencies, such as camera operations and file system interactions, are mocked to ensure consistency and reproducibility. Similarly, UI components are simulated to validate user interactions, while image processing operations rely on controlled test data to maintain accuracy and isolate external influences. These strategies enable thorough and reliable testing in a constrained, repeatable environment.
 
 \subsection{Quality Assurance}
-The test suite ensures quality across several dimensions:
+The test suite ensures quality assurance across multiple dimensions to verify the robustness and reliability of the application. 
 
-\textbf{Functional Testing}
-\begin{itemize}
-    \item Camera control reliability
-    \item Data management accuracy
-    \item Analysis algorithm precision
-    \item UI responsiveness and usability
-\end{itemize}
+\textbf{Functional testing} focuses on evaluating the core features, such as camera control reliability, accurate data management, precise analysis algorithms, and a responsive, user-friendly interface. 
 
-\textbf{Error Handling}
-\begin{itemize}
-    \item Camera connection issues
-    \item Invalid user input
-    \item Resource availability
-    \item Data corruption scenarios
-\end{itemize}
+\textbf{Error handling} is assessed by simulating common issues like camera connection failures, invalid user inputs, resource constraints, and potential data corruption  to ensure graceful recovery and stability. 
 
-\textbf{Performance Testing}
-\begin{itemize}
-    \item Image processing efficiency
-    \item Memory usage optimization
-    \item Response time measurement
-    \item Resource cleanup verification
-\end{itemize}
+\textbf{Performance testing} evaluates the efficiency of image processing algorithms and optimization of memory usage, measures application response times, and confirms that resources are effectively cleaned up after operations. 
 
-Test coverage reports are generated using pytest-cov to ensure comprehensive testing of all components, with particular attention to critical paths in the lens measurement workflows.
+Together, these tests provide a comprehensive framework to validate the functionality, reliability, and performance of the application under diverse conditions. Test coverage reports are generated using pytest-cov to ensure comprehensive testing of all components, with particular attention to critical paths in the lens measurement workflows.
 
 
