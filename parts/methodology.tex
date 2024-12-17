@@ -9,8 +9,7 @@ While professional lens testing typically requires expensive equipment and contr
 \section{Lens Properties Analysis}
 
 \subsection{Observable Characteristics}
-While professional lens testing employs sophisticated equipment, many lens characteristics are observable in everyday photography:
-
+Many lens characteristics are observable in everyday photography:
 \begin{itemize}
     \item Dark corners in landscape photos indicating vignetting
     \item Color fringing around high-contrast edges showing chromatic aberration
@@ -22,6 +21,25 @@ While professional lens testing employs sophisticated equipment, many lens chara
 These real-world observations form the foundation for developing quantitative measurements.
 
 \subsection{Quantifiable Properties}
+
+\subsubsection{Segmentation and Preprocessing Methods}
+Effective segmentation and preprocessing are critical for accurate lens property analysis. The methodology employs the following techniques:
+
+\paragraph{Segmentation Method}
+Calibration elements, such as grid patterns and Siemens star charts, are detected and localized in images using the Scale-Invariant Feature Transform (SIFT) algorithm \cite{Sift}. SIFT identifies keypoints and descriptors that are robust to scale, rotation, and illumination changes. This ensures reliable detection of calibration targets across different testing conditions.
+
+\paragraph{Edge Detection}
+Edge detection is performed using the Sobel operator to identify high-contrast transitions essential for sharpness and chromatic aberration analysis. The Sobel filter calculates the gradient magnitude and direction, highlighting areas with significant intensity changes.
+
+\paragraph{Image Preprocessing}
+Preprocessing steps include:
+\begin{enumerate}
+    \item \textbf{Noise Reduction}: Gaussian blur is applied to smooth the image and reduce sensor noise, enhancing the quality of subsequent analyses.
+    \item \textbf{Contrast Adjustment}: Histogram equalization normalizes image brightness and contrast, ensuring consistent lighting conditions across captures.
+    \item \textbf{Normalization}: Images are resized to a standard resolution and converted to grayscale to facilitate uniform processing.
+\end{enumerate}
+
+These preprocessing steps prepare the images for accurate and consistent analysis of lens properties.
 
 \subsubsection{Sharpness Assessment}
 Sharpness manifests as the lens's ability to preserve fine details and edge clarity. While traditionally measured with expensive test charts, edge detection algorithms can quantify sharpness by analyzing high-contrast transitions. Key metrics include:
@@ -46,9 +64,9 @@ Where:
 
 The practical implementation of sharpness analysis follows these steps:
 
-First, we detect edges in the image using the Sobel operator. These edges provide the basis for measuring how well the lens preserves fine detail. For each detected edge, we analyze the intensity transition perpendicular to the edge direction.
+First, edges in the image are detected using the Sobel operator. These edges provide the basis for measuring how well the lens preserves fine detail. For each detected edge, the intensity transition perpendicular to the edge direction is analyzed.
 
-To quantify the overall sharpness, we compute the acutance score:
+To quantify the overall sharpness, the acutance score is computed:
 
 \begin{equation}
 A = \frac{1}{n} \sum_{i=1}^{n} |\nabla I|
@@ -89,14 +107,32 @@ Where:
     \item \( f \) is the focal length
 \end{itemize}
 
+First, we convert the captured image to grayscale and apply Gaussian smoothing to reduce noise. The image is then divided into concentric regions from center to corners. For each region, we compute the average intensity:
+
+\begin{equation}
+I_{\text{region}} = \frac{1}{n} \sum_{x,y \in \text{region}} I(x,y)
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item \( I(x,y) \) is the pixel intensity at position (x,y)
+    \item \( n \) is the number of pixels in the region
+\end{itemize}
+
+The vignetting score is calculated as the ratio between corner and center intensities:
+
+\begin{equation}
+V = \frac{I_{\text{corners}}}{I_{\text{center}}}
+\end{equation}
+
+The analysis generates a radial heat map showing intensity falloff from center to corners. The final vignetting score is normalized to a 0-100 scale, where 100 represents no vignetting (uniform illumination) and lower values indicate stronger corner darkening.
+
+One way of compensating uneven wall illumination is to capture a reference image at a wide aperture (typically f/8) where vignetting is minimal.
+
 \subsubsection{Bokeh Characterization}
 The aesthetic quality of out-of-focus areas can be quantified through analysis of point light sources. Key metrics include:
 
-\begin{itemize}
-    \item Circularity ratio \( = \frac{4\pi A}{P^2} \), where \( A \) is area and \( P \) is perimeter
-    \item Intensity distribution uniformity within bokeh discs
-    \item Edge gradient measurement for transition smoothness
-\end{itemize}
+Circularity ratio \( = \frac{4\pi A}{P^2} \), where \( A \) is area and \( P \) is perimeter; intensity distribution uniformity within bokeh discs; and edge gradient measurement for transition smoothness.
 
 \subsubsection{Chromatic Aberration Detection}
 Color fringing along high-contrast edges reveals chromatic aberrations. Quantitative analysis involves:
@@ -323,17 +359,7 @@ The image acquisition process follows a defined protocol that ensures reliabilit
 Pre-capture steps include verifying camera readiness with timeout handling to avoid delays, validating configuration parameters to ensure compatibility, allocating memory buffers for seamless data handling, and confirming the capture target to direct where the image will be stored. These measures collectively provide a robust foundation for the image capture process.
 
 \subsubsection{Capture Process}
-
-The capture process involves a sequence of well-defined steps. If required, the process begins with mirror lock-up to minimize vibrations during the capture. This is followed by the execution of the capture command and the initiation of file transfer from the camera. Data integrity is then verified to ensure the accuracy of the captured image, and finally, local storage management is performed to organize and store the data efficiently.
-
-% TODO: neviem ci pouzit
-\begin{enumerate}
-    \item Mirror lock-up
-    \item Capture command execution
-    \item File transfer initiation
-    \item Data integrity verification
-    \item Local storage management
-\end{enumerate}
+The capture process follows a sequence of well-defined steps to ensure image quality and data integrity. If necessary, the process begins with mirror lock-up to minimize vibrations during the capture. Subsequently, the capture command is executed, and the file transfer from the camera is initiated. After the image is transferred, data integrity verification is performed to ensure the accuracy of the captured image. Finally, local storage management organizes and stores the data efficiently.
 
 \subsection{Batch Capture Implementation}
 The batch capture implementation is designed to facilitate scenarios that require multiple captures with different settings.
@@ -465,7 +491,198 @@ Chromatic aberration detection focuses on color fringing artifacts in images. Th
 \subsubsection{MTF Calculation}
 The Modulation Transfer Function (MTF) calculation employs a sophisticated slanted-edge analysis approach. This process begins with precise edge detection and proceeds through several stages: calculating the Edge Spread Function (ESF), deriving the Line Spread Function (LSF), and finally computing the MTF through Fourier transform. This provides accurate measurements of lens resolution and contrast performance.
 
-% TODO: dopisat
+The practical implementation of the MTF calculation follows these steps:
+
+First, a slanted edge is detected in the captured image using the Sobel operator to identify high-contrast transitions. The Edge Spread Function (ESF) is then extracted by sampling the intensity values across the detected edge. To obtain the Line Spread Function (LSF), the ESF is differentiated, providing a profile of how the lens spreads light from the edge.
+
+The Fourier transform of the LSF yields the MTF curve, which represents the lens's ability to reproduce contrast at various spatial frequencies. The MTF is normalized by dividing by its value at zero frequency, ensuring that the curve starts at unity. This normalization facilitates comparison across different lenses and testing conditions.
+
+Finally, the MTF curve is analyzed to derive key performance indicators such as the spatial frequency at which the MTF drops to 0.5 (known as the MTF50), which serves as a benchmark for lens sharpness. The system visualizes the MTF curve alongside the image to provide users with an intuitive understanding of the lens's performance across different spatial frequencies.
+
+\subsubsection{Bokeh Quality Analysis}
+The aesthetic quality of out-of-focus areas, commonly referred to as bokeh, is an important lens characteristic for photographers who value image aesthetics. The bokeh quality analysis focuses on evaluating the shape and intensity distribution of point light sources in defocused regions of an image.
+
+The analysis begins by detecting bright spots in a defocused image using adaptive thresholding and blob detection techniques. Each detected light source is treated as a point spread function (PSF), representing how the lens renders out-of-focus points. For each PSF, several metrics are computed:
+
+The \textbf{Circularity Ratio} measures the deviation of the bokeh shape from a perfect circle:
+
+\begin{equation}
+\text{Circularity} = \frac{4\pi A}{P^2}
+\end{equation}
+
+where \( A \) is the area and \( P \) is the perimeter of the bokeh disc.
+
+\textbf{Intensity Distribution Uniformity} assesses how evenly light is distributed within the bokeh disc:
+
+\begin{equation}
+\text{Uniformity} = 1 - \frac{\sigma}{\mu}
+\end{equation}
+
+where \( \sigma \) is the standard deviation and \( \mu \) is the mean intensity within the bokeh disc.
+
+\textbf{Edge Gradient Measurement} evaluates the smoothness of intensity transitions at the edges of the bokeh discs.
+
+These metrics are combined into a composite bokeh score, providing a single value that encapsulates the overall bokeh quality:
+
+\begin{equation}
+B = \frac{C \cdot U \cdot E}{3}
+\end{equation}
+
+where \( C \) is the circularity score, \( U \) is the intensity uniformity, and \( E \) is the edge smoothness score.
+
+The system generates visual representations of the bokeh analysis, overlaying detected bokeh regions with color-coded metrics to provide an intuitive understanding of the bokeh quality across different apertures and lighting conditions. This visual feedback aids photographers in assessing the artistic rendering capabilities of their lenses.
+
+Finally, to ensure robustness, the bokeh analysis incorporates multiple image captures under varying focus and aperture settings, allowing for comprehensive evaluation of the lens's bokeh performance under different shooting conditions.
+
+\section{System Architecture}
+
+\subsection{Component Overview}
+The system architecture of the lens evaluation application is composed of four main components: image acquisition, segmentation and preprocessing, lens property evaluation, and result display. These components work together to capture images from a camera, process and analyze these images, and present the results to the user through a web interface.
+
+\subsection{Data Flow}
+The data flow in the application follows a structured process from image acquisition to result display. Each step is designed to ensure that the captured images are accurately processed and analyzed, and the results are presented in a user-friendly manner.
+
+\subsection{Dataset Concept}
+A dataset represents a comprehensive testing session for a specific lens and camera combination. It encapsulates all relevant information about the lens, testing conditions, and captured images. Each dataset receives a unique identifier following the format \texttt{lens\_model\_date}, enabling straightforward tracking and organization.
+
+\subsection{Scenario Design}
+Scenarios are structured tests that evaluate specific lens characteristics. Each scenario focuses on isolating a particular optical property through controlled image capture. The primary scenarios include:
+\begin{itemize}
+    \item \textbf{Vignetting Analysis:} Captures images of a uniform surface at different apertures to measure light falloff.
+    \item \textbf{Bokeh Evaluation:} Uses point light sources to assess out-of-focus rendering quality, varying focus and aperture settings.
+    \item \textbf{Distortion Test:} Photographs grid patterns to quantify geometric lens deformations across focal lengths.
+    \item \textbf{Sharpness Assessment:} Employs resolution test charts to measure lens resolving power and edge performance.
+    \item \textbf{Chromatic Aberration Examination:} Analyzes high-contrast edges to detect color fringing and misalignment.
+\end{itemize}
+
+\subsection{Frame Management}
+Frames represent individual captured images within a scenario. Each frame stores comprehensive metadata including:
+\begin{itemize}
+    \item Camera settings (aperture, shutter speed, ISO)
+    \item Capture timestamp
+    \item Lens configuration
+    \item Analysis results specific to the scenario
+\end{itemize}
+
+Frames are named systematically to reflect their testing context: \texttt{scenario\_type\_timestamp\_settings}.
+
+\subsection{Metadata Collection}
+
+The system collects comprehensive metadata about each captured image through two primary sources. The first source is the camera's EXIF data embedded in captured images, which provides details about the capture conditions and equipment used. The second source is the gphoto2 interface, which offers real-time access to camera settings during capture.
+
+From EXIF data, the system extracts:
+\begin{itemize}
+    \item Camera make and model
+    \item Lens identification
+    \item Focal length
+    \item Exposure settings (aperture, shutter speed, ISO)
+    \item Image timestamp
+    \item Color space information
+\end{itemize}
+
+Through the gphoto2 interface, the system accesses:
+\begin{itemize}
+    \item Current camera configuration
+    \item Available setting ranges
+    \item Focus information
+    \item Drive mode status
+    \item Battery level
+    \item Storage capacity
+\end{itemize}
+
+This dual approach to metadata collection ensures that both static image properties and dynamic camera states are captured, providing context for analysis results and enabling reproducible testing conditions.
+
+\subsection{User Interface Considerations}
+The data organization influences the user interface design, providing intuitive navigation through tests and results. The interface reflects the hierarchical nature of the data, allowing users to drill down from datasets to specific frame results while maintaining context.
+
+\section{Integration Points}
+
+The integration points between system components follow a modular design that emphasizes loose coupling and high cohesion. The camera control system communicates with the analysis engine through a message queue system, allowing asynchronous processing of captured images. This design choice reduces system blocking during long-running operations and improves overall responsiveness.
+
+The analysis engine interfaces with the data management system through a unified API that handles both RAW image storage and analysis results. This integration point implements retry logic and transaction management to ensure data consistency, particularly important when handling large RAW files during batch operations.
+
+The web interface connects to the backend systems via a REST-like protocol implemented using the NiceGUI framework. This architecture decision simplifies state management and provides a clear separation between the UI layer and core analysis functions. The interface adapts to different analysis scenarios while maintaining consistent error handling and progress reporting.
+
+\subsection{Performance Metrics}
+System performance evaluation focuses on three key areas: image processing speed, analysis accuracy, and resource utilization. The image processing pipeline achieves analysis times of under 5 seconds for standard lens evaluation tasks on commodity hardware. This performance level maintains interactive responsiveness while ensuring thorough analysis of lens characteristics.
+
+Memory management posed a particular challenge when handling RAW image files. The implementation uses streaming processing where possible, only loading complete images into memory when required for analysis. This approach allows the system to process high-resolution images while maintaining a reasonable memory footprint of approximately 2\,GB during normal operation.
+
+Storage requirements vary based on usage patterns, with a typical analysis session generating between 100\,MB and 1\,GB of data including RAW images and analysis results. The system implements automatic cleanup of temporary files while preserving essential analysis data for future comparison.
+
+\subsection{Validation Procedures}
+The validation process implements both automated and manual verification steps to ensure measurement accuracy. Each lens analysis includes control measurements using calibration patterns to validate the core metrics. These controls provide baseline measurements that help identify any systematic errors in the analysis pipeline.
+
+Cross-validation with existing analysis tools provided reference points for accuracy assessment. While the system cannot match the precision of industrial testing equipment, it achieves sufficient accuracy for practical lens evaluation. The validation process identified areas where measurement accuracy could be improved, particularly in chromatic aberration detection under varying lighting conditions.
+
+To further ensure reliability, the system conducts repeated analyses on the same image captures to assess the consistency of the results. Statistical measures such as standard deviation and mean absolute error are calculated to quantify the variability and bias of the measurements. Additionally, a subset of images is manually inspected to verify that the automated analyses correspond to observable lens characteristics. Any discrepancies observed during manual checks are used to refine the analysis algorithms and adjust calibration parameters. This iterative validation approach enhances the robustness of the system and builds confidence in the accuracy of the quantitative metrics generated.
+
+\section{Image Processing Pipeline}
+
+\subsection{Preprocessing}
+Image filtering is a crucial step in image preprocessing; its goal is to enhance the image quality and prepare it for subsequent analysis. Filtering helps in reducing noise, smoothing the image, and highlighting important features.
+
+\textbf{Gaussian blur} is a widely-used smoothing technique that applies a Gaussian function to the image. It effectively reduces noise and detail, providing a smoother and more uniform image. The Gaussian blur is particularly useful in preparing images for feature detection and other analytical processes \cite{gaussian}.
+
+\subsection{Feature Detection}
+Feature detection on the captured image is performed using the \textbf{Scale-Invariant Feature Transform} (SIFT). This algorithm detects and describes local features in images, also referred to as keypoints in the following sections. SIFT is used in computer vision for object recognition, image stitching, and other applications due to its robustness to changes in scale, rotation, and illumination. In this case, it is used for analyzing sharpness, PSF, and bokeh \cite{Sift}.
+
+\subsection{Analysis Algorithms}
+The analysis engine implements several specialized algorithms for evaluating lens characteristics, each designed to measure specific aspects of lens performance.
+
+\subsubsection{Vignetting Analysis}
+The vignetting analysis algorithm evaluates light falloff from center to edges. It begins by dividing the image into center and peripheral regions, then calculates intensity ratios between these areas. The algorithm compensates for natural light falloff using calibrated correction factors, ultimately producing normalized vignetting scores that accurately represent lens performance.
+
+\subsubsection{Chromatic Aberration Detection}
+Chromatic aberration detection focuses on color fringing artifacts in images. The algorithm analyzes RGB channel alignment at high-contrast edges, measuring both the magnitude and direction of color fringing. It distinguishes between lateral and longitudinal chromatic aberration, generating detailed heat maps that visualize aberration distribution across the frame.
+
+\subsubsection{MTF Calculation}
+The Modulation Transfer Function (MTF) calculation employs a sophisticated slanted-edge analysis approach. This process begins with precise edge detection and proceeds through several stages: calculating the Edge Spread Function (ESF), deriving the Line Spread Function (LSF), and finally computing the MTF through Fourier transform. This provides accurate measurements of lens resolution and contrast performance.
+
+The practical implementation of the MTF calculation follows these steps:
+
+First, a slanted edge is detected in the captured image using the Sobel operator to identify high-contrast transitions. The Edge Spread Function (ESF) is then extracted by sampling the intensity values across the detected edge. To obtain the Line Spread Function (LSF), the ESF is differentiated, providing a profile of how the lens spreads light from the edge.
+
+The Fourier transform of the LSF yields the MTF curve, which represents the lens's ability to reproduce contrast at various spatial frequencies. The MTF is normalized by dividing by its value at zero frequency, ensuring that the curve starts at unity. This normalization facilitates comparison across different lenses and testing conditions.
+
+Finally, the MTF curve is analyzed to derive key performance indicators such as the spatial frequency at which the MTF drops to 0.5 (known as the MTF50), which serves as a benchmark for lens sharpness. The system visualizes the MTF curve alongside the image to provide users with an intuitive understanding of the lens's performance across different spatial frequencies.
+
+Additionally, the system calibrates the MTF measurements using known reference lenses to account for any systematic biases introduced by the testing environment or analysis algorithms. This calibration ensures that the MTF scores accurately reflect the inherent capabilities of the lenses under evaluation.
+
+\subsubsection{Bokeh Quality Analysis}
+The aesthetic quality of out-of-focus areas, commonly referred to as bokeh, is an important lens characteristic for photographers who value image aesthetics. The bokeh quality analysis focuses on evaluating the shape and intensity distribution of point light sources in defocused regions of an image.
+
+The analysis begins by detecting bright spots in a defocused image using adaptive thresholding and blob detection techniques. Each detected light source is treated as a point spread function (PSF), representing how the lens renders out-of-focus points. For each PSF, several metrics are computed:
+
+The \textbf{Circularity Ratio} measures the deviation of the bokeh shape from a perfect circle:
+
+\begin{equation}
+\text{Circularity} = \frac{4\pi A}{P^2}
+\end{equation}
+
+where \( A \) is the area and \( P \) is the perimeter of the bokeh disc.
+
+\textbf{Intensity Distribution Uniformity} assesses how evenly light is distributed within the bokeh disc:
+
+\begin{equation}
+\text{Uniformity} = 1 - \frac{\sigma}{\mu}
+\end{equation}
+
+where \( \sigma \) is the standard deviation and \( \mu \) is the mean intensity within the bokeh disc.
+
+\textbf{Edge Gradient Measurement} evaluates the smoothness of intensity transitions at the edges of the bokeh discs.
+
+These metrics are combined into a composite bokeh score, providing a single value that encapsulates the overall bokeh quality:
+
+\begin{equation}
+B = \frac{C \cdot U \cdot E}{3}
+\end{equation}
+
+where \( C \) is the circularity score, \( U \) is the intensity uniformity, and \( E \) is the edge smoothness score.
+
+The system generates visual representations of the bokeh analysis, overlaying detected bokeh regions with color-coded metrics to provide an intuitive understanding of the bokeh quality across different apertures and lighting conditions. This visual feedback aids photographers in assessing the artistic rendering capabilities of their lenses.
+
+Finally, to ensure robustness, the bokeh analysis incorporates multiple image captures under varying focus and aperture settings, allowing for comprehensive evaluation of the lens's bokeh performance under different shooting conditions.
 
 \section{System Architecture}
 
@@ -530,14 +747,3 @@ This dual approach to metadata collection ensures that both static image propert
 
 \subsection{User Interface Considerations}
 The data organization influences the user interface design, providing intuitive navigation through tests and results. The interface reflects the hierarchical nature of the data, allowing users to drill down from datasets to specific frame results while maintaining context.
-
-
-\begin{thebibliography}{9}
-
-    \bibitem{gaussian}
-    Gonzalez, R. C., \& Woods, R. E. \textit{Digital Image Processing}. Pearson, 2008.
-    
-    \bibitem{Sift}
-    Lowe, D. G. "Distinctive Image Features from Scale-Invariant Keypoints," \textit{International Journal of Computer Vision}, 2004.
-    
-    \end{thebibliography}
