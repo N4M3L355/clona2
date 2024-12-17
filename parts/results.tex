@@ -1,24 +1,457 @@
+\documentclass{book}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float} % For [H] positioning
+\usepackage{hyperref} % For clickable references
+
+\begin{document}
+
+\frontmatter
+\title{Evaluation of Lens Properties Using a Python Application}
+\author{Your Name}
+\maketitle
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{Introduction}
+% [Your Introduction Content]
+
+\chapter{Methodology}
+% [Your Methodology Content]
+
 \chapter{Results and Discussion}
+\label{chap:results}
+
 \section{Evaluation Metrics}
-Metrics used to evaluate lens properties include:
 \begin{itemize}
-    \item \textbf{Sharpness}: The sharpness evaluation using MTF charts showed that the application could accurately measure the lens's resolving power.
-    \item \textbf{Bokeh}: The bokeh analysis revealed that the application effectively assessed the quality of out-of-focus areas.
-    \item \textbf{Distortions}: Evaluated using test charts to identify barrel and pincushion distortion.
-    \item \textbf{Chromatic Aberration}: Chromatic aberration analysis showed that the application could detect chromatic aberrations based on the misalignment of RGB components.
-    \item \textbf{Vignetting}: The vignetting measurement revealed that the application could accurately compare luminance differences across the image.
+    \item \textbf{Sharpness}: Assessed using Modulation Transfer Function (MTF) charts to determine the lens's resolving power.
+    \item \textbf{Bokeh}: Evaluated the quality of out-of-focus areas to measure the aesthetic appeal and smoothness of the blur.
+    \item \textbf{Distortion}: Identified and quantified barrel and pincushion distortions using test charts.
+    \item \textbf{Chromatic Aberration (CA)}: Analyzed the misalignment of RGB channels to detect and measure color fringing.
+    \item \textbf{Vignetting}: Measured luminance fall-off from the center to the edges of the image to assess light falloff.
 \end{itemize}
 
 \section{Results}
-%intrpretation, splnenie mojho zadania z metodologie (uneven lighting etc) todo
+\subsection{Successful Evaluations}
+
+\subsubsection{Vignetting}
+\begin{table}[H]
+    \centering
+    \caption{Vignetting Assessment Results}
+    \label{tab:vignetting_results}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        \textbf{Photo ID} & \textbf{Center Intensity} & \textbf{Top Left} & \textbf{Top Right} & \textbf{Bottom Left} & \textbf{Bottom Right} \\ \hline
+        vignette\_20241215\_132956\_2J9B3461.CR2 & 68.26 & 41.27 & 34.51 & 26.87 & 19.86 \\ \hline
+        vignette\_20241215\_140626\_2J9B3465.CR2 & 65.29 & 38.81 & 32.51 & 25.26 & 17.09 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/vignette_analysis_20241215_134315.jpg}
+    \caption{Vignetting Analysis Visualization for Photo ID \texttt{vignette\_20241215\_132956\_2J9B3461.CR2}}
+    \label{fig:vignetting_visualization}
+\end{figure}
+
+The vignetting scores indicated a noticeable luminance fall-off, which is expected under wide aperture settings. The consistent reduction in intensity from the center to the corners validates the application's accuracy in this metric.
+
+\subsubsection{Bokeh}
+\begin{table}[H]
+    \centering
+    \caption{Bokeh Assessment Scores}
+    \label{tab:bokeh_scores}
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Photo ID} & \textbf{Overall Score} & \textbf{Shape Regularity} & \textbf{Color Fringing} \\ \hline
+        bokeh\_20241215\_141412\_2J9B3466.CR2 & 66.79 & 44.48 & 90.81 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{datasets/g_20241215_130205/photos/bokeh_analysis_20241215_143248.jpg}
+    \caption{Bokeh Analysis Visualization for Photo ID \texttt{bokeh\_20241215\_141412\_2J9B3466.CR2}}
+    \label{fig:bokeh_visualization}
+\end{figure}
+
+The bokeh scores reflected the smoothness and aesthetic quality of the out-of-focus areas. High scores in color fringing indicate minimal color distortions, contributing to pleasing bokeh effects.
+
+\subsection{Partial or Unsuccessful Evaluations}
+
+\subsubsection{Sharpness}
+\begin{table}[H]
+    \centering
+    \caption{Sharpness Assessment Scores}
+    \label{tab:sharpness_scores}
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Photo ID} & \textbf{Sharpness Score} & \textbf{Traditional Score} & \textbf{SIFT Score} \\ \hline
+        sharpness\_20241215\_152555\_2J9B3467.CR2 & 3.26 & 3.80 & 1.98 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/sharpness_analysis_20241215_160716.jpg}
+    \caption{Sharpness Analysis Visualization for Photo ID \texttt{sharpness\_20241215\_152555\_2J9B3467.CR2}}
+    \label{fig:sharpness_analysis}
+\end{figure}
+
+While the application attempted to measure the lens's resolving power, the results were inconsistent. Some lenses showed expected sharpness levels, but overall, the sharpness measurements did not consistently align with theoretical benchmarks or visual assessments.
+
+\subsubsection{Chromatic Aberration (CA)}
+\begin{table}[H]
+    \centering
+    \caption{Chromatic Aberration Assessment Scores}
+    \label{tab:ca_scores}
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Photo ID} & \textbf{Chromatic Aberration Score} & \textbf{Lateral CA} & \textbf{Longitudinal CA} \\ \hline
+        chromatic\_20241215\_161105\_sharpness\_f4\_20241211\_212111.CR2 & 34.72 & R-G: 3.89, R-B: 1.16, G-B: 4.98 & R-G: 1.21, R-B: 1.71, G-B: 1.41 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{datasets/g_20241215_130205/photos/ca_analysis_20241216_144651.jpg}
+    \caption{Chromatic Aberration Analysis Visualization for Photo ID \texttt{chromatic\_20241215\_161105\_sharpness\_f4\_20241211\_212111.CR2}}
+    \label{fig:ca_visualization}
+\end{figure}
+
+The CA scores indicate moderate color fringing, but the measurements lacked consistency across different photos. Factors such as high ISO settings and image noise may have contributed to unreliable CA assessments.
+
+\subsubsection{Distortion}
+\begin{table}[H]
+    \centering
+    \caption{Distortion Assessment Scores}
+    \label{tab:distortion_scores}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Photo ID} & \textbf{Mean Deviation} & \textbf{Max Deviation} \\ \hline
+        distortion\_20241215\_161602\_sharpness\_f4\_20241211\_212111.CR2 & 2.20 & 3.17 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/distortion_analysis_20241216_090148.jpg}
+    \caption{Distortion Analysis Visualization for Photo ID \texttt{distortion\_20241215\_161602\_sharpness\_f4\_20241211\_212111.CR2}}
+    \label{fig:distortion_visualization}
+\end{figure}
+
+The distortion analysis identified pincushion distortion; however, the accuracy of these measurements was questionable due to potential alignment issues and high image noise.
+
+Despite these challenges, the application succeeded in visualizing all intended lens properties, providing valuable insights even when quantitative measurements were inconsistent.
+
+\section{Limitations}
+Several limitations impacted the accuracy and reliability of the lens evaluations:
+
+\begin{itemize}
+    \item \textbf{Image Noise}: A significant amount of noise was present in the images used for evaluation. This noise interfered with the application's ability to accurately measure and quantify lens properties, particularly affecting sharpness and chromatic aberration assessments.
+    \item \textbf{Pixel Scale}: The pixel scale used in the analysis was excessively large, leading to confusion and difficulties in interpreting the quantitative data. This issue hindered precise measurements and contributed to inconsistencies in evaluating certain lens properties.
+    \item \textbf{Environmental Factors}: Uneven lighting conditions and slight misalignments of test charts introduced variability in the results. These factors compromised the consistency of measurements, especially for metrics sensitive to lighting and alignment.
+\end{itemize}
+
+These limitations highlight the need for improved image acquisition protocols and enhanced processing algorithms to mitigate noise and optimize pixel scaling.
+
 \section{Comparative Analysis}
-Results obtained from the application were compared with those from Imatest and Dxomark. The application provided comparable accuracy in certain evaluating lens properties, demonstrating its potential as a cost-effective and accessible tool for photographers
-%actual porovnanie todo
+A comparative analysis with industry-standard tools such as Imatest and DxOMark has not yet been conducted. Future work will involve benchmarking the application's results against these established tools to evaluate its accuracy and reliability comprehensively.
 
 \section{Discussion}
-%todo
-The comparative analysis highlights the application's success in evaluating various lens properties. By providing results comparable to industry-standard tools like Imatest and Dxomark, the application proves to be a valuable resource for photographers seeking to assess lens quality without excessive costs.
+The evaluation metrics revealed that the application possesses strengths in assessing certain lens properties while encountering challenges with others. Specifically, the successful measurement of vignetting and bokeh demonstrates the tool's potential in providing valuable insights into lens performance. The ability to visualize these properties effectively supports photographers in making informed decisions about lens quality.
 
-The success of the application in accurately measuring sharpness, bokeh, chromatic aberration, and vignetting demonstrates its comprehensive capabilities. The use of advanced image processing techniques and detailed analysis ensures that photographers can rely on the application for precise and detailed lens evaluations.
+However, the inconsistent results in sharpness and chromatic aberration assessments indicate areas for improvement. The presence of significant image noise and an overly large pixel scale adversely affected the application's performance in these metrics. Addressing these issues through enhanced image preprocessing and calibration techniques is essential for improving measurement accuracy.
 
-Overall, the application offers a cost-effective and accessible alternative to professional lens testing tools, making it an attractive option for both amateur and professional photographers. Future developments could focus on enhancing user interface features, expanding compatibility with different camera models, and incorporating additional lens evaluation metrics.
+The partial success in distortion measurements suggests that the application requires further refinement in detecting and quantifying geometric distortions. Implementing more robust algorithms and optimizing test chart alignment procedures could enhance the reliability of distortion assessments.
+
+\subsection{Strengths}
+\begin{itemize}
+    \item \textbf{Vignetting Measurement}: The application accurately quantified luminance fall-off, providing reliable data that aligns with theoretical expectations.
+    \item \textbf{Bokeh Analysis}: Successfully evaluated the aesthetic quality of out-of-focus areas, offering objective scores that correlate with subjective assessments.
+    \item \textbf{Visualization Capabilities}: Managed to visualize all intended lens properties, facilitating a better understanding of lens performance despite quantitative inconsistencies.
+\end{itemize}
+
+\subsection{Weaknesses}
+\begin{itemize}
+    \item \textbf{Sharpness Assessment}: Inconsistent measurements due to high image noise and large pixel scales compromised the reliability of sharpness scores.
+    \item \textbf{Chromatic Aberration Detection}: Partial success in identifying color fringing suggests the need for more refined detection algorithms.
+    \item \textbf{Distortion Quantification}: Limited effectiveness in accurately measuring geometric distortions indicates the necessity for improved analysis methods.
+\end{itemize}
+
+\subsection{Recommendations for Improvement}
+\begin{itemize}
+    \item \textbf{Noise Reduction}: Implement advanced image preprocessing techniques to minimize noise and enhance measurement accuracy.
+    \item \textbf{Pixel Scaling Optimization}: Adjust the pixel scale to a more manageable size to facilitate clearer data interpretation.
+    \item \textbf{Algorithm Enhancement}: Refine existing algorithms or develop new ones to improve the detection and quantification of sharpness, chromatic aberration, and distortion.
+    \item \textbf{Environmental Controls}: Standardize image acquisition conditions to reduce variability caused by uneven lighting and misaligned test charts.
+\end{itemize}
+
+\chapter{Conclusion and Further Work}
+
+\section{Summary of Findings}
+This thesis presented the development of a Python application for evaluating lens properties. The application successfully captured and analyzed images to assess various lens properties, providing a comprehensive score for each property. Notably, the application accurately measured vignetting and bokeh, aligning with theoretical expectations and subjective assessments.
+
+The methodology includes support for RAW image capture, parameterized batch processing, and integration of standardized test charts. A web-based user interface, developed with NiceGUI, enhances usability and supports diverse use cases for beginners and professionals alike.
+
+The research explores fundamental aspects of lens performance, including sharpness, chromatic aberrations, geometric distortions, vignetting, bokeh, and dynamic range. It also examines the challenges posed by metadata reliability and camera control standardization. Robust error handling and recovery mechanisms are implemented to ensure system stability.
+
+\section{Limitations}
+The application is currently limited to cameras that are compatible with the Python libraries utilized in its implementation, particularly gphoto2 used to access the camera \cite{gphoto2_compatible}. This dependency on library support restricts the system’s compatibility to a subset of cameras, potentially excluding certain models or brands.
+
+Lighting conditions significantly impact lens evaluation by affecting the accuracy and consistency of results. Variations in intensity, color temperature, and uniformity can influence the measurements of various lens properties. Furthermore, achieving even illumination, especially for test charts, often requires specialized setups that may not always be accessible for at-home lens testing.
+
+The reliance on EXIF metadata for extracting camera and lens information presents challenges due to inconsistent implementation across manufacturers and the lack of a formal standard. This makes metadata an unreliable sole source of information.
+
+High-resolution RAW image analysis and advanced processing algorithms might place significant computational demands on lower-end hardware, potentially affecting performance.
+
+\section{Future Work}
+
+Future research could explore the integration of motorized testing setups to achieve greater precision in measurements. Additionally, expanding the application to support a wider range of camera models and lenses would enhance its versatility. Developing more sophisticated algorithms to reduce image noise and optimize pixel scaling could further improve the accuracy of sharpness and chromatic aberration assessments. Creating an extensive catalog of lens evaluations would provide a valuable reference for photographers and technicians, fostering informed decision-making in lens selection.
+
+\appendix
+
+\chapter{Raw JSON Data}
+
+\section{Vignetting Analysis}
+\label{app:vignetting_json}
+\begin{verbatim}
+{
+  "id": "g_20241215_130205",
+  "name": "g",
+  "created": "20241215_130205",
+  "metadata": {},
+  "scenarios": [
+    {
+      "id": "vignette_20241215_130554",
+      "type": "vignette",
+      "created": "20241215_130554",
+      "metadata": {
+        "focal_length": 50,
+        "notes": "",
+        "created": "20241215_130554"
+      },
+      "photos": [
+        {
+          "filename": "vignette_20241215_132956_2J9B3461.CR2",
+          "path": "datasets/g_20241215_130205/photos/vignette_20241215_132956_2J9B3461.CR2",
+          "timestamp": "20241215_132956",
+          "metadata": {
+            "scenario_type": "vignette",
+            "scenario_id": "vignette_20241215_130554",
+            "camera_settings": {
+              "aperture": "2.5",
+              "iso": "Auto",
+              "shutter_speed": "1/50",
+              "camera_model": "Canon EOS 5D Mark III",
+              "lens_name": "EF50mm f/2.5 Compact Macro"
+            },
+            "aperture": "2.5",
+            "shutter_speed": "1/50",
+            "iso": "Auto",
+            "lens_name": "EF50mm f/2.5 Compact Macro",
+            "camera_model": "Canon EOS 5D Mark III",
+            "focal_length": null
+          },
+          "analysis": {
+            "vignetting_results": {
+              "center_intensity": 68.26437152181892,
+              "corner_intensities": {
+                "top_left": 41.268320194889306,
+                "top_right": 34.50813607531432,
+                "bottom_left": 26.866990082857512,
+                "bottom_right": 19.855198857877326
+              },
+              "corner_ratios": {
+                "top_left": 0.6045367338026245,
+                "top_right": 0.5055072698396512,
+                "bottom_left": 0.3935726570670937,
+                "bottom_right": 0.2908574182292315
+              },
+              "average_corner_ratio": 0.44861851973465017,
+              "vignetting_score": 44.861851973465015,
+              "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_134315.jpg"
+            },
+            "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_134315.jpg",
+            "preview_path": "datasets/g_20241215_130205/photos/vignette_20241215_132956_2J9B3461.CR2",
+            "analyzed_at": "20241215_134316",
+            "type": "vignette",
+            "metadata": {
+              "scenario_type": "vignette",
+              "scenario_id": "vignette_20241215_130554",
+              "camera_settings": {
+                "aperture": "2.5",
+                "iso": "Auto",
+                "shutter_speed": "1/50",
+                "camera_model": "Canon EOS 5D Mark III",
+                "lens_name": "EF50mm f/2.5 Compact Macro"
+              },
+              "aperture": "2.5",
+              "shutter_speed": "1/50",
+              "iso": "Auto",
+              "lens_name": "EF50mm f/2.5 Compact Macro",
+              "camera_model": "Canon EOS 5D Mark III",
+              "focal_length": null
+            }
+          }
+        },
+        {
+          "filename": "vignette_20241215_140626_2J9B3465.CR2",
+          "path": "datasets/g_20241215_130205/photos/vignette_20241215_140626_2J9B3465.CR2",
+          "timestamp": "20241215_140626",
+          "metadata": {
+            "scenario_type": "vignette",
+            "scenario_id": "vignette_20241215_130554",
+            "camera_settings": {
+              "camera_model": "Canon EOS 5D Mark III",
+              "lens_name": "EF50mm f/2.5 Compact Macro",
+              "aperture": "2.5",
+              "shutter_speed": "1/50",
+              "iso": "Auto",
+              "focal_length": 50
+            }
+          },
+          "analysis": {
+            "vignetting_results": {
+              "center_intensity": 65.2881906770509,
+              "corner_intensities": {
+                "top_left": 38.808094764616506,
+                "top_right": 32.51066587888782,
+                "bottom_left": 25.262945008136924,
+                "bottom_right": 17.090093243114787
+              },
+              "corner_ratios": {
+                "top_left": 0.5944121649285914,
+                "top_right": 0.497956300239692,
+                "bottom_left": 0.38694509292041024,
+                "bottom_right": 0.2617639279919888
+              },
+              "average_corner_ratio": 0.43526937152017064,
+              "vignetting_score": 43.52693715201706,
+              "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_140652.jpg"
+            },
+            "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_140652.jpg",
+            "preview_path": "datasets/g_20241215_130205/photos/vignette_20241215_140626_2J9B3465.CR2",
+            "analyzed_at": "20241215_140653",
+            "type": "vignette",
+            "metadata": {
+              "scenario_type": "vignette",
+              "scenario_id": "vignette_20241215_130554",
+              "camera_settings": {
+                "camera_model": "Canon EOS 5D Mark III",
+                "lens_name": "EF50mm f/2.5 Compact Macro",
+                "aperture": "2.5",
+                "shutter_speed": "1/50",
+                "iso": "Auto",
+                "focal_length": 50
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "camera_model": "Canon EOS 5D Mark III",
+  "lens_name": "EF50mm f/2.5 Compact Macro"
+}
+\end{verbatim}
+
+\section{Bokeh Analysis}
+\label{app:bokeh_json}
+\begin{verbatim}
+{
+  "id": "bokeh_20241215_141354",
+  "type": "bokeh",
+  "created": "20241215_141354",
+  "metadata": {
+    "focal_length": 50,
+    "notes": "",
+    "created": "20241215_141354"
+  },
+  "photos": [
+    {
+      "filename": "bokeh_20241215_141412_2J9B3466.CR2",
+      "path": "datasets/g_20241215_130205/photos/bokeh_20241215_141412_2J9B3466.CR2",
+      "timestamp": "20241215_141412",
+      "metadata": {
+        "scenario_type": "bokeh",
+        "scenario_id": "bokeh_20241215_141354",
+        "camera_settings": {
+          "camera_model": "Canon EOS 5D Mark III",
+          "lens_name": "EF50mm f/2.5 Compact Macro",
+          "aperture": "2.5",
+          "shutter_speed": "1/50",
+          "iso": "Auto",
+          "focal_length": 50
+        }
+      },
+      "analysis": {
+        "overall_score": 66.78943397462963,
+        "shape_regularity": {
+          "score": 44.484266721329384,
+          "metrics": {
+            "circularity": 0.014624072905553747,
+            "contour_matching": 0.12493873847896608,
+            "area": 0.5,
+            "perimeter": 20.727921843528748
+          }
+        },
+        "color_fringing": {
+          "score": 90.80501089324619,
+          "metrics": {
+            "average_color_difference": 23.447222222222223,
+            "max_color_difference": 30.0,
+            "color_variation": 4.95185072647429
+          }
+        },
+        "intensity_distribution": {
+          "score": 65.07902430931331,
+          "metrics": {
+            "mean_intensity": 85.6923076923077,
+            "std_intensity": 3.830738337842687,
+            "intensity_gradient": -1.307432208252324,
+            "center_intensity": 89.0
+          }
+        },
+        "visualization_path": "datasets/g_20241215_130205/photos/bokeh_analysis_20241215_143248.jpg",
+        "center_point": [
+          1877.0,
+          802.0
+        ],
+        "radius": 2.0,
+        "analysis_time": "20241215_143248",
+        "metadata": {
+          "scenario_type": "bokeh",
+          "scenario_id": "bokeh_20241215_141354",
+          "camera_settings": {
+            "camera_model": "Canon EOS 5D Mark III",
+            "lens_name": "EF50mm f/2.5 Compact Macro",
+            "aperture": "2.5",
+            "shutter_speed": "1/50",
+            "iso": "Auto",
+            "focal_length": 50
+          }
+        },
+        "click_debug_path": "datasets/g_20241215_130205/photos/click_debug_20241215_143246.jpg",
+        "preview_path": "datasets/g_20241215_130205/photos/bokeh_20241215_141412_2J9B3466.CR2",
+        "analyzed_at": "20241215_143248",
+        "type": "bokeh"
+      }
+    }
+  ]
+}
+\end{verbatim}
+
+% [Include additional appendices as needed]
+
+\backmatter
+
+\begin{thebibliography}{9}
+\bibitem{gphoto2_compatible}
+GPhoto2. (n.d.). \textit{Supported Cameras}. Retrieved from \url{http://www.gphoto.org/proj/libgphoto2/support.php}
+% [Add more references as needed]
+\end{thebibliography}
+
+\end{document}

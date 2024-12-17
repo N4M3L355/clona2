@@ -501,6 +501,33 @@ Frames represent individual captured images within a scenario. Each frame stores
 
 Frames are named systematically to reflect their testing context: \texttt{scenario\_type\_timestamp\_settings}.
 
+\subsection{Metadata Collection}
+
+The system collects comprehensive metadata about each captured image through two primary sources. The first source is the camera's EXIF data embedded in captured images, which provides details about the capture conditions and equipment used. The second source is the gphoto2 interface, which offers real-time access to camera settings during capture.
+
+From EXIF data, the system extracts:
+\begin{itemize}
+    \item Camera make and model
+    \item Lens identification
+    \item Focal length
+    \item Exposure settings (aperture, shutter speed, ISO)
+    \item Image timestamp
+    \item Color space information
+\end{itemize}
+
+Through the gphoto2 interface, the system accesses:
+\begin{itemize}
+    \item Current camera configuration
+    \item Available setting ranges
+    \item Focus information
+    \item Drive mode status
+    \item Battery level
+    \item Storage capacity
+\end{itemize}
+
+This dual approach to metadata collection ensures that both static image properties and dynamic camera states are captured, providing context for analysis results and enabling reproducible testing conditions.
+
+
 \subsection{User Interface Considerations}
 The data organization influences the user interface design, providing intuitive navigation through tests and results. The interface reflects the hierarchical nature of the data, allowing users to drill down from datasets to specific frame results while maintaining context.
 
