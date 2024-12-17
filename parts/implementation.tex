@@ -78,7 +78,7 @@ Although a REST API-based control system provides advantages in terms of scalabi
 
 Here is an example of how image capture is handled within the \texttt{CameraManager} class:
 
-\begin{verbatim}
+\begin{minted}[linenos, fontsize=\small, breaklines=true]{python}
 def capture_image(self):
     try:
         file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
@@ -91,11 +91,11 @@ def capture_image(self):
     except gp.GPhoto2Error as e:
         logging.error(f"Capture failed: {e}")
         raise
-\end{verbatim}
+\end{minted}
 
 And an example of how a REST API-based implementation would look:
 
-\begin{verbatim}
+\begin{minted}[linenos, fontsize=\small, breaklines=true]{python}
 @app.post("/api/camera/capture")
 async def capture_image():
     try:
@@ -108,7 +108,7 @@ async def capture_image():
         raise HTTPException(status_code=response.status_code)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-\end{verbatim}
+\end{minted}
 
 \subsection{Dataset Management}
 
@@ -153,31 +153,14 @@ While the split browser-server model offers advantages in UI responsiveness and 
 
 The selected architecture aligns well with the project's primary goals of reliability and accuracy in lens testing, maintaining a balance between implementation complexity and system robustness.
 
-\section{Analysis Engine}
-
 \subsection{Preprocessing vs. Processing}
 
 A key part of the image analysis workflow is distinguishing between **preprocessing** and **processing** steps. These two phases serve distinct purposes and occur at different points in the workflow.
 
-**Preprocessing** includes all operations that are uniform and necessary before an image enters scenario-specific analysis. The goal is to ensure that every input photograph, regardless of its eventual analytical purpose, is brought to a consistent baseline. This involves tasks such as converting RAW images to a standard format like TIFF or PNG, applying lens corrections that are independent of specific scenarios, normalizing image brightness or contrast to account for variations in lighting and camera settings, and removing sensor noise or unwanted digital artifacts common to all captures. By performing these steps upfront, the system ensures that downstream processes operate on images with a predictable level of quality, uniformity, and formatting. Preprocessing is scenario-agnostic and solely focused on preparing the inputs consistently.
-
+**Preprocessing** includes debayering and converting to 8bit format. This is common for all scenarios.
 **Processing**, in contrast, refers to the suite of analyses and transformations that depend on the specific scenario at hand. For example, if the analysis is focused on evaluating sharpness, the processing stage might involve localizing test-chart features, computing sharpness metrics, and extracting spatial frequency responses. If the scenario is centered on vignetting, processing might involve measuring the illumination fall-off towards the corners and computing vignetting scores. These operations are scenario-specific, requiring knowledge of the particular tests being run, the metrics to be derived, and the structures or patterns expected in the images.
 
 In summary, **preprocessing** consists of universal, scenario-independent steps applied to every photo to ensure consistent starting conditions, while **processing** involves scenario-specific analysis steps that derive particular measurements, scores, or insights from the image based on the experiment’s goals.
-
-\subsection{Image Preprocessing and Segmentation}
-
-The image processing pipeline begins with an initial segmentation phase that identifies calibration elements within the image. Utilizing algorithms such as SIFT, the pipeline detects and localizes key graphical features of the test charts. This step lays the groundwork for subsequent stages by eliminating irrelevant areas of the image.
-
-Following segmentation, preprocessing applies a series of transformations to normalize the data. Preprocessing tasks include noise reduction, image resizing, and contrast adjustment to account for variations in lighting and camera settings. The application of median or Gaussian filters ensures that these transformations preserve critical details. Additionally, the pipeline converts raw image data into an analyzable format, setting the stage for accurate and reliable analysis.
-
-\subsection{Feature Detection and Analysis}
-
-The next stage involves evaluating specific lens properties. For sharpness analysis, edge detection techniques are employed to assess transitions between high-contrast regions. The modulation transfer function (MTF) is calculated to quantify spatial resolution, providing a robust measure of lens clarity. Vignetting is assessed by analyzing the intensity distribution across the image, while geometric distortion is evaluated by comparing expected grid patterns to their actual appearance. Chromatic aberrations are quantified by measuring color fringing at the boundaries of high-contrast features, and bokeh quality is examined by characterizing out-of-focus light regions.
-
-A key characteristic of the pipeline is its adaptability to various calibration test charts and environmental conditions. This is achieved through parameterized algorithms and automated calibration routines. The pipeline also integrates mechanisms to validate the reliability of the extracted data, detecting and discarding outliers that might result from erroneous inputs.
-
-Processed data is formatted for visualization and reporting, with analytical results structured into metrics and graphs. These results are also stored for future reference, ensuring that comprehensive records of lens performance are maintained.
 
 \section{User Interface Components}
 
@@ -293,6 +276,22 @@ The notification system provides real-time feedback to users. Notifications appe
 \subsection{Additional Features}
 
 The application includes several key features that enhance user experience and functionality. It can operate fully offline after the initial installation, allowing users to utilize its features without internet connectivity. A dark mode option is available, improving usability in low-light environments and providing a more comfortable viewing experience. Additionally, the application stores user interface state, including user preferences and currently opened elements, between visits, ensuring a seamless and consistent user experience.
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{Images/screen2.png}
+\caption{Complete user interface.}
+\label{fig:ui_notification}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{Images/screen3.png}
+\caption{User interface in dark mode.}
+\label{fig:ui_notification}
+\end{figure}
+
 
 \section{Testing}
 
@@ -448,7 +447,7 @@ Error Handling & Direct exception propagation & HTTP status codes and messages \
 
 Choosing the direct integration approach impacts implementation significantly. For example, capturing an image using direct integration involves straightforward method calls with exception handling:
 
-\begin{verbatim}
+\begin{minted}[linenos, fontsize=\small, breaklines=true]{python}
 def capture_image(self):
     try:
         file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
@@ -461,11 +460,11 @@ def capture_image(self):
     except gp.GPhoto2Error as e:
         logging.error(f"Capture failed: {e}")
         raise
-\end{verbatim}
+\end{minted}
 
 In contrast, a REST API-based implementation would require setting up HTTP endpoints and handling responses accordingly:
 
-\begin{verbatim}
+\begin{minted}[linenos, fontsize=\small, breaklines=true]{python}
 @app.post("/api/camera/capture")
 async def capture_image():
     try:
@@ -478,7 +477,7 @@ async def capture_image():
         raise HTTPException(status_code=response.status_code)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-\end{verbatim}
+\end{minted}
 
 \subsection{Selected Approach}
 
@@ -528,12 +527,6 @@ The application supports containerized deployment for scenarios where camera con
 
 The container configuration excludes the gphoto2 library, as physical camera access isn't necessary. This reduces the container size and simplifies cross-platform deployment. The container includes only the core analysis components and dataset management functionality.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{Images/docker_architecture.png}
-\caption{Docker deployment architecture.}
-\label{fig:docker_architecture}
-\end{figure}
 
 The containerized version maintains the same dataset structure and analysis capabilities as the full application. Users can import existing datasets, perform analysis, and export results. The key difference is that new image capture isn't possible— all operations work with pre-existing or imported RAW files.
 

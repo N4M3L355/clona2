@@ -6,6 +6,35 @@ This chapter outlines the methodology employed for image processing and evaluati
 \section{Unconventional Testing Environment}
 While professional lens testing typically requires expensive equipment and controlled lighting, this methodology embraces a more accessible "garage lab" approach. Basic household items are repurposed for testing---a white wall becomes the vignetting test surface, while Christmas lights or phone flashlights serve as point light sources for bokeh analysis. This approach, while less precise than industrial solutions, provides meaningful relative measurements that help photographers evaluate their lenses.
 
+\section{Testing Equipment}
+
+\subsection{Camera Bodies}
+The testing methodology was validated using a range of consumer and prosumer DSLR cameras. The Canon lineup included the full-frame EOS 5D Mark III and crop-sensor bodies (EOS 80D, EOS 600D). From Nikon, testing incorporated the entry-level D3400.
+
+\subsection{Lens Selection}
+Testing covered both zoom and prime lenses across different price points and manufacturers:
+
+Standard zooms:
+\begin{equation*}
+\begin{aligned}
+&\text{Sigma 24-70mm f/2.8 DG OS HSM} \\
+&\text{Canon 18-135mm f/3.5-5.6 IS USM} \\
+&\text{Canon 18-55mm f/3.5-5.6 IS STM} \\
+&\text{Nikon 18-55mm f/3.5-5.6G}
+\end{aligned}
+\end{equation*}
+
+Prime lenses:
+\begin{equation*}
+\begin{aligned}
+&\text{Sigma 50mm f/1.4 EX DG HSM} \\
+&\text{Nikon 50mm f/1.8}
+\end{aligned}
+\end{equation*}
+
+\subsection{Cross-Platform Testing}
+The Novoflex Nikon to Canon EOS EF adapter enabled testing Nikon lenses on Canon bodies. This cross-platform testing revealed how lens characteristics translate across different mounting systems, though adapter-induced limitations needed consideration in the analysis.
+
 \section{Lens Properties Analysis}
 
 \subsection{Observable Characteristics}
@@ -128,11 +157,53 @@ V = \frac{I_{\text{corners}}}{I_{\text{center}}}
 The analysis generates a radial heat map showing intensity falloff from center to corners. The final vignetting score is normalized to a 0-100 scale, where 100 represents no vignetting (uniform illumination) and lower values indicate stronger corner darkening.
 
 One way of compensating uneven wall illumination is to capture a reference image at a wide aperture (typically f/8) where vignetting is minimal.
-
 \subsubsection{Bokeh Characterization}
-The aesthetic quality of out-of-focus areas can be quantified through analysis of point light sources. Key metrics include:
+The aesthetic quality of out-of-focus areas, known as bokeh, is evaluated by analyzing point light sources captured in defocused regions. The process focuses on three primary metrics: circularity, intensity uniformity, and edge smoothness.
 
-Circularity ratio \( = \frac{4\pi A}{P^2} \), where \( A \) is area and \( P \) is perimeter; intensity distribution uniformity within bokeh discs; and edge gradient measurement for transition smoothness.
+The methodology for bokeh analysis follows these steps:
+
+\paragraph{Preprocessing the Image:}
+The image is first converted to grayscale to simplify analysis while retaining essential luminance information. For RAW images, preprocessing includes demosaicing and basic noise reduction.
+
+\paragraph{Point Light Detection:}
+Bright spots representing bokeh are detected using thresholding and blob detection. The Canny edge detector identifies boundaries of light sources in the defocused region:
+\[
+\text{Edges} = \text{Canny}(\text{Image}, \text{threshold1}, \text{threshold2})
+\]
+
+Detected edges are passed to OpenCV's \texttt{findContours} to extract the boundaries of circular features.
+
+\paragraph{Circularity Analysis:}
+Circularity quantifies how closely the detected bokeh shape resembles a perfect circle. The metric is calculated as:
+\[
+\text{Circularity} = \frac{4\pi A}{P^2}
+\]
+
+where \( A \) is the area enclosed by the contour, and \( P \) is its perimeter. Values closer to 1 indicate more circular and aesthetically pleasing bokeh.
+
+\paragraph{Intensity Distribution:}
+For each detected bokeh disc, intensity distribution is evaluated within the region of interest (ROI). Uniformity of intensity is calculated as:
+\[
+U = 1 - \frac{\sigma}{\mu}
+\]
+
+where \( \sigma \) is the standard deviation and \( \mu \) is the mean intensity of the bokeh region. High uniformity indicates smooth, evenly lit bokeh.
+
+\paragraph{Edge Gradient Measurement:}
+Smoothness of the bokeh edge is analyzed by measuring the gradient of pixel intensities perpendicular to the detected boundary. A smoother gradient corresponds to more natural transitions in the bokeh.
+
+\paragraph{Composite Bokeh Score:}
+The final bokeh score combines circularity, uniformity, and edge smoothness:
+\[
+B = \frac{C \cdot U \cdot E}{3}
+\]
+
+where \( C \) is circularity, \( U \) is intensity uniformity, and \( E \) is edge smoothness.
+
+\textbf{Visualization}
+
+The system generates overlays highlighting detected bokeh regions, annotated with their respective scores.
+
 
 \subsubsection{Chromatic Aberration Detection}
 Color fringing along high-contrast edges reveals chromatic aberrations. Quantitative analysis involves:
@@ -341,8 +412,8 @@ Point light sources for bokeh testing can be created using simple LED lights or 
 \subsubsection{Lighting Compensation}
 Rather than requiring expensive studio lighting, the methodology adapts to available light sources. Test procedures include steps for compensating for uneven ambient lighting through reference shots and software correction. This makes testing possible in various environments while maintaining relative accuracy.
 
-\subsection{Consistency Through Process} %todo prepisat
-While individual measurements may have higher variability than lab tests, the methodology emphasizes consistency through careful documentation and repeated measurements. By averaging multiple tests and following structured procedures, hobbyist photographers can build meaningful datasets about their lens performance using accessible tools and spaces.
+\subsection{Consistency Through Process}
+While individual measurements may have higher variability than lab tests, the methodology emphasizes consistency through directing the user and repeated measurements. By averaging multiple tests and following structured procedures, hobbyist photographers can build meaningful dataset about their lens performance.
 
 \section{Image Acquisition}
 
@@ -448,7 +519,7 @@ A sophisticated comparison framework enables detailed analysis across different 
 \subsection{Export Capabilities}
 The system provides flexible data export options to support various analysis needs. Detailed CSV reports capture numerical data for statistical analysis, while visual comparison charts offer intuitive result interpretation. Raw measurement data export enables external analysis and verification, and comprehensive metadata export ensures full reproducibility of all test results.
 
-\section{Integration Points} %todo subsection or section
+\section{Integration Points} 
 The integration points between system components follow a modular design that emphasizes loose coupling and high cohesion. The camera control system communicates with the analysis engine through a message queue system, allowing asynchronous processing of captured images. This design choice reduces system blocking during long-running operations and improves overall responsiveness.
 
 The analysis engine interfaces with the data management system through a unified API that handles both RAW image storage and analysis results. This integration point implements retry logic and transaction management to ensure data consistency, particularly important when handling large RAW files during batch operations.
@@ -467,14 +538,25 @@ The validation process implements both automated and manual verification steps t
 
 Cross-validation with existing analysis tools provided reference points for accuracy assessment. While the system cannot match the precision of industrial testing equipment, it achieves sufficient accuracy for practical lens evaluation. The validation process identified areas where measurement accuracy could be improved, particularly in chromatic aberration detection under varying lighting conditions.
 
-% TODO: dopisat
+\section{Image Processing}
 
-\section{Image Processing Pipeline}
+\subsection{Multiple Capture Strategy}
 
-\subsection{Preprocessing}
-Image filtering is a crucial step in image preprocessing; its goal is to enhance the image quality and prepare it for subsequent analysis. Filtering helps in reducing noise, smoothing the image, and highlighting important features.
+The system captures multiple images at each aperture setting to minimize the impact of random noise and environmental variations. This approach follows basic statistical principles - by averaging multiple captures, random variations tend to cancel out while consistent lens characteristics remain.
 
-\textbf{Gaussian blur} is a widely-used smoothing technique that applies a Gaussian function to the image. It effectively reduces noise and detail, providing a smoother and more uniform image. The Gaussian blur is particularly useful in preparing images for feature detection and other analytical processes \cite{gaussian}.
+For each selected aperture value, the system captures n images in rapid succession (where n is configurable, defaulting to 2). These images undergo alignment before averaging to account for minor camera movement between shots. The averaging process reduces:
+
+\begin{equation}
+\sigma_{\text{final}} = \frac{\sigma_{\text{single}}}{\sqrt{n}}
+\end{equation}
+
+Where:
+\begin{itemize}
+    \item \( \sigma_{\text{final}} \) is the standard deviation of noise in the final averaged image
+    \item \( \sigma_{\text{single}} \) is the standard deviation in a single capture
+    \item \( n \) is the number of captures
+\end{itemize}
+
 
 \subsection{Feature Detection}
 Feature detection on the captured image is performed using the \textbf{Scale-Invariant Feature Transform} (SIFT). This algorithm detects and describes local features in images, also referred to as keypoints in the following sections. SIFT is used in computer vision for object recognition, image stitching, and other applications due to its robustness to changes in scale, rotation, and illumination. In this case, it is used for analyzing sharpness, PSF, and bokeh \cite{Sift}.
@@ -616,6 +698,29 @@ The validation process implements both automated and manual verification steps t
 Cross-validation with existing analysis tools provided reference points for accuracy assessment. While the system cannot match the precision of industrial testing equipment, it achieves sufficient accuracy for practical lens evaluation. The validation process identified areas where measurement accuracy could be improved, particularly in chromatic aberration detection under varying lighting conditions.
 
 To further ensure reliability, the system conducts repeated analyses on the same image captures to assess the consistency of the results. Statistical measures such as standard deviation and mean absolute error are calculated to quantify the variability and bias of the measurements. Additionally, a subset of images is manually inspected to verify that the automated analyses correspond to observable lens characteristics. Any discrepancies observed during manual checks are used to refine the analysis algorithms and adjust calibration parameters. This iterative validation approach enhances the robustness of the system and builds confidence in the accuracy of the quantitative metrics generated.
+
+\section{Testing Methodology Validation}
+
+\subsection{Repeatability Testing}
+Testing focused on result consistency across different scenarios. Basic repeatability was verified through identical test conditions (same camera, lens, settings, and scenario), which produced consistent results with negligible variations from sensor noise. This established a baseline for measurement reliability.
+
+\subsection{Environmental Adaptability}
+Multiple captures with slight ambient lighting variations demonstrated the system's robustness. Results remained within acceptable error margins despite environmental fluctuations, validating the lighting compensation mechanisms.
+
+\subsection{Cross-Platform Performance}
+Testing examined lens behavior across different camera bodies:
+
+\subsubsection{Same-Generation Bodies}
+Comparing two Canon EOS 5D Mark III bodies (shutter counts ~100,000 vs ~260,000) revealed consistent measurements, indicating result stability across different units of the same model.
+
+\subsubsection{Different Sensor Formats}
+Tests between full-frame (5D Mark III) and crop-sensor bodies (80D) showed expected variations in field of view while maintaining consistent sharpness measurements when accounting for sensor differences.
+
+\subsubsection{Cross-Brand Adaptation}
+Nikon lenses (18-55mm f/3.5-5.6G, 50mm f/1.8) were tested on both native (D3400) and adapted (Canon 80D) bodies using the Novoflex adapter. Results showed minimal impact on optical performance, though autofocus capabilities were affected.
+
+\subsection{Zoom Lens Characteristics}
+Analysis of zoom lenses revealed variations in sharpness across focal lengths, providing insights into optimal shooting ranges for each lens. This testing validated the system's ability to track performance changes through a lens's zoom range.
 
 \section{Image Processing Pipeline}
 

@@ -13,18 +13,23 @@ The evaluation focused on five main lens properties: sharpness, bokeh, distortio
     \centering
     \caption{Vignetting Assessment Results}
     \label{tab:vignetting_results}
-    \begin{tabular}{|l|c|c|c|c|c|}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|c|}
         \hline
-        \textbf{Photo ID} & \textbf{Center Intensity} & \textbf{Top Left} & \textbf{Top Right} & \textbf{Bottom Left} & \textbf{Bottom Right} \\ \hline
-        vignette\_20241215\_132956\_2J9B3461.CR2 & 68.26 & 41.27 & 34.51 & 26.87 & 19.86 \\ \hline
-        vignette\_20241215\_140626\_2J9B3465.CR2 & 65.29 & 38.81 & 32.51 & 25.26 & 17.09 \\ \hline
-    \end{tabular}
+        \textbf{Photo ID} & vignette\_20241215\_132956\_2J9B3461.CR2 & vignette\_20241215\_140626\_2J9B3465.CR2 \\ \hline
+        \textbf{Center Intensity} & 68.26 & 65.29 \\ \hline
+        \textbf{Top Left} & 41.27 & 38.81 \\ \hline
+        \textbf{Top Right} & 34.51 & 32.51 \\ \hline
+        \textbf{Bottom Left} & 26.87 & 25.26 \\ \hline
+        \textbf{Bottom Right} & 19.86 & 17.09 \\ \hline
+    \end{tabular}%
+    }
 \end{table}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/vignette_analysis_20241215_134315.jpg}
-    \caption{Vignetting Analysis Visualization for Photo ID \texttt{vignette\_20241215\_132956\_2J9B3461.CR2}}
+    \includegraphics[width=0.8\textwidth]{Images/vignette_analysis_20241209_135329.jpg}
+    \caption{Vignetting Analysis Visualization}
     \label{fig:vignetting_visualization}
 \end{figure}
 
@@ -35,17 +40,22 @@ The vignetting scores indicated a noticeable luminance fall-off, which is expect
     \centering
     \caption{Bokeh Assessment Scores}
     \label{tab:bokeh_scores}
-    \begin{tabular}{|l|c|c|c|}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|}
         \hline
-        \textbf{Photo ID} & \textbf{Overall Score} & \textbf{Shape Regularity} & \textbf{Color Fringing} \\ \hline
-        bokeh\_20241215\_141412\_2J9B3466.CR2 & 66.79 & 44.48 & 90.81 \\ \hline
-    \end{tabular}
+        \textbf{Photo ID} & bokeh\_20241215\_141412\_2J9B3466.CR2 \\ \hline
+        \textbf{Overall Score} & 66.79 \\ \hline
+        \textbf{Shape Regularity} & 44.48 \\ \hline
+        \textbf{Color Fringing} & 90.81 \\ \hline
+    \end{tabular}%
+    }
 \end{table}
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{datasets/g_20241215_130205/photos/bokeh_analysis_20241215_143248.jpg}
-    \caption{Bokeh Analysis Visualization for Photo ID \texttt{bokeh\_20241215\_141412\_2J9B3466.CR2}}
+    \includegraphics[width=0.7\textwidth]{Images/bokeh_analysis_20241212_234642.jpg}
+    \caption{Bokeh Analysis Visualization}
     \label{fig:bokeh_visualization}
 \end{figure}
 
@@ -58,17 +68,21 @@ The bokeh scores reflected the smoothness and aesthetic quality of the out-of-fo
     \centering
     \caption{Sharpness Assessment Scores}
     \label{tab:sharpness_scores}
-    \begin{tabular}{|l|c|c|c|}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|}
         \hline
-        \textbf{Photo ID} & \textbf{Sharpness Score} & \textbf{Traditional Score} & \textbf{SIFT Score} \\ \hline
-        sharpness\_20241215\_152555\_2J9B3467.CR2 & 3.26 & 3.80 & 1.98 \\ \hline
-    \end{tabular}
+        \textbf{Photo ID} & sharpness\_20241215\_152555\_2J9B3467.CR2 \\ \hline
+        \textbf{Sharpness Score} & 3.26 \\ \hline
+        \textbf{Traditional Score} & 3.80 \\ \hline
+        \textbf{SIFT Score} & 1.98 \\ \hline
+    \end{tabular}%
+    }
 \end{table}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/sharpness_analysis_20241215_160716.jpg}
-    \caption{Sharpness Analysis Visualization for Photo ID \texttt{sharpness\_20241215\_152555\_2J9B3467.CR2}}
+    \includegraphics[width=0.8\textwidth]{Images/sharpness_analysis_20241211_224531.jpg}
+    \caption{Sharpness Analysis Visualization}
     \label{fig:sharpness_analysis}
 \end{figure}
 
@@ -79,17 +93,23 @@ While the application attempted to measure the lens's resolving power, the resul
     \centering
     \caption{Chromatic Aberration Assessment Scores}
     \label{tab:ca_scores}
-    \begin{tabular}{|l|c|c|c|}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Photo ID} & \textbf{Chromatic Aberration Score} & \textbf{Lateral CA} & \textbf{Longitudinal CA} \\ \hline
-        chromatic\_20241215\_161105\_sharpness\_f4\_20241211\_212111.CR2 & 34.72 & R-G: 3.89, R-B: 1.16, G-B: 4.98 & R-G: 1.21, R-B: 1.71, G-B: 1.41 \\ \hline
-    \end{tabular}
+        \textbf{Photo ID} & chromatic\_20241215\_161105\_sharpness\_f4\_20241211\_212111.CR2 \\ \hline
+        \textbf{Chromatic Aberration Score} & 34.72 \\ \hline
+        \textbf{Lateral CA} & R-G: 3.89, R-B: 1.16, G-B: 4.98 \\ \hline
+        \textbf{Longitudinal CA} & R-G: 1.21, R-B: 1.71, G-B: 1.41 \\ \hline
+    \end{tabular}%
+    }
 \end{table}
+
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{datasets/g_20241215_130205/photos/ca_analysis_20241216_144651.jpg}
-    \caption{Chromatic Aberration Analysis Visualization for Photo ID \texttt{chromatic\_20241215\_161105\_sharpness\_f4\_20241211\_212111.CR2}}
+    \includegraphics[width=1\textwidth]{Images/ca_analysis_20241211_234543.jpg}
+    \caption{Chromatic Aberration Analysis Visualization }
     \label{fig:ca_visualization}
 \end{figure}
 
@@ -100,23 +120,42 @@ The CA scores indicate moderate color fringing, but the measurements lacked cons
     \centering
     \caption{Distortion Assessment Scores}
     \label{tab:distortion_scores}
-    \begin{tabular}{|l|c|c|}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|c|}
         \hline
-        \textbf{Photo ID} & \textbf{Mean Deviation} & \textbf{Max Deviation} \\ \hline
-        distortion\_20241215\_161602\_sharpness\_f4\_20241211\_212111.CR2 & 2.20 & 3.17 \\ \hline
-    \end{tabular}
+        \textbf{Photo ID} & distortion\_20241215\_161602\_sharpness\_f4\_20241211\_212111.CR2 \\ \hline
+        \textbf{Mean Deviation} & 2.20 \\ \hline
+        \textbf{Max Deviation} & 3.17 \\ \hline
+    \end{tabular}%
+    }
 \end{table}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/distortion_analysis_20241216_090148.jpg}
-    \caption{Distortion Analysis Visualization for Photo ID \texttt{distortion\_20241215\_161602\_sharpness\_f4\_20241211\_212111.CR2}}
-    \label{fig:distortion_visualization}
-\end{figure}
 
 The distortion analysis identified pincushion distortion; however, the accuracy of these measurements was questionable due to potential alignment issues and high image noise.
 
 Despite these challenges, the application succeeded in visualizing all intended lens properties, providing valuable insights even when quantitative measurements were inconsistent.
+
+\section{Testing Methodology Validation}
+
+\subsection{Repeatability Testing}
+Testing focused on result consistency across different scenarios. Basic repeatability was verified through identical test conditions (same camera, lens, settings, and scenario), which produced consistent results with negligible variations from sensor noise. This established a baseline for measurement reliability.
+
+\subsection{Environmental Adaptability}
+Multiple captures with slight ambient lighting variations demonstrated the system's robustness. Results remained within acceptable error margins despite environmental fluctuations, validating the lighting compensation mechanisms.
+
+\subsection{Cross-Platform Performance}
+Testing examined lens behavior across different camera bodies:
+
+\subsubsection{Same-Generation Bodies}
+Comparing two Canon EOS 5D Mark III bodies (shutter counts ~100,000 vs ~260,000) revealed consistent measurements, indicating result stability across different units of the same model.
+
+\subsubsection{Different Sensor Formats}
+Tests between full-frame (5D Mark III) and crop-sensor bodies (80D) showed expected variations in field of view while maintaining consistent sharpness measurements when accounting for sensor differences.
+
+\subsubsection{Cross-Brand Adaptation}
+Nikon lenses (18-55mm f/3.5-5.6G, 50mm f/1.8) were tested on both native (D3400) and adapted (Canon 80D) bodies using the Novoflex adapter. Results showed minimal impact on optical performance, though autofocus capabilities were affected.
+
+\subsection{Zoom Lens Characteristics}
+Analysis of zoom lenses revealed variations in sharpness across focal lengths, providing insights into optimal shooting ranges for each lens. This testing validated the system's ability to track performance changes through a lens's zoom range.
 
 \section{Limitations}
 Several limitations impacted the accuracy and reliability of the lens evaluations:
@@ -130,7 +169,7 @@ Several limitations impacted the accuracy and reliability of the lens evaluation
 These limitations highlight the need for improved image acquisition protocols and enhanced processing algorithms to mitigate noise and optimize pixel scaling.
 
 \section{Comparative Analysis}
-A comparative analysis with industry-standard tools such as Imatest and DxOMark has not yet been conducted. Future work will involve benchmarking the application's results against these established tools to evaluate its accuracy and reliability comprehensively.
+Direct comparison with industry tools like Imatest and DxOMark proved unfeasible due to licensing restrictions and commercial access limitations. Imatest's commercial licensing model and DxOMark's proprietary testing methodology was one of the reasons of not including side-by-side result validation. The project timeline also constrained the scope for extensive comparative testing. Future work could explore partnerships with commercial testing facilities to enable proper benchmarking of the application's accuracy and reliability against these established tools.
 
 \section{Discussion}
 The evaluation metrics revealed that the application possesses strengths in assessing certain lens properties while encountering challenges with others. Specifically, the successful measurement of vignetting and bokeh demonstrates the tool's potential in providing valuable insights into lens performance. The ability to visualize these properties effectively supports photographers in making informed decisions about lens quality.
@@ -173,7 +212,7 @@ The methodology includes support for RAW image capture, parameterized batch proc
 The research explores fundamental aspects of lens performance, including sharpness, chromatic aberrations, geometric distortions, vignetting, bokeh, and dynamic range. It also examines the challenges posed by metadata reliability and camera control standardization. Robust error handling and recovery mechanisms are implemented to ensure system stability.
 
 \section{Limitations}
-The application is currently limited to cameras that are compatible with the Python libraries utilized in its implementation, particularly gphoto2 used to access the camera \cite{gphoto2_compatible}. This dependency on library support restricts the system’s compatibility to a subset of cameras, potentially excluding certain models or brands.
+The application is currently limited to cameras that are compatible with the Python libraries utilized in its implementation, particularly gphoto2 used to access the camera \cite{gphoto2_compatible}. This dependency on library support restricts the system’s compatibility to a subset of cameras, potentially excluding certain models or brands. The compatibility is further narrowed by different implementations of different manufacturers protocols.
 
 Lighting conditions significantly impact lens evaluation by affecting the accuracy and consistency of results. Variations in intensity, color temperature, and uniformity can influence the measurements of various lens properties. Furthermore, achieving even illumination, especially for test charts, often requires specialized setups that may not always be accessible for at-home lens testing.
 
@@ -183,5 +222,5 @@ High-resolution RAW image analysis and advanced processing algorithms might plac
 
 \section{Future Work}
 
-Future research could explore the integration of motorized testing setups to achieve greater precision in measurements. Additionally, expanding the application to support a wider range of camera models and lenses would enhance its versatility. Developing more sophisticated algorithms to reduce image noise and optimize pixel scaling could further improve the accuracy of sharpness and chromatic aberration assessments. Creating an extensive catalog of lens evaluations would provide a valuable reference for photographers and technicians, fostering informed decision-making in lens selection.
+Future research could explore the integration of motorized testing setups to achieve greater precision in measurements. Additionally, expanding the application to support a wider range of camera models and lenses would enhance its versatility. Developing more sophisticated algorithms to reduce image noise and optimize pixel scaling could further improve the accuracy of sharpness and chromatic aberration assessments. Creating an extensive catalog of lens evaluations would provide a valuable reference for photographers and technicians, providing informed decision-making in lens selection.
 
