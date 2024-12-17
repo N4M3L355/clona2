@@ -152,3 +152,56 @@ The camera interface layer provides abstraction over the physical camera hardwar
     Lowe, D. G. "Distinctive Image Features from Scale-Invariant Keypoints," \textit{International Journal of Computer Vision}, 2004.
     
     \end{thebibliography}
+
+\begin{tikzpicture}[
+    component/.style={rectangle, draw, rounded corners, text centered, minimum width=3cm, minimum height=1cm},
+    user/.style={circle, draw, minimum size=1.2cm, text centered},
+    external/.style={rectangle, draw, dashed, text centered, minimum width=3cm, minimum height=1cm},
+    dataflow/.style={->, thick},
+    textlabel/.style={midway, fill=white, inner sep=2pt}
+]
+
+% Nodes
+\node[user] (User) {User};
+\node[component, right=2.5cm of User] (UI) {LensAnalysisUI};
+\node[component, below=1.8cm of UI] (CameraManager) {CameraManager};
+\node[component, right=2.5cm of CameraManager] (DatasetManager) {DatasetManager};
+
+\node[external, right=2.5cm of UI] (GPhoto2) {gphoto2 API};
+\node[external, below=1.8cm of CameraManager] (ExifTool) {EXIF Tools};
+\node[external, below=1.8cm of DatasetManager] (Analysis) {Image Analysis};
+
+% User interactions
+\draw[dataflow] (User) -- node[textlabel] {Perform Actions} (UI);
+
+% UI to CameraManager and DatasetManager
+\draw[dataflow] (UI) -- node[textlabel, left] {Capture Photo} (CameraManager);
+\draw[dataflow] (UI) -- node[textlabel, above] {Manage Scenarios} (DatasetManager);
+
+% CameraManager to gphoto2
+\draw[dataflow] (CameraManager) -- node[textlabel, above] {Capture, Settings} (GPhoto2);
+
+% CameraManager to EXIF Tool
+\draw[dataflow] (CameraManager) -- node[textlabel, left] {Extract EXIF Data} (ExifTool);
+
+% DatasetManager to Analysis
+\draw[dataflow] (DatasetManager) -- node[textlabel, left] {Run Analysis} (Analysis);
+
+% EXIF back to DatasetManager
+\draw[dataflow] (ExifTool) -- node[textlabel, below] {Metadata} (DatasetManager);
+
+% Analysis results to DatasetManager
+\draw[dataflow] (Analysis) -- node[textlabel, below] {Results} (DatasetManager);
+
+% DatasetManager back to UI
+\draw[dataflow] (DatasetManager) -- node[textlabel, below] {Show Results} (UI);
+
+% Grouping for external tools
+\node[fit=(GPhoto2) (ExifTool) (Analysis), dashed, draw, inner sep=0.5cm] (ExternalTools) {};
+\node[above=0.2cm of ExternalTools, text width=4cm, text centered] {External Tools};
+
+% User actions label (sideways text)
+\node[rotate=90, left=1.5cm of User, align=center] {User Actions: \\ Connect Camera \\ Capture Photo \\ Import RAW File \\ View Results \\ Manage Datasets \\ Run Analysis};
+
+\end{tikzpicture}
+
