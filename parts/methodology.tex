@@ -147,45 +147,36 @@ Where:
 For lateral chromatic aberration, the score increases with distance from the image center, matching how this artifact typically manifests. Longitudinal aberration is evaluated by comparing color fringing patterns across multiple focus distances.
 
 \subsubsection{Geometric Distortion Analysis}
-Distortion manifests as curved lines that should be straight. Analysis involves:
-
-\begin{itemize}
-    \item Line deviation from ideal straight paths
-    \item Radial distortion coefficient calculation
-    \item Grid point displacement measurement
-\end{itemize}
-
-The radial distortion model follows:
+Geometric distortion manifests as the warping of straight lines in images. The analysis focuses on detecting and quantifying this warping through grid pattern analysis. The mathematical foundation uses a polynomial distortion model:
 
 \begin{equation}
-r_{\text{distorted}} = r \left(1 + k_1 r^2 + k_2 r^4\right)
+r_d = r_u \left(1 + k_1 r_u^2 + k_2 r_u^4\right)
 \end{equation}
 
 Where:
 \begin{itemize}
-    \item \( r \) is the radial distance from center
+    \item \( r_d \) is the distorted radius from center
+    \item \( r_u \) is the undistorted radius
     \item \( k_1, k_2 \) are distortion coefficients
 \end{itemize}
 
 The practical implementation of distortion analysis follows these steps:
 
-First, we detect straight lines in the image using the Hough transform. This gives us a set of line segments that should ideally be straight. For each detected line, we calculate its deviation from a perfect straight line by measuring the perpendicular distance of points along the actual line to the ideal straight line.
+First, we enhance the grid pattern visibility through adaptive thresholding and noise reduction. The system then detects grid lines using the Hough transform, identifying both vertical and horizontal lines. For each detected line, we calculate its orientation and group similar lines together.
 
-To quantify the overall distortion, we compute the momentum of these deviations:
+To quantify the distortion, we compute the grid deviation score:
 
 \begin{equation}
-M = \sum_{i} \left(d_i \cdot r_i\right)
+D = \frac{w_s \cdot S + w_r \cdot R + w_g \cdot G}{w_s + w_r + w_g}
 \end{equation}
 
 Where:
 \begin{itemize}
-    \item \( d_i \) is the perpendicular deviation at point \( i \)
-    \item \( r_i \) is the radial distance from the image center
+    \item \( S \) is the line straightness score
+    \item \( R \) is the grid regularity score
+    \item \( G \) is the grid coverage score
+    \item \( w_s, w_r, w_g \) are weighting factors
 \end{itemize}
-
-The momentum approach weights deviations more heavily when they occur farther from the center, matching how distortion typically increases with radius. By analyzing the sign and magnitude of these momentums, we can characterize both the type and severity of the distortion.
-
-For barrel distortion, the momentum values will be predominantly positive as lines curve inward. For pincushion distortion, the values will be predominantly negative as lines curve outward. The absolute magnitude of the average momentum provides a single numerical score for distortion severity.
 
 \subsection{Mathematical Framework}
 The transition from qualitative observations to quantitative metrics requires robust mathematical models. Each lens property corresponds to specific mathematical tools:

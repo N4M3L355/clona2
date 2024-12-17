@@ -346,3 +346,260 @@ The test suite ensures quality assurance across multiple dimensions to verify th
 Together, these tests provide a comprehensive framework to validate the functionality, reliability, and performance of the application under diverse conditions. Test coverage reports are generated using pytest-cov to ensure comprehensive testing of all components, with particular attention to critical paths in the lens measurement workflows.
 
 
+%TODO: reorder
+
+\section{Dataset Management Architecture}
+
+Two distinct architectural approaches were considered for managing lens testing datasets: a centralized server-side approach and a split browser-server model. Each offers different advantages and tradeoffs for the application's specific requirements.
+
+\subsection{Approach Comparison}
+
+\subsubsection{Centralized Server-Side Management}
+The first approach maintains all dataset management on the server, including both metadata and RAW files.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Strong data consistency with single source of truth
+    \item Simpler transaction management for dataset operations
+    \item Reduced complexity in maintaining data synchronization
+    \item Better suited for multi-user scenarios
+    \item Easier backup and version control of complete datasets
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Higher server resource utilization
+    \item More network traffic for metadata operations
+    \item Potential latency in UI operations
+    \item Less responsive interface for dataset organization
+\end{itemize}
+
+\subsubsection{Split Browser-Server Management}
+The alternative approach splits responsibility: metadata management in the browser with RAW files on the server.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item More responsive user interface for dataset operations
+    \item Reduced server load for metadata operations
+    \item Lower bandwidth usage for organizational tasks
+    \item Better offline capabilities for dataset organization
+    \item Faster sorting and filtering of datasets
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item More complex data synchronization requirements
+    \item Potential consistency issues between client and server
+    \item Additional complexity in handling multi-user scenarios
+    \item More complicated error recovery
+    \item Need for conflict resolution in metadata
+\end{itemize}
+
+\subsection{Technical Considerations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Aspect} & \textbf{Centralized} & \textbf{Split Management} \\
+\hline
+Data Storage & All data managed in server filesystem and database & RAW files on server, metadata in browser storage \\
+\hline
+Network Usage & Higher for metadata operations, consistent for RAW files & Lower for metadata, same for RAW files \\
+\hline
+Scalability & Limited by server resources & Better distribution of computational load \\
+\hline
+Implementation Complexity & Lower, straightforward Python implementation & Higher, requires browser-server synchronization \\
+\hline
+Error Handling & Simpler recovery from failures & More complex state management required \\
+\hline
+\end{tabular}
+\caption{Technical Comparison of Dataset Management Approaches}
+\label{table:dataset_comparison}
+\end{table}
+
+\subsection{Selected Approach}
+
+For this implementation, the centralized server-side management approach was selected for several key reasons:
+
+\begin{itemize}
+    \item \textbf{Consistency Priority}: The critical nature of lens testing data requires strong consistency guarantees.
+    \item \textbf{Implementation Timeline}: The simpler architecture allows faster development and testing.
+    \item \textbf{Future Expandability}: Better foundation for adding multi-user support and version control.
+    \item \textbf{Data Integrity}: Easier to maintain referential integrity between metadata and RAW files.
+    \item \textbf{Error Recovery}: More straightforward backup and recovery procedures.
+\end{itemize}
+
+While the split browser-server model offers interesting advantages in UI responsiveness and resource distribution, the additional complexity and potential consistency issues outweighed these benefits for the current scope of the application. However, the architecture remains modular enough that transitioning to a split model could be implemented in future versions if the requirements change.
+
+The selected architecture aligns well with the project's primary goals of reliability and accuracy in lens testing, while maintaining a balance between implementation complexity and system robustness.
+
+\section{Analysis Results Architecture}
+
+A key architectural decision involved how to store and manage analysis results for lens tests.
+
+\subsection{Approach Comparison}
+
+\subsubsection{Embedded Results}
+Storing analysis results directly with photo metadata.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Simpler data structure
+    \item Direct access to results
+    \item No separate storage management
+    \item Easier data export
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Larger metadata size
+    \item Less flexible for multiple analyses
+    \item Potential performance impact on metadata operations
+\end{itemize}
+
+\subsubsection{Separate Results Storage}
+Managing analysis results in separate storage structures.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item More flexible analysis management
+    \item Better performance for large datasets
+    \item Easier to implement result versioning
+    \item Independent scaling of storage
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item More complex data relationships
+    \item Additional storage management needed
+    \item Potential consistency challenges
+\end{itemize}
+
+\subsection{Selected Approach}
+The embedded results approach was chosen for its simplicity and direct alignment with the project's scope, though the architecture allows for future transition to separate storage if needed.
+
+\section{Camera Control Architecture}
+
+The design of camera control systems presents a fundamental architectural decision: whether to use direct library integration via gphoto2 or implement a REST API-based control system. Both approaches offer distinct characteristics that impact the application's functionality and maintainability.
+
+\subsection{Approach Comparison}
+
+\subsubsection{Direct gphoto2 Integration}
+This approach, which was selected for the application, involves direct integration with the gphoto2 library through Python bindings.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Lower latency for camera operations
+    \item Direct access to all camera features
+    \item Simpler error handling with direct exceptions
+    \item No additional network stack required
+    \item Better handling of large RAW file transfers
+    \item Full access to real-time camera events
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Tight coupling to gphoto2 library
+    \item Platform-dependent installation requirements
+    \item More complex deployment process
+    \item Limited to local camera connections
+    \item Version compatibility constraints
+\end{itemize}
+
+\subsubsection{REST API-based Control}
+The alternative approach would involve implementing a REST API layer for camera control.
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item Platform-independent operation
+    \item Easier integration with other systems
+    \item Support for remote camera control
+    \item Simpler deployment through containerization
+    \item Better separation of concerns
+    \item Possibility of load balancing
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Additional network latency
+    \item More complex error handling
+    \item Overhead of HTTP protocol
+    \item Need for API version management
+    \item More complex security considerations
+\end{itemize}
+
+\subsection{Technical Considerations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Aspect} & \textbf{Direct Integration} & \textbf{REST API} \\
+\hline
+Performance & Minimal latency, direct memory access & Network-dependent latency \\
+\hline
+Deployment & Requires library installation & Container-friendly, portable \\
+\hline
+Security & System-level permissions & Network security required \\
+\hline
+Scalability & Limited to local connections & Supports distributed systems \\
+\hline
+Error Handling & Direct exception propagation & HTTP status codes and messages \\
+\hline
+\end{tabular}
+\caption{Technical Comparison of Camera Control Approaches}
+\label{table:camera_control_comparison}
+\end{table}
+
+\subsection{Implementation Impact}
+
+The choice of approach significantly impacts the implementation:
+
+\subsubsection{Direct Integration Implementation}
+\begin{verbatim}
+def capture_image(self):
+    try:
+        file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
+        camera_file = self.camera.file_get(
+            file_path.folder, 
+            file_path.name, 
+            gp.GP_FILE_TYPE_NORMAL
+        )
+        return camera_file
+    except gp.GPhoto2Error as e:
+        logging.error(f"Capture failed: {e}")
+        raise
+\end{verbatim}
+
+\subsubsection{REST API Implementation}
+\begin{verbatim}
+@app.post("/api/camera/capture")
+async def capture_image():
+    try:
+        response = await client.post(
+            f"{CAMERA_SERVICE_URL}/capture",
+            headers={"Authorization": AUTH_TOKEN}
+        )
+        if response.status_code == 200:
+            return response.json()
+        raise HTTPException(status_code=response.status_code)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+\end{verbatim}
+
+\subsection{Selected Approach}
+
+The direct gphoto2 integration approach was selected for several key reasons:
+
+\begin{itemize}
+    \item \textbf{Performance Priority}: The application requires minimal latency for precise timing of captures and settings changes.
+    \item \textbf{Real-time Events}: Direct access to camera events is crucial for monitoring camera status and capture completion.
+    \item \textbf{RAW File Handling}: Large RAW files are handled more efficiently with direct memory access.
+    \item \textbf{Error Control}: Direct exception handling provides better control over camera-related errors.
+    \item \textbf{Feature Access}: Full access to camera features without API abstraction limitations.
+\end{itemize}
+
+While REST API-based control offers advantages in terms of scalability and system integration, the performance and control requirements of lens testing necessitated the direct integration approach. The tight coupling to gphoto2 is mitigated through careful abstraction in the \texttt{CameraManager} class, allowing for potential future adaptation if requirements change.
+
+\subsection{Future Considerations}
