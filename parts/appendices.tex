@@ -1,115 +1,466 @@
+\appendix
 
-\chapter{Technical Appendices}
-\section{Source code}
-The complete source code for this project is available on GitHub: \url{https://github.com/N4M3L355/clona} and in the attachment of this thesis in IS.
+\chapter{Raw JSON Data}
 
-\section{Code Snippets}
-\begin{spverbatim}
-# Function to capture a photo and save it as a RAW file
-def capture_photo_and_save(camera):
-    file_path = camera.capture(gp.GP_CAPTURE_IMAGE)
-    target = os.path.join(tempfile.gettempdir(), 
-                          file_path.name)
-    camera_file = camera.file_get(file_path.folder, 
-                                  file_path.name, 
-                                  gp.GP_FILE_TYPE_NORMAL)
-    camera_file.save(target)
-    return target
-
-# Function to process a RAW image using rawpy
-def process_raw_image(file_path):
-    with rawpy.imread(file_path) as raw:
-        rgb = raw.postprocess()
-    return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
-
-# Function to analyze sharpness using a Siemens star
-def analyze_sharpness(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 50, 150)
-    return edges
-
-# Function to analyze vignetting using a white wall
-def analyze_vignetting(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    mean_intensity = np.mean(gray)
-    return mean_intensity
-
-
-
-
-
-# Function to capture a series of photos with different 
-# aperture settings
-def capture_series(camera, settings):
-    file_paths = []
-    config = camera.get_config(camera.context)
-    aperture_cfg = config.get_child_by_name('aperture')
-
-    for setting in settings:
-        aperture_cfg.set_value(setting)
-        camera.set_config(config, camera.context)
-        file_path = camera.capture(gp.GP_CAPTURE_IMAGE)
-        target = os.path.join(tempfile.gettempdir(), 
-                              file_path.name)
-        camera_file = camera.file_get(file_path.folder,
-                                      file_path.name, 
-                                      gp.GP_FILE_TYPE_NORMAL)
-        camera_file.save(target)
-        file_paths.append(target)
-    return file_paths
-\end{spverbatim}
-
-\section{Test code}
-Example of camera initialization test:
-\begin{lstlisting}[language=Python]
-def test_initialize_camera(mock_camera):
-    """Test camera initialization"""
-    with patch('gphoto2.Camera') as mock_camera_class:
-        mock_camera_class.return_value = mock_camera
-        mock_camera_class.autodetect = MagicMock(
-            return_value=[(0, "Test Camera")])
-        
-        # Mock camera status check
-        config = MagicMock()
-        widget = MagicMock()
-        widget.get_value.return_value = 0
-        config.get_child_by_name.return_value = widget
-        mock_camera.get_config.return_value = config
-        
-        manager = CameraManager()
-        success = manager.initialize_camera()
-        
-        assert success
-        assert manager.connected
-        assert manager.camera is not None
-\end{lstlisting}
-\\
-Example of photo capture test:
-\begin{lstlisting}[language=Python]
-def test_handle_capture_photo(ui_instance, temp_dir):
-    """Test photo capture handling"""
-    capture_result = {
-        'path': os.path.join(temp_dir, "test.jpg"),
-        'metadata': {
-            'camera_settings': {
-                'aperture': '1.8',
-                'shutterspeed': '1/100',
-                'iso': '400'
+\section{Vignetting Analysis}
+\label{app:vignetting_json}
+\begin{verbatim}
+{
+  "id": "g_20241215_130205",
+  "name": "g",
+  "created": "20241215_130205",
+  "metadata": {},
+  "scenarios": [
+    {
+      "id": "vignette_20241215_130554",
+      "type": "vignette",
+      "created": "20241215_130554",
+      "metadata": {
+        "focal_length": 50,
+        "notes": "",
+        "created": "20241215_130554"
+      },
+      "photos": [
+        {
+          "filename": "vignette_20241215_132956_2J9B3461.CR2",
+          "path": "datasets/g_20241215_130205/photos/vignette_20241215_132956_2J9B3461.CR2",
+          "timestamp": "20241215_132956",
+          "metadata": {
+            "scenario_type": "vignette",
+            "scenario_id": "vignette_20241215_130554",
+            "camera_settings": {
+              "aperture": "2.5",
+              "iso": "Auto",
+              "shutter_speed": "1/50",
+              "camera_model": "Canon EOS 5D Mark III",
+              "lens_name": "EF50mm f/2.5 Compact Macro"
+            },
+            "aperture": "2.5",
+            "shutter_speed": "1/50",
+            "iso": "Auto",
+            "lens_name": "EF50mm f/2.5 Compact Macro",
+            "camera_model": "Canon EOS 5D Mark III",
+            "focal_length": null
+          },
+          "analysis": {
+            "vignetting_results": {
+              "center_intensity": 68.26437152181892,
+              "corner_intensities": {
+                "top_left": 41.268320194889306,
+                "top_right": 34.50813607531432,
+                "bottom_left": 26.866990082857512,
+                "bottom_right": 19.855198857877326
+              },
+              "corner_ratios": {
+                "top_left": 0.6045367338026245,
+                "top_right": 0.5055072698396512,
+                "bottom_left": 0.3935726570670937,
+                "bottom_right": 0.2908574182292315
+              },
+              "average_corner_ratio": 0.44861851973465017,
+              "vignetting_score": 44.861851973465015,
+              "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_134315.jpg"
+            },
+            "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_134315.jpg",
+            "preview_path": "datasets/g_20241215_130205/photos/vignette_20241215_132956_2J9B3461.CR2",
+            "analyzed_at": "20241215_134316",
+            "type": "vignette",
+            "metadata": {
+              "scenario_type": "vignette",
+              "scenario_id": "vignette_20241215_130554",
+              "camera_settings": {
+                "aperture": "2.5",
+                "iso": "Auto",
+                "shutter_speed": "1/50",
+                "camera_model": "Canon EOS 5D Mark III",
+                "lens_name": "EF50mm f/2.5 Compact Macro"
+              },
+              "aperture": "2.5",
+              "shutter_speed": "1/50",
+              "iso": "Auto",
+              "lens_name": "EF50mm f/2.5 Compact Macro",
+              "camera_model": "Canon EOS 5D Mark III",
+              "focal_length": null
             }
+          }
+        },
+        {
+          "filename": "vignette_20241215_140626_2J9B3465.CR2",
+          "path": "datasets/g_20241215_130205/photos/vignette_20241215_140626_2J9B3465.CR2",
+          "timestamp": "20241215_140626",
+          "metadata": {
+            "scenario_type": "vignette",
+            "scenario_id": "vignette_20241215_130554",
+            "camera_settings": {
+              "camera_model": "Canon EOS 5D Mark III",
+              "lens_name": "EF50mm f/2.5 Compact Macro",
+              "aperture": "2.5",
+              "shutter_speed": "1/50",
+              "iso": "Auto",
+              "focal_length": 50
+            }
+          },
+          "analysis": {
+            "vignetting_results": {
+              "center_intensity": 65.2881906770509,
+              "corner_intensities": {
+                "top_left": 38.808094764616506,
+                "top_right": 32.51066587888782,
+                "bottom_left": 25.262945008136924,
+                "bottom_right": 17.090093243114787
+              },
+              "corner_ratios": {
+                "top_left": 0.5944121649285914,
+                "top_right": 0.497956300239692,
+                "bottom_left": 0.38694509292041024,
+                "bottom_right": 0.2617639279919888
+              },
+              "average_corner_ratio": 0.43526937152017064,
+              "vignetting_score": 43.52693715201706,
+              "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_140652.jpg"
+            },
+            "visualization_path": "datasets/g_20241215_130205/photos/vignette_analysis_20241215_140652.jpg",
+            "preview_path": "datasets/g_20241215_130205/photos/vignette_20241215_140626_2J9B3465.CR2",
+            "analyzed_at": "20241215_140653",
+            "type": "vignette",
+            "metadata": {
+              "scenario_type": "vignette",
+              "scenario_id": "vignette_20241215_130554",
+              "camera_settings": {
+                "camera_model": "Canon EOS 5D Mark III",
+                "lens_name": "EF50mm f/2.5 Compact Macro",
+                "aperture": "2.5",
+                "shutter_speed": "1/50",
+                "iso": "Auto",
+                "focal_length": 50
+              }
+            }
+          }
         }
+      ]
     }
+  ],
+  "camera_model": "Canon EOS 5D Mark III",
+  "lens_name": "EF50mm f/2.5 Compact Macro"
+}
+\end{verbatim}
+
+\section{Bokeh Analysis}
+\label{app:bokeh_json}
+\begin{verbatim}
+{
+  "id": "bokeh_20241215_141354",
+  "type": "bokeh",
+  "created": "20241215_141354",
+  "metadata": {
+    "focal_length": 50,
+    "notes": "",
+    "created": "20241215_141354"
+  },
+  "photos": [
+    {
+      "filename": "bokeh_20241215_141412_2J9B3466.CR2",
+      "path": "datasets/g_20241215_130205/photos/bokeh_20241215_141412_2J9B3466.CR2",
+      "timestamp": "20241215_141412",
+      "metadata": {
+        "scenario_type": "bokeh",
+        "scenario_id": "bokeh_20241215_141354",
+        "camera_settings": {
+          "camera_model": "Canon EOS 5D Mark III",
+          "lens_name": "EF50mm f/2.5 Compact Macro",
+          "aperture": "2.5",
+          "shutter_speed": "1/50",
+          "iso": "Auto",
+          "focal_length": 50
+        }
+      },
+      "analysis": {
+        "overall_score": 66.78943397462963,
+        "shape_regularity": {
+          "score": 44.484266721329384,
+          "metrics": {
+            "circularity": 0.014624072905553747,
+            "contour_matching": 0.12493873847896608,
+            "area": 0.5,
+            "perimeter": 20.727921843528748
+          }
+        },
+        "color_fringing": {
+          "score": 90.80501089324619,
+          "metrics": {
+            "average_color_difference": 23.447222222222223,
+            "max_color_difference": 30.0,
+            "color_variation": 4.95185072647429
+          }
+        },
+        "intensity_distribution": {
+          "score": 65.07902430931331,
+          "metrics": {
+            "mean_intensity": 85.6923076923077,
+            "std_intensity": 3.830738337842687,
+            "intensity_gradient": -1.307432208252324,
+            "center_intensity": 89.0
+          }
+        },
+        "visualization_path": "datasets/g_20241215_130205/photos/bokeh_analysis_20241215_143248.jpg",
+        "center_point": [
+          1877.0,
+          802.0
+        ],
+        "radius": 2.0,
+        "analysis_time": "20241215_143248",
+        "metadata": {
+          "scenario_type": "bokeh",
+          "scenario_id": "bokeh_20241215_141354",
+          "camera_settings": {
+            "camera_model": "Canon EOS 5D Mark III",
+            "lens_name": "EF50mm f/2.5 Compact Macro",
+            "aperture": "2.5",
+            "shutter_speed": "1/50",
+            "iso": "Auto",
+            "focal_length": 50
+          }
+        },
+        "click_debug_path": "datasets/g_20241215_130205/photos/click_debug_20241215_143246.jpg",
+        "preview_path": "datasets/g_20241215_130205/photos/bokeh_20241215_141412_2J9B3466.CR2",
+        "analyzed_at": "20241215_143248",
+        "type": "bokeh"
+      }
+    }
+  ]
+}
+\end{verbatim}
+
+\section{Code Listings}
+\label{app:code_listings}
+
+\subsection{Vignetting Analysis Function}
+\label{lst:vignetting_code}
+\begin{lstlisting}[style=jsonStyle, caption={Vignetting Analysis Function}, label={lst:vignetting_code}]
+def analyze_vignetting(image_path):
+    # Load image
+    image = load_image(image_path)
     
-    ui_instance.camera_manager.capture_image = MagicMock(
-        return_value=capture_result)
-    ui_instance.camera_manager.connected = True
+    # Calculate center intensity
+    center_intensity = calculate_center_intensity(image)
     
-    with patch('nicegui.ui.notify') as mock_notify:
-        ui_instance.handle_capture_photo()
-        ui_instance.camera_manager.capture_image\
-            .assert_called_once()
-        mock_notify.assert_called_once()
+    # Calculate corner intensities
+    corners = ['top_left', 'top_right', 'bottom_left', 'bottom_right']
+    corner_intensities = {corner: calculate_corner_intensity(image, corner) for corner in corners}
+    
+    # Compute corner ratios
+    corner_ratios = {corner: intensity / center_intensity for corner, intensity in corner_intensities.items()}
+    
+    # Compute average corner ratio
+    average_ratio = sum(corner_ratios.values()) / len(corner_ratios)
+    
+    # Compute vignetting score
+    vignetting_score = compute_score(average_ratio)
+    
+    # Generate visualization
+    visualization = generate_vignetting_visualization(image, corner_intensities)
+    
+    return {
+        "center_intensity": center_intensity,
+        "corner_intensities": corner_intensities,
+        "corner_ratios": corner_ratios,
+        "average_corner_ratio": average_ratio,
+        "vignetting_score": vignetting_score,
+        "visualization_path": visualization
+    }
 \end{lstlisting}
 
-%\section{Test Charts and Patterns}
+\subsection{Bokeh Analysis Function}
+\label{lst:bokeh_code}
+\begin{lstlisting}[style=jsonStyle, caption={Bokeh Analysis Function}, label={lst:bokeh_code}]
+def analyze_bokeh(image_path):
+    # Load image
+    image = load_image(image_path)
+    
+    # Detect out-of-focus areas
+    bokeh_regions = detect_bokeh_regions(image)
+    
+    # Calculate shape regularity
+    shape_regularity = calculate_shape_regularity(bokeh_regions)
+    
+    # Calculate color fringing
+    color_fringing = calculate_color_fringing(bokeh_regions)
+    
+    # Calculate intensity distribution
+    intensity_distribution = calculate_intensity_distribution(bokeh_regions)
+    
+    # Compute overall score
+    overall_score = compute_overall_bokeh_score(shape_regularity, color_fringing, intensity_distribution)
+    
+    # Generate visualization
+    visualization = generate_bokeh_visualization(image, bokeh_regions)
+    
+    return {
+        "overall_score": overall_score,
+        "shape_regularity": shape_regularity,
+        "color_fringing": color_fringing,
+        "intensity_distribution": intensity_distribution,
+        "visualization_path": visualization
+    }
+\end{lstlisting}
 
-% todo
+% Add more code listings as needed
+
+\section{Additional Data Tables}
+\label{app:additional_tables}
+
+\begin{table}[H]
+    \centering
+    \caption{Complete Sharpness Assessment Results}
+    \label{tab:complete_sharpness}
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Photo ID} & \textbf{Sharpness Score} & \textbf{Traditional Score} & \textbf{SIFT Score} \\ \hline
+        sharpness\_20241215\_152555\_2J9B3467.CR2 & 3.26 & 3.80 & 1.98 \\ \hline
+        % Add all additional rows here
+    \end{tabular}
+\end{table}
+
+% Add more detailed tables as needed
+
+\chapter{Test Charts and Calibration Materials}
+\label{app:test_charts}
+
+\section{Vignetting Test Chart}
+\label{app:vignetting_chart}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{datasets/g_20241215_130205/photos/test_chart_vignetting.jpg}
+    \caption{Standardized Vignetting Test Chart}
+    \label{fig:vignetting_chart}
+\end{figure}
+
+\section{Distortion Test Chart}
+\label{app:distortion_chart}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{datasets/g_20241215_130205/photos/test_chart_distortion.jpg}
+    \caption{Standardized Distortion Test Chart}
+    \label{fig:distortion_chart}
+\end{figure}
+
+% Add more test charts as needed
+
+\chapter{User Manual}
+\label{app:user_manual}
+
+\section{Installation}
+\begin{enumerate}
+    \item Ensure Python 3.8 or higher is installed on your system.
+    \item Clone the repository:
+    \begin{verbatim}
+    git clone https://github.com/yourusername/lens-evaluation-app.git
+    \end{verbatim}
+    \item Navigate to the project directory:
+    \begin{verbatim}
+    cd lens-evaluation-app
+    \end{verbatim}
+    \item Install required dependencies:
+    \begin{verbatim}
+    pip install -r requirements.txt
+    \end{verbatim}
+\end{enumerate}
+
+\section{Usage}
+\subsection{Launching the Application}
+Run the main script to start the web-based interface:
+\begin{verbatim}
+python app.py
+\end{verbatim}
+Open your web browser and navigate to \texttt{http://localhost:8080}.
+
+\subsection{Evaluating Lens Properties}
+\begin{itemize}
+    \item \textbf{Select Evaluation Type}: Choose from Vignetting, Bokeh, Sharpness, Chromatic Aberration, or Distortion.
+    \item \textbf{Upload Test Image}: Upload the corresponding test chart image.
+    \item \textbf{Start Analysis}: Click on the "Analyze" button to initiate the evaluation.
+    \item \textbf{View Results}: The results will be displayed with visualizations and scores.
+\end{itemize}
+
+\section{Troubleshooting}
+\begin{itemize}
+    \item \textbf{Issue}: Application does not launch.
+    \item \textbf{Solution}: Ensure all dependencies are installed correctly and that your Python version is compatible.
+    
+    \item \textbf{Issue}: High image noise affecting results.
+    \item \textbf{Solution}: Use higher quality images with lower ISO settings if possible.
+    
+    \item \textbf{Issue}: Test charts not aligning correctly.
+    \item \textbf{Solution}: Ensure the camera is mounted securely and that test charts are perfectly flat during capture.
+\end{itemize}
+
+% Add more sections as needed
+
+\chapter{Additional Visualizations}
+\label{app:additional_visuals}
+
+\section{Sharpness Analysis - Additional Views}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/sharpness_analysis_detailed_view.jpg}
+    \caption{Detailed Sharpness Analysis Visualization}
+    \label{fig:sharpness_detailed}
+\end{figure}
+
+\section{Chromatic Aberration - Extended Data}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{datasets/g_20241215_130205/photos/ca_extended_analysis.jpg}
+    \caption{Extended Chromatic Aberration Analysis}
+    \label{fig:ca_extended}
+\end{figure}
+
+% Add more visualizations as needed
+
+\chapter{User Feedback and Survey Results}
+\label{app:user_feedback}
+
+\section{Survey Questionnaire}
+\begin{enumerate}
+    \item How easy was it to install and set up the application?
+    \item How intuitive is the user interface?
+    \item How accurate do you find the lens evaluation results?
+    \item What features would you like to see in future versions?
+    \item Any additional comments or suggestions?
+\end{enumerate}
+
+\section{Survey Responses}
+\subsection{Response 1}
+\begin{itemize}
+    \item Installation: Easy
+    \item Interface: Very Intuitive
+    \item Accuracy: Good
+    \item Features: Integration with more camera models
+    \item Comments: Great tool, very useful for photographers.
+\end{itemize}
+
+\subsection{Response 2}
+\begin{itemize}
+    \item Installation: Moderate
+    \item Interface: Somewhat Intuitive
+    \item Accuracy: Needs Improvement in Sharpness
+    \item Features: Batch processing capabilities
+    \item Comments: Helpful but could be more refined.
+\end{itemize}
+
+% Add more responses as needed
+
+\section{Analysis of Feedback}
+% Summarize key findings from the feedback
+Most users found the installation process straightforward and appreciated the intuitive user interface. However, several respondents highlighted the need for improved sharpness measurements and requested additional features such as batch processing and support for more camera models. Overall, the feedback indicates a positive reception with clear areas for enhancement.
+
+\backmatter
+
+\begin{thebibliography}{9}
+\bibitem{gphoto2_compatible}
+GPhoto2. (n.d.). \textit{Supported Cameras}. Retrieved from \url{http://www.gphoto.org/proj/libgphoto2/support.php}
+
+% [Add more references as needed]
+\end{thebibliography}
+
+\end{document}

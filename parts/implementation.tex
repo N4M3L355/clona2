@@ -10,11 +10,11 @@ The development process began with a modular architecture centered on four prima
 
 The integration of the camera system was approached in three phases.
 
-In Phase 1, Basic Camera Communication, the team integrated the gphoto2 library to facilitate camera control. They implemented basic logic for connecting and disconnecting the camera and developed a system to monitor the camera's status. Basic error handling and recovery mechanisms were also established to manage initial connection issues.
+In Phase 1, Basic Camera Communication, we integrated the gphoto2 library to facilitate camera control. We implemented basic logic for connecting and disconnecting the camera and developed a system to monitor the camera's status. Basic error handling and recovery mechanisms were also established to manage initial connection issues.
 
-Phase 2 focused on Advanced Camera Control. This phase involved comprehensive management of camera settings, including manual and auto-focus controls. The team added capabilities for capturing images in RAW format and implemented real-time monitoring of the camera's status to provide immediate feedback on its operation.
+Phase 2 focused on Advanced Camera Control. In this phase, we comprehensively managed camera settings, including manual and auto-focus controls. We added capabilities for capturing images in RAW format and implemented real-time monitoring of the camera's status to provide immediate feedback on its operation.
 
-In Phase 3, the emphasis was on Robustness Improvements. The team made camera operations thread-safe to prevent concurrent access issues. They implemented automatic reconnection handling to maintain camera connectivity and optimized memory management to efficiently handle image capture processes. Additionally, they introduced timeout handling to manage prolonged camera operations gracefully.
+In Phase 3, the emphasis was on Robustness Improvements. We made camera operations thread-safe to prevent concurrent access issues. We implemented automatic reconnection handling to maintain camera connectivity and optimized memory management to efficiently handle image capture processes. Additionally, we introduced timeout handling to manage prolonged camera operations gracefully.
 
 \subsection{Analysis Engine Development}
 
@@ -24,21 +24,21 @@ Stage 1, Core Analysis Functions, involved implementing the raw image processing
 
 In Stage 2, Advanced Analysis Features were introduced, enhancing the engine with capabilities such as bokeh quality analysis, chromatic aberration detection, vignetting measurement, and generating visualizations of analysis results.
 
-Stage 3 focused on Optimization, where the team improved the processing of large images, optimized memory usage, refined the accuracy of analysis algorithms, and added support for multi-threaded analysis to increase processing efficiency.
+Stage 3 focused on Optimization, where we improved the processing of large images, optimized memory usage, refined the accuracy of analysis algorithms, and added support for multi-threaded analysis to increase processing efficiency.
 
 \subsection{Data Management Implementation}
 
 The Data Management system was developed in two phases.
 
-During the Core Functionality phase, the team established the dataset creation and storage system, organized files hierarchically, managed comprehensive metadata, and implemented storage for analysis results.
+During the Core Functionality phase, we established the dataset creation and storage system, organized files hierarchically, managed comprehensive metadata, and implemented storage for analysis results.
 
-In the Advanced Features phase, they added functionalities for importing and exporting datasets, managing structured scenarios, comparing analysis results, and verifying data integrity to ensure the reliability of stored information.
+In the Advanced Features phase, we added functionalities for importing and exporting datasets, managing structured scenarios, comparing analysis results, and verifying data integrity to ensure the reliability of stored information.
 
 \subsection{Integration and Testing}
 
 The integration process concentrated on two main areas: Component Integration and Testing Procedures.
 
-In Component Integration, the core components were systematically integrated, ensuring that interfaces between different modules were compatible. The team optimized performance and verified resource management to ensure efficient operation.
+In Component Integration, we systematically integrated the core components, ensuring that interfaces between different modules were compatible. We optimized performance and verified resource management to ensure efficient operation.
 
 Testing Procedures involved conducting comprehensive unit tests, performing integration tests to ensure components worked together seamlessly, executing performance load tests to assess the system's handling of high data volumes, and verifying the functionality of the user interface.
 
@@ -46,9 +46,9 @@ Testing Procedures involved conducting comprehensive unit tests, performing inte
 
 The final phase addressed deployment requirements, focusing on System Requirements and Documentation.
 
-For System Requirements, the team conducted hardware compatibility testing, managed dependencies, developed the installation process, and managed system configuration to ensure the application could be reliably deployed.
+For System Requirements, we conducted hardware compatibility testing, managed dependencies, developed the installation process, and managed system configuration to ensure the application could be reliably deployed.
 
-In terms of Documentation, they created technical documentation, user guides, API documentation, and installation guides to support users and developers in understanding and utilizing the application effectively.
+In terms of Documentation, we created technical documentation, user guides, API documentation, and installation guides to support users and developers in understanding and utilizing the application effectively.
 
 \section{Used Technologies}
 
@@ -58,7 +58,7 @@ The project is built using the Python programming language and leverages several
 
 \subsection{Development Environment}
 
-The development environment integrates various tools and configurations to support efficient and organized software development. Git is used for version control, enabling the team to track code changes and collaborate effectively. The primary platform for development is Linux, chosen for its robustness and versatility. Python virtual environments are employed to isolate dependencies, ensuring a clean and consistent development setup. Additionally, an automated testing framework is incorporated to streamline testing processes, validate functionality, and maintain code quality throughout the development lifecycle.
+The development environment integrates various tools and configurations to support efficient and organized software development. Git is used for version control, enabling us to track code changes and collaborate effectively. The primary platform for development is Linux, chosen for its robustness and versatility. Python virtual environments are employed to isolate dependencies, ensuring a clean and consistent development setup. Additionally, an automated testing framework is incorporated to streamline testing processes, validate functionality, and maintain code quality throughout the development lifecycle.
 
 \section{Implementation of System Components}
 
@@ -296,11 +296,11 @@ The application includes several key features that enhance user experience and f
 
 \section{Testing}
 
-To ensure the reliability and correctness of the application, particularly in the context of the "garage lab" approach described in the methodology, a comprehensive test suite was implemented using the pytest framework. The tests were designed to validate both the technical functionality and the practical usability of the application.
+To ensure the reliability and correctness of the application, particularly in the context of the "garage lab" approach described in the methodology, we implemented a comprehensive test suite using the pytest framework. The tests were designed to validate both the technical functionality and the practical usability of the application.
 
 \subsection{Test Architecture}
 
-The test suite is organized into four main components, reflecting the modular architecture of the application. Tests are divided among \texttt{test\_camera\_manager.py}, which validates camera control and image acquisition; \texttt{test\_dataset\_manager.py}, which ensures proper data organization and persistence; \texttt{test\_analysis.py}, which verifies image processing and lens measurement algorithms; and \texttt{test\_ui.py}, which tests user interface components and interactions.
+Our test suite is organized into four main components, reflecting the modular architecture of the application. We divided the tests among \texttt{test\_camera\_manager.py}, which validates camera control and image acquisition; \texttt{test\_dataset\_manager.py}, which ensures proper data organization and persistence; \texttt{test\_analysis.py}, which verifies image processing and lens measurement algorithms; and \texttt{test\_ui.py}, which tests user interface components and interactions.
 
 \subsection{Camera Manager Tests}
 
@@ -536,26 +536,6 @@ The container configuration excludes the gphoto2 library, as physical camera acc
 \end{figure}
 
 The containerized version maintains the same dataset structure and analysis capabilities as the full application. Users can import existing datasets, perform analysis, and export results. The key difference is that new image capture isn't possible— all operations work with pre-existing or imported RAW files.
-
-The implementation uses a multi-stage build process to optimize the container size:
-
-\begin{verbatim}
-FROM python:3.9-slim as builder
-
-WORKDIR /app
-COPY . .
-RUN pip install --no-cache-dir -e .
-
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY --from=builder /app/clona ./clona
-COPY --from=builder /usr/local/lib/python3.9/site-packages \
-     /usr/local/lib/python3.9/site-packages
-
-EXPOSE 8080
-CMD ["python", "-m", "clona.app"]
-\end{verbatim}
 
 Data persistence is handled through volume mounting, allowing datasets to be stored outside the container. This enables easy backup and sharing of datasets between container instances:
 
